@@ -66,6 +66,7 @@ import {
 import {CompanyAuthInterceptorService} from '../services/interceptors/company-auth-interceptor.service';
 import {XUiOriginInterceptor} from '../../../common/src/lib/services/interceptors/x-ui-origin.interceptor';
 import {CsrfInterceptor} from '../../../common/src/lib/services/interceptors/csrf.interceptor';
+import {MockBackendInterceptor} from '../../../common/src/lib/dev/mock-backend.interceptor';
 import {NbEvaIconsModule} from "@nebular/eva-icons";
 import {CompanyExternalModalComponent} from "./modal/company-external-modal.component";
 import {CompanyAuthPageModule} from "./authpage/company-auth-page.module";
@@ -245,6 +246,7 @@ import {environment} from "../../../../environments/environment";
       useClass: CsrfInterceptor,
       multi: true
     },
+    ...(environment.mockBackend ? [{provide: HTTP_INTERCEPTORS, useClass: MockBackendInterceptor, multi: true}] : []),
     UnderMaintenanceService,
     RecaptchaService,
     UserManagementUiKeyService,

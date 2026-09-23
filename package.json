@@ -8,8 +8,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ssl true --ssl-cert \"./ssl/cert.pem\"  --ssl-key \"./ssl/key.pem\" --port 63829",
-    "start-company-portal": "ng serve company-portal --ssl true --ssl-cert \"./ssl/cert.pem\"  --ssl-key \"./ssl/key.pem\" --configuration development",
-    "start-customer-portal": "ng serve customer-portal --ssl true --ssl-cert \"./ssl/cert.pem\"  --ssl-key \"./ssl/key.pem\"",
+    "start-company-portal": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve company-portal --ssl true --ssl-cert \"./ssl/cert.pem\"  --ssl-key \"./ssl/key.pem\" --configuration development",
+    "start-customer-portal": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve customer-portal --ssl true --ssl-cert \"./ssl/cert.pem\"  --ssl-key \"./ssl/key.pem\"",
     "build-increased-heap-size": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --extra-webpack-config webpack.partial.js --configuration production",
     "post-build": "node ./build/post-build.js",
     "lint": "ng lint",

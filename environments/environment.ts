@@ -4,7 +4,9 @@ export const environment = {
   production: false,
   statusCheckURL: 'status.json',
   statusCheckFrequency: 30000,
-  cookieChangedVersion: '2.1.1'
+  cookieChangedVersion: '2.1.1',
+  // Fake API for local UI work without a backend (projects/common/src/lib/dev/mock-backend.interceptor.ts)
+  mockBackend: true
 };
 
 export const quickbooks_timezone = 'America/Los_Angeles';

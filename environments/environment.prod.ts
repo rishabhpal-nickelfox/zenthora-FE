@@ -4,7 +4,8 @@ export const environment = {
   production: true,
   statusCheckURL: 'status.json',
   statusCheckFrequency: 30000,
-  cookieChangedVersion: '2.1.1'
+  cookieChangedVersion: '2.1.1',
+  mockBackend: false
 };
 
 export const quickbooks_timezone = 'America/Los_Angeles';

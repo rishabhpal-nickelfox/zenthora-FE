@@ -34,6 +34,7 @@ import {
 } from '../../../common/src/lib/services/interceptors/service-worker-ignore.interceptor';
 import {XUiOriginInterceptor} from '../../../common/src/lib/services/interceptors/x-ui-origin.interceptor';
 import {CsrfInterceptor} from '../../../common/src/lib/services/interceptors/csrf.interceptor';
+import {MockBackendInterceptor} from '../../../common/src/lib/dev/mock-backend.interceptor';
 import {QboDefaultErrorInterceptor} from '../../../common/src/lib/utils/errorhandler/default-error-interceptor.service';
 import {ErrorInterceptor} from '../../../common/src/lib/utils/errorhandler/error-interceptor.service';
 import {
@@ -160,6 +161,7 @@ import {environment} from "../../../../environments/environment";
     {provide: HTTP_INTERCEPTORS, useClass: CustomerAuthInterceptorService, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: XUiOriginInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: CsrfInterceptor, multi: true},
+    ...(environment.mockBackend ? [{provide: HTTP_INTERCEPTORS, useClass: MockBackendInterceptor, multi: true}] : []),
     StatusCheckService,
     {provide: COMMON_CONFIG, useValue: environment},
     UnderMaintenanceService,
