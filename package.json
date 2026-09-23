@@ -14,7 +14,9 @@
     "post-build": "node ./build/post-build.js",
     "lint": "ng lint",
     "build-company-portal": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build company-portal --extra-webpack-config webpack.partial.js --configuration production && node ./build/post-build-company.js",
+    "build-company-portal-mock": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build company-portal --extra-webpack-config webpack.partial.js --configuration production,mock && node ./build/post-build-company.js",
     "build-customer-portal": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build customer-portal --extra-webpack-config webpack.partial.js --configuration production && node ./build/post-build-customer.js",
+    "build-customer-portal-mock": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build customer-portal --extra-webpack-config webpack.partial.js --configuration production,mock && node ./build/post-build-customer.js",
     "build-common": "ng build common",
     "pack-common": "ng build common && npm pack ./dist/common --pack-destination ./dist",
     "link-common": "npm run pack-common && npm i ./dist/eps-common-0.0.1.tgz --no-save"

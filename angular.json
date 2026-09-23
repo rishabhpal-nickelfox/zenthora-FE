@@ -265,6 +265,18 @@
                 {
                   "replace": "/environments/environment.ts",
                   "with": "/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "projects/common/src/lib/dev/mock-backend.providers.ts",
+                  "with": "projects/common/src/lib/dev/mock-backend.providers.prod.ts"
+                }
+              ]
+            },
+            "mock": {
+              "fileReplacements": [
+                {
+                  "replace": "/environments/environment.ts",
+                  "with": "/environments/environment.mock.ts"
                 }
               ]
             }
@@ -408,6 +420,18 @@
                 {
                   "replace": "/environments/environment.ts",
                   "with": "/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "projects/common/src/lib/dev/mock-backend.providers.ts",
+                  "with": "projects/common/src/lib/dev/mock-backend.providers.prod.ts"
+                }
+              ]
+            },
+            "mock": {
+              "fileReplacements": [
+                {
+                  "replace": "/environments/environment.ts",
+                  "with": "/environments/environment.mock.ts"
                 }
               ]
             }

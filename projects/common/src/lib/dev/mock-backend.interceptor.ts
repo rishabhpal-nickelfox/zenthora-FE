@@ -6,11 +6,13 @@ import {UiKeyEnum} from '../../../../company-portal/src/enums/usermanagement/ui-
 import {CustomerPermissionEnum} from '../../../../customer-portal/src/enums/customer-permission.enum';
 
 /**
- * Dev-only fake backend so the portals can be explored locally without the real API.
- * Enabled by `environment.mockBackend` (environments/environment.ts); never enabled in production builds.
+ * Fake backend so the portals can be explored without the real API.
+ * Enabled by `environment.mockBackend`: on in dev (environment.ts) and in the `mock` build configuration
+ * (environment.mock.ts, used by `npm run build-*-portal-mock` for demo deploys); off in regular production builds.
  * Any username/password logs in with every permission; data endpoints return empty lists.
  */
-export const MOCK_API_URL = 'http://localhost/mock-api';
+// Same origin as the page, so BaseSettingsProvider's root-domain match picks it on any host (localhost, *.vercel.app, ...)
+export const MOCK_API_URL = `${window.location.origin}/mock-api`;
 
 const DEMO_ENTITY = {
   id: 1,
