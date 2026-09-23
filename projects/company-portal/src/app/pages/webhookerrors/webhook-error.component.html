@@ -1,0 +1,64 @@
+<app-table-component #table
+                     [headers]="headers" [filters]="filters"
+                     [objectOperatingService]="webhookErrorService"
+                     [buttonsPanelTemplate]="buttonTemplate"
+                     [rowTemplate]="rowtemplate"></app-table-component>
+
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr>
+    <td>
+      <div class="company-id">
+        <span>{{rowData.companyId}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.dateFormatted}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <div *ngFor="let docId of rowData.docIds; let last = last">
+          <span [class.mr-1]="last">{{docId}}</span>
+          <span *ngIf="!last">,</span>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isWebhookSaleEvent(rowData.event)">Sale: </span>
+        <span *ngIf="isWebhookPaymentEvent(rowData.event)">Payment: </span>
+        <span *ngIf="isWebhookPaymentDataEvent(rowData.event)">Payment Method: </span>
+        <span *ngIf="isWebhookCustomerEvent(rowData.event)">Customer: </span>
+        <span>{{WebhookEventEnumValue.get(rowData.event)}}</span>
+      </div>
+    </td>
+    <td>
+      <div class="exception-message">
+        <span>{{rowData.exceptionMessage}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.attemptNumber)">{{rowData.attemptNumber}}/{{rowData.totalAttempts}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.responseHttpCode}}</span>
+      </div>
+    </td>
+    <td>
+      <div class="response-body">
+        <span>{{rowData.responseBody}}</span>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+<ng-template #buttonTemplate>
+<button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success" (click)="table.refresh()">
+  <nb-icon icon="refresh-outline"></nb-icon>
+  Refresh
+</button>
+</ng-template>

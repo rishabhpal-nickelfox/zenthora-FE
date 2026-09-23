@@ -1,0 +1,12 @@
+@use "../../../../themes" as *;
+
+
+@include nb-install-component() {
+  .modal-body {
+    overflow: visible;
+  }
+  .header-value {
+    word-wrap: break-word;
+  }
+
+}

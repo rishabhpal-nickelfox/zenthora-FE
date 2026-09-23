@@ -1,0 +1,8 @@
+<div *ngFor="let item of options; let i = index">
+    <label class="checkbox-container">
+        <input type="checkbox" [ngModel]="item.checked" [disabled]="isDisabled || item.disabled" (ngModelChange)="checkedChanged(i)" >
+        <span class="checkmark"  [ngbPopover]="item.hint" triggers="mouseenter:mouseleave" placement="top-left"></span>
+        <span class="checkbox-descr" [innerHTML]="item.label"></span>
+    </label>
+</div>
+

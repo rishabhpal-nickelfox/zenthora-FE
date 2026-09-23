@@ -1,0 +1,557 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right">
+            <span *ngIf="isCreateMode">{{Labels.CreateHeader}}</span>
+            <span *ngIf="!isCreateMode">{{Labels.EditHeader}}</span>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+
+    <nb-card-body>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.PlatformName"
+                              [required]="true"
+                              [verticalMode]=true>
+            <app-extended-typeahead-with-load-input (blur)="onPlatformBlur()"
+                                                    (selectItem)="selectPlatform($event)"
+                                                    *ngIf="isCreateMode"
+                                                    [formControl]="getForm().controls.platform"
+                                                    [listFormatter]="platformFormatter"
+                                                    [pageableSource]="searchPlatform"
+                                                    [placeholder]="Labels.PlatformName"
+                                                    [resultFormatter]="platformFormatter"
+                                                    [searchProperty]="'name'"
+                                                    formControlErrorMessage></app-extended-typeahead-with-load-input>
+            <span *ngIf="isEditMode">{{getForm().controls.platform.value.name}}</span>
+          </app-extended-input>
+        </div>
+
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.AdministratorPlaceholder(isEditMode)"
+                              [required]="false"
+                              [verticalMode]=true>
+            <app-extended-typeahead-with-load-input (blur)="onAdministratorBlur()"
+                                                    (selectItem)="selectAdministrator($event)"
+                                                    [formControl]="getForm().controls.administrator"
+                                                    [listFormatter]="userFormatter"
+                                                    [pageableSource]="searchUser"
+                                                    [placeholder]="Labels.AdministratorPlaceholder(isEditMode)"
+                                                    [resultFormatter]="userFormatter"
+                                                    [searchProperty]="'email'"
+                                                    formControlErrorMessage></app-extended-typeahead-with-load-input>
+          </app-extended-input>
+          <ng-container *ngIf="isEditMode">
+            <div class="d-flex flex-column">
+              <span *ngFor="let admin of entity.admins" class="py-1">{{admin.email}}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.LegalName"
+                              [required]=true
+                              [verticalMode]=true>
+            <input [maxlength]="MAX_LENGTH.LEGAL_NAME" [placeholder]="Labels.LegalName"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   formControlName="legalName"
+                   type="text">
+          </app-extended-input>
+        </div>
+
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.DisplayName"
+                              [required]=true
+                              [verticalMode]=true>
+            <input [maxlength]="MAX_LENGTH.DISPLAY_NAME" [placeholder]="Labels.DisplayName"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   formControlName="displayName"
+                   type="text">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-12">
+          <app-extended-input [labelText]="Labels.Logo"
+                              [verticalMode]=true>
+            <app-single-img-input [formControl]="getForm().controls.logo"
+                                  formControlErrorMessage></app-single-img-input>
+          </app-extended-input>
+        </div>
+      </div>
+
+      <hr/>
+
+      <div formGroupName="address">
+        <div class="row">
+          <div class="col-md-8">
+            <app-extended-input [labelText]="Labels.Street"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [maxlength]="MAX_LENGTH.STREET" [placeholder]="Labels.Street"
+                     class="form-control qbo-form-control"
+                     formControlErrorMessage formControlName="street"
+                     type="text">
+            </app-extended-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.City"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [maxlength]="MAX_LENGTH.CITY" [placeholder]="Labels.City"
+                     class="form-control qbo-form-control"
+                     formControlErrorMessage formControlName="city"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.State"
+                                [required]=true
+                                [verticalMode]=true>
+              <select class="form-control qbo-form-control" formControlErrorMessage
+                      formControlName="state">
+                <option *ngIf="!isDefined(getForm().get('address.state').value)"
+                        [ngValue]="null">{{Labels.Select}}</option>
+                <ng-container [ngSwitch]="getForm().get('address.country').value">
+                  <ng-container *ngSwitchCase=CountryISOEnum.US>
+                    <ng-container [ngTemplateOutlet]="usStates"></ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase=CountryISOEnum.CA>
+                    <ng-container [ngTemplateOutlet]="caStates"></ng-container>
+                  </ng-container>
+                </ng-container>
+                <ng-template #usStates>
+                  <option *ngFor="let option of enumKeys(USStateEnum)" [ngValue]="option">
+                    {{USStateEnumValue.get(option)}}
+                  </option>
+                </ng-template>
+                <ng-template #caStates>
+                  <option *ngFor="let option of enumKeys(CAStateEnum)" [ngValue]="option">
+                    {{CAStateEnumValue.get(option)}}
+                  </option>
+                </ng-template>
+              </select>
+            </app-extended-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.Zip"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [placeholder]="Labels.Zip" [textMask]="zipMask"
+                     class="form-control qbo-form-control ng-trim-ignore"
+                     formControlErrorMessage
+                     formControlName="zip"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="col-lg-2 col-sm-4">
+            <app-extended-input [labelText]="Labels.Country"
+                                [required]=true
+                                [verticalMode]=true>
+              <select class="form-control qbo-form-control" formControlErrorMessage
+                      formControlName="country">
+                <option *ngIf="!isDefined(getForm().get('address.country').value)"
+                        [ngValue]="null">{{Labels.Select}}</option>
+                <option *ngFor="let option of CountryISOShort" [ngValue]="option">
+                  {{CountryISO.findByCode(option).name}}
+                </option>
+              </select>
+
+            </app-extended-input>
+          </div>
+        </div>
+      </div>
+
+      <div formGroupName="contactInfo">
+        <div class="form-group row">
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.Email"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [maxlength]="MAX_LENGTH.EMAIL" [placeholder]="Labels.Email"
+                     class="form-control qbo-form-control"
+                     formControlErrorMessage
+                     formControlName="email"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.Phone"
+                                [required]=true
+                                [verticalMode]=true>
+
+              <!-- because backend has no validation for phone format -->
+
+              <ng-container *ngIf="isCreateMode">
+                <input [placeholder]="Labels.Phone" [textMask]="{mask: MASK.US_PHONE}"
+                       class="form-control qbo-form-control ng-trim-ignore"
+                       formControlErrorMessage
+                       formControlName="phone"
+                       type="text">
+              </ng-container>
+              <ng-container *ngIf="isEditMode">
+                <input [placeholder]="Labels.Phone" class="form-control qbo-form-control ng-trim-ignore"
+                       formControlErrorMessage
+                       formControlName="phone"
+                       type="text">
+              </ng-container>
+            </app-extended-input>
+          </div>
+
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.Website"
+                                [required]=false
+                                [verticalMode]=true>
+              <input [maxlength]="MAX_LENGTH.WEBSITE" [placeholder]="Labels.WebsiteHint"
+                     [textMask]="{mask: MASK.HTTPS_URL, guide: false}"
+                     class="form-control ng-trim-ignore qbo-form-control" formControlErrorMessage
+                     formControlName="website" type="text">
+            </app-extended-input>
+          </div>
+        </div>
+      </div>
+
+      <hr/>
+      <div class="d-flex flex-row py-2">
+        <label class="checkbox-container">
+          <input [formControl]="getForm().controls.globalPaymentsEnabled" type="checkbox">
+          <span class="checkmark"></span>
+          <span [innerText]="Labels.EnableGlobalPayments"
+                class="checkbox-descr"></span>
+        </label>
+      </div>
+
+      <ng-container *ngIf="platformCustomerRegistrationOnCheckoutPageEnabled">
+        <hr/>
+        <div class="d-flex flex-row py-2">
+          <label class="checkbox-container">
+            <input [formControl]="getForm().controls.customerRegistrationOnCheckoutPageEnabled" type="checkbox">
+            <span class="checkmark"></span>
+            <span [innerText]="Labels.CustomerRegistrationOnCheckout"
+                  class="checkbox-descr"></span>
+          </label>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="getControls().platform.value">
+        <hr/>
+        <label *ngIf="isEmailReceiptEditable" class="checkbox-container">
+          <input [formControl]="getForm().controls.emailReceipt" formControlErrorMessage type="checkbox">
+          <span class="checkmark"></span>
+          <span [innerHTML]="Labels.EmailReceipt" class="checkbox-descr"></span>
+        </label>
+
+        <div class="pt-3">
+          <app-extended-input [labelContainerClass]="'row col-md-2'"
+                              [labelText]="Labels.MailingMethod"
+                              [required]=true
+                              [verticalMode]="true">
+            <div class="form-check">
+              <div *ngFor="let key of enumKeys(MailingMethodEnum)" class="rd">
+                <input [value]="key" formControlErrorMessage formControlName="mailingMethod" type="radio"/>
+                <label
+                  [for]="key">{{MailingMethodEnumValue.get(key)}}</label>
+              </div>
+            </div>
+          </app-extended-input>
+        </div>
+
+
+        <ng-container *ngIf="showSmtpFields">
+          <div formGroupName="privateSmtp">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <app-extended-input [labelText]="Labels.FromAddress"
+                                    [required]=true
+                                    [verticalMode]=true>
+                  <input [maxlength]="MAX_LENGTH.FROM"
+                         [placeholder]="Labels.FromAddress" class="form-control ng-trim-ignore qbo-form-control"
+                         formControlErrorMessage
+                         formControlName="from"
+                         type="text">
+                </app-extended-input>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <app-extended-input [labelText]="Labels.SMTPServer"
+                                    [required]=true
+                                    [verticalMode]=true>
+                  <input [maxlength]="MAX_LENGTH.SERVER"
+                         [placeholder]="Labels.SMTPServer"
+                         class="form-control ng-trim-ignore qbo-form-control"
+                         formControlErrorMessage
+                         formControlName="server"
+                         type="text">
+                </app-extended-input>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-3">
+                <app-extended-input [labelContainerClass]="'row col-md-2'"
+                                    [labelText]="Labels.SecurityMode"
+                                    [required]=true
+                                    [verticalMode]="true">
+                  <div class="form-check">
+                    <div *ngFor="let key of enumKeys(PrivateSmtpSecurityMode)" class="rd">
+                      <input [value]="key" formControlErrorMessage formControlName="securityMode" type="radio"/>
+                      <label
+                        [for]="key">{{PrivateSmtpSecurityModeValue.get(key)}}</label>
+                    </div>
+                  </div>
+                </app-extended-input>
+              </div>
+              <div class="col-md-3">
+                <app-extended-input [labelText]="Labels.Port"
+                                    [required]=true
+                                    [verticalMode]=true>
+                  <input [maxlength]="MAX_LENGTH.PORT" [placeholder]="Labels.Port"
+                         class="form-control ng-trim-ignore qbo-form-control"
+                         formControlErrorMessage
+                         formControlName="port"
+                         type="text">
+                </app-extended-input>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <app-extended-input [labelText]="Labels.User"
+                                    [required]=true
+                                    [verticalMode]=true>
+                  <input [maxlength]="MAX_LENGTH.USER"
+                         [placeholder]="Labels.User" class="form-control ng-trim-ignore qbo-form-control"
+                         formControlErrorMessage
+                         formControlName="user"
+                         type="text">
+                </app-extended-input>
+              </div>
+              <div class="col-md-6">
+                <app-extended-input [labelText]="Labels.Password"
+                                    [required]=true
+                                    [verticalMode]=true>
+                  <input [maxlength]="MAX_LENGTH.PASSWORD" [placeholder]="Labels.Password"
+                         class="form-control ng-trim-ignore qbo-form-control"
+                         formControlErrorMessage
+                         formControlName="password"
+                         autocomplete="private-smtp-password"
+                         type="password">
+                </app-extended-input>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <hr/>
+      <div formGroupName="vault">
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            <app-extended-input [labelText]="Labels.VaultCompanyID"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [placeholder]="Labels.VaultCompanyID" [textMask]="{mask: MASK.DIGITS, guide: false}"
+                     [maxlength]="MAX_LENGTH.VAULT_COMPANY_ID"
+                     class="form-control qbo-form-control ng-trim-ignore"
+                     formControlErrorMessage
+                     formControlName="companyId"
+                     type="text">
+            </app-extended-input>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            <app-extended-input [labelText]="Labels.VaultUserID"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [placeholder]="Labels.VaultUserID" [textMask]="{mask: MASK.DIGITS, guide: false}"
+                     [maxlength]="MAX_LENGTH.VAULT_USER_ID"
+                     class="form-control qbo-form-control ng-trim-ignore" formControlErrorMessage
+                     formControlName="userId"
+                     type="text">
+            </app-extended-input>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            <app-extended-input [labelText]="Labels.VaultAuthorizationKey"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [maxlength]="MAX_LENGTH.VAULT_AUTH_KEY" [placeholder]="Labels.VaultAuthorizationKey"
+                     class="form-control qbo-form-control ng-trim-ignore"
+                     formControlErrorMessage
+                     formControlName="authKey"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="d-flex align-self-end pb-1">
+            <button (click)="connectToVault();" [disabled]="connectLocked" class="btn btn-sm btn-rectangle btn-warning"
+                    type="button">
+              <nb-icon icon="sync-outline"></nb-icon>
+              {{Labels.Connect}}
+            </button>
+          </div>
+        </div>
+        <ng-container *ngIf="isDefined(vaultFeatures)">
+          <hr>
+            <label class="col-form-label">{{Labels.VaultFeatureNameHeader}}</label>
+            <div class="d-flex flex-column">
+              <div *ngIf="vaultFeatures.emailPaymentFeatureSubscriptionActive" class="my-1">
+                {{Labels.EmailPaymentFeature}}
+              </div>
+              <div *ngIf="vaultFeatures.customerPortalFeatureEnabled" class="my-1">
+                {{Labels.CustomerPortalFeature}}
+              </div>
+              <div *ngIf="vaultFeatures.surchargesFeatureEnabled" class="my-1">
+                {{Labels.SurchargesFeature}}
+              </div>
+              <div *ngIf="vaultFeatures.paymentFormsFeatureEnabled" class="my-1">
+                {{Labels.PaymentFormsFeature}}
+              </div>
+              <div *ngIf="!vaultFeatures.emailPaymentFeatureSubscriptionActive && !vaultFeatures.customerPortalFeatureEnabled && !vaultFeatures.surchargesFeatureEnabled && !vaultFeatures.paymentFormsFeatureEnabled" class="val-message my-1">
+                  {{Labels.NoFeatures}}
+              </div>
+            </div>
+          <ng-container
+            *ngIf="isDefined(vaultFeatures.vaultAllowedPaymentMethods) && vaultFeatures.vaultAllowedPaymentMethods.length > 0">
+            <label class="col-form-label">{{Labels.VaultAvailablePaymentMethods}}</label>
+            <div *ngFor="let pm of vaultFeatures.vaultAllowedPaymentMethods" class="my-1">
+              <span>{{PaymentMethodTypeEnumValue.get(pm)}}</span><span class="pl-3 val-message" *ngIf="isEditMode && vaultFeatures.missingPaymentMethods.includes(pm)">{{Labels.MissingPaymentMethod}}</span>
+            </div>
+          </ng-container>
+          <div *ngIf="vaultFeatures.lastUpdatedTimestamp" class="pt-2">
+            <label><i>{{Labels.LastUpdated}} {{vaultFeatures.lastUpdatedTimestamp}} ({{vaultFeatures.lastUpdatedZoneName}})</i></label>
+          </div>
+        </ng-container>
+      </div>
+
+      <ng-container *ngIf="getForm().contains('webhookSettings')">
+        <hr/>
+        <app-company-webhook [formControl]="_webhookSettings"></app-company-webhook>
+      </ng-container>
+
+      <ng-container *ngIf="paymentFormsEnabled">
+        <hr/>
+        <div class="form-group row">
+          <div class="col-md-6">
+            <app-extended-input [labelText]="Labels.CompanyIdForPaymentForms"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [placeholder]="Labels.CompanyIdForPaymentForms"
+                     [maxlength]="MAX_LENGTH.PAYMENT_FORMS_COMPANY_ID"
+                     class="form-control qbo-form-control ng-trim-ignore"
+                     formControlErrorMessage
+                     [formControl]="getForm().controls.paymentFormsCompanyId"
+                     type="text">
+            </app-extended-input>
+          </div>
+        </div>
+      </ng-container>
+
+      <hr/>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.TokenLimit"
+                              [required]=false
+                              [verticalMode]=true>
+            <div class="d-flex flex-row">
+              <app-extended-number-input [decimalMax]="0"
+                                         [integerLimit]="10"
+                                         [placeholder]="Labels.TokenLimit"
+                                         formControlErrorMessage
+                                         formControlName="tokenLimit">
+              </app-extended-number-input>
+              <div *ngIf="isEditMode" class="d-flex flex-row ml-3 align-items-center">
+                <b class="mr-2">{{Labels.ActiveTokens}}:</b><span>{{entity.activeTokens}}</span>
+              </div>
+            </div>
+            <span class="text-hint">{{Labels.TokenLimitHint}}</span>
+          </app-extended-input>
+        </div>
+
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.MaxUsersInCompany"
+                              [required]=false
+                              [verticalMode]=true>
+            <div class="d-flex flex-row">
+              <app-extended-number-input [decimalMax]="0"
+                                         [integerLimit]="10"
+                                         [placeholder]="Labels.MaxUsersInCompany"
+                                         formControlErrorMessage
+                                         formControlName="maxUsersInCompany">
+              </app-extended-number-input>
+              <div *ngIf="isEditMode" class="d-flex flex-row ml-3 align-items-center">
+                <b class="mr-2">{{Labels.ActiveUsers}}:</b><span>{{entity.activeUsers}}</span>
+              </div>
+            </div>
+          </app-extended-input>
+        </div>
+
+
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.MaxCustomerUsersInCustomer"
+                              [required]=false
+                              [verticalMode]=true>
+            <div class="d-flex flex-row">
+            <app-extended-number-input [decimalMax]="0"
+                                       [integerLimit]="10"
+                                       [placeholder]="Labels.MaxCustomerUsersInCustomer"
+                                       formControlErrorMessage
+                                       formControlName="maxCustomerUsersInCustomer">
+            </app-extended-number-input>
+            </div>
+          </app-extended-input>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+  </nb-card>
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked"
+              class="btn btn-sm btn-rectangle btn-primary" nbSpinnerMessage="" nbSpinnerSize="xsmall" nbSpinnerStatus="success"
+              type="submit">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        {{Labels.Save}}
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger" type="button">
+        <nb-icon icon="minus-outline"></nb-icon>
+        {{Labels.Cancel}}
+      </button>
+    </div>
+  </div>
+</ng-template>

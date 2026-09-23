@@ -1,0 +1,48 @@
+<nb-select (ngModelChange)="onFilterChange($event)" (selectedChange)="onFilterChange($event)"
+           [ngModel]="filterValue"
+           [placeholder]="placeholder"
+           class="qbo-form-control-select"
+           status="qbo-form-control-option" style="width:250px">
+  <nb-option [value]="null">{{placeholder}}</nb-option>
+
+  <nb-select-label>
+          <span *ngIf="filterValue == null">
+              {{placeholder}}
+          </span>
+    <span *ngIf="isWebhookSaleEvent(filterValue)">
+              Sale: {{WebhookEventEnumValue.get(filterValue)}}
+          </span>
+    <span *ngIf="isWebhookPaymentEvent(filterValue)">
+              Payment: {{WebhookEventEnumValue.get(filterValue)}}
+          </span>
+    <span *ngIf="isWebhookPaymentDataEvent(filterValue)">
+              Payment Method: {{WebhookEventEnumValue.get(filterValue)}}
+          </span>
+    <span *ngIf="isWebhookCustomerEvent(filterValue)">
+              Customer: {{WebhookEventEnumValue.get(filterValue)}}
+          </span>
+  </nb-select-label>
+
+  <nb-option-group class="sale-group" title="Sale">
+    <nb-option *ngFor="let option of WebhookSaleEvents" [value]="option">
+      {{WebhookEventEnumValue.get(option)}}
+    </nb-option>
+  </nb-option-group>
+  <nb-option-group class="payment-group" title="Payment">
+    <nb-option *ngFor="let option of WebhookPaymentEvents" [value]="option">
+      {{WebhookEventEnumValue.get(option)}}
+    </nb-option>
+  </nb-option-group>
+  <nb-option-group class="payment-data-group" title="Payment Method">
+    <nb-option *ngFor="let option of WebhookPaymentDataEvents" [value]="option">
+      {{WebhookEventEnumValue.get(option)}}
+    </nb-option>
+  </nb-option-group>
+
+  <nb-option-group class="customer-group" title="Customer">
+    <nb-option *ngFor="let option of WebhookCustomerEvents" [value]="option">
+      {{WebhookEventEnumValue.get(option)}}
+    </nb-option>
+  </nb-option-group>
+
+</nb-select>

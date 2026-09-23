@@ -1,0 +1,21 @@
+@use '../themes' as *;
+
+@include nb-install-component() {
+  width: 25px;
+
+  .icon-warning .cls-main {
+    fill: nb-theme(color-warning);
+  }
+  .icon-danger .cls-main {
+    fill: nb-theme(color-danger);
+  }
+  .icon-info .cls-main {
+    fill: nb-theme(color-info);
+  }
+  .icon-primary .cls-main {
+    fill: nb-theme(color-primary);
+  }
+  .icon-success .cls-main {
+    fill: nb-theme(color-success);
+  }
+}

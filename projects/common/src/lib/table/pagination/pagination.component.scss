@@ -1,0 +1,50 @@
+@use '../../themes' as *;
+
+
+@include nb-install-component() {
+  nb-icon {
+    font-size: 10px;
+  }
+
+  .pagination > div {
+    line-height: 0.5;
+    display: flex;
+  }
+
+  .pagination span {
+    margin: 0.25rem 0.5rem 0.25rem 0.5rem
+  }
+
+  .pagination-number {
+    color: nb-theme(pagination-fg);
+  }
+  .pagination-number:hover {
+    color: nb-theme(pagination-fg-hover);
+  }
+  .pagination-number.current {
+    color: nb-theme(pagination-active-fg);
+    text-decoration: underline;
+  }
+  .pagination-number.current {
+    color: nb-theme(pagination-active-fg-hover);
+  }
+  .pagination-disabled {
+    color: nb-theme(pagination-disabled-fg);
+  }
+
+  .pagination-previous {
+    color: nb-theme(pagination-next-fg);
+  }
+
+  .pagination-next {
+    color: nb-theme(pagination-next-fg);
+  }
+
+  .pagination .pagination-last {
+    color: nb-theme(pagination-next-fg);
+  }
+
+  .pagination-first {
+    color: nb-theme(pagination-next-fg);
+  }
+}

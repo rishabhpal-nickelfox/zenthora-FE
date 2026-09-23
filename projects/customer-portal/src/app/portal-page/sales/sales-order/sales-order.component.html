@@ -1,0 +1,69 @@
+<app-sales-order-payment *ngIf="showSalePayment" (cancelEvent)="onCancel()">
+
+</app-sales-order-payment>
+<app-table-component #table [hidden]="showSalePayment"
+                     [filters]="filters" [headers]="headers"
+                     [objectOperatingService]="service"
+                     [buttonsPanelTemplate]="buttonPanelTemplate"
+                     [rowTemplate]="rowtemplate"></app-table-component>
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button ngbPopover="Export" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.export()" class="btn btn-sm btn-rectangle btn-danger mr-2" type="button">
+        <nb-icon icon="arrow-upward-outline"></nb-icon>
+        Export
+      </button>
+      <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success" (click)="table.refresh()">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        Refresh
+      </button>
+    </div>
+    <label class="checkbox-container">
+      <input [ngModel] = "showArchivedSales" (ngModelChange)="onShowArchivedSales()" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">Show Archived</span>
+    </label>
+    <label class="checkbox-container">
+      <input [ngModel] = "showPaidSales" (ngModelChange)="onShowPaidSales()" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">Show Paid</span>
+    </label>
+  </div>
+
+</ng-template>
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr [class.archived]="rowData.archived" (click)="onViewSale(rowData.id)" class="clickable" >
+    <td class="doc-number">
+      <div>
+        <span>{{rowData.docNumber}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.docDateFormatted}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.total)">{{getCurrencyPrefix(rowData)}}{{rowData.total |number:'1.2-2'}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.appliedAmount)">{{getCurrencyPrefix(rowData)}}{{rowData.appliedAmount |number:'1.2-2'}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.amountDue)">{{getCurrencyPrefix(rowData)}}{{rowData.amountDue |number:'1.2-2'}}</span>
+      </div>
+    </td>
+    <td class="payment-status">
+      <div>
+        <span>{{PaymentStatusEnumValue.get(rowData.paymentStatus)}}</span>
+      </div>
+    </td>
+  </tr>
+
+
+</ng-template>

@@ -1,0 +1,171 @@
+<app-sale-preview (cancelEvent)="onClosePreview()" *ngIf="showPreview"></app-sale-preview>
+<app-table-component #table
+                     [buttonsPanelTemplate]="buttonPanelTemplate"
+                     [filters]="filters" [headers]="headers"
+                     [hidden]="showPreview"
+                     [objectOperatingService]="service"
+                     [rowTemplate]="rowtemplate"></app-table-component>
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        Refresh
+      </button>
+    </div>
+    <label class="checkbox-container">
+      <input (ngModelChange)="onShowArchivedSales()" [ngModel]="showArchivedSales" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">Show Archived</span>
+    </label>
+    <label class="checkbox-container">
+      <input (ngModelChange)="onShowPaidSales()" [ngModel]="showPaidSales" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">Show Paid</span>
+    </label>
+  </div>
+
+</ng-template>
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr [class.archived]="rowData.archived">
+    <td>
+      <div class="expand">
+        <div (click)="expandStatuses(rowData)" *ngIf="showExpandStatuses(rowData)" class="clickable"
+             container="body" ngbPopover="Email details" placement="bottom" triggers="mouseenter:mouseleave">
+          <nb-icon *ngIf="rowData._expandStatuses" icon="minus-outline"></nb-icon>
+          <nb-icon *ngIf="!rowData._expandStatuses" icon="plus-outline"></nb-icon>
+        </div>
+      </div>
+    </td>
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <ng-container *ngIf="isSystemSales">
+      <td class="vault-company-id">
+        <div>
+          <span>{{rowData.vaultCompanyId}}</span>
+        </div>
+      </td>
+    <td class="platform-id">
+      <div>
+        <span>{{rowData.platformId}}</span>
+      </div>
+    </td>
+    <td class="company-id">
+      <div>
+        <span>{{rowData.companyId}}</span>
+      </div>
+    </td>
+    </ng-container>
+    <td>
+      <div>
+        <span>{{rowData.tokenName}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{DocTypeEnumValue.get(rowData.docType)}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.docDateFormatted}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.docId}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.docNumber}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.version}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.emailedOnFormatted}}</span>
+      </div>
+    </td>
+    <td>
+      <div class="d-flex flex-column">
+        <span *ngFor="let emailStatus of rowData.toSaleEmailStatuses"
+              [ngbPopover]="SaleEmailStatusEnumValue.get(emailStatus.status)" class="mb-2"
+              container="body"
+              placement="left"
+              triggers="mouseenter:mouseleave">{{emailStatus.emailAddress}}</span>
+      </div>
+    </td>
+    <td [ngbPopover]="rowData.paymentStatusDateFormatted" class="payment-status"
+        container="body" placement="left"
+        triggers="mouseenter:mouseleave">
+      <div>
+        <span>{{SaleStatusEnumValue.get(rowData.paymentStatus)}}</span>
+      </div>
+    </td>
+    <td class="email-status">
+      <div>
+        <div *ngFor="let status of rowData.toStatuses; let isLast=last;" class="pb-2">
+          <ng-container [ngTemplateOutletContext]="{status:status}"
+                        [ngTemplateOutlet]="emailStatus"></ng-container>
+        </div>
+        <span (click)="$event.cancelBubble=true;" *ngIf="rowData.errorDescription" [ngbPopover]="errorDescription"
+              autoClose="outside"
+              class="d-flex align-self-center pl-1"
+              placement="left">
+            <nb-icon icon="info-outline" status="danger"></nb-icon>
+      </span>
+      </div>
+      <ng-template #errorDescription>
+        {{rowData.errorDescription}}
+      </ng-template>
+
+      <ng-template #emailStatus let-status="status">
+        <span container="body" ngbPopover="{{SaleEmailStatusDescription.get(status)}}"
+              placement="left"
+              triggers="mouseenter:mouseleave">
+          {{SaleEmailStatusEnumValue.get(status)}}
+        </span>
+      </ng-template>
+      <ng-template #expanded>
+        <div *ngFor="let emailStatus of rowData.emailStatuses" class="d-flex flex-row expanded-email-status-row">
+          <div class="col-2">
+            {{emailStatus.statusDatetimeUtcFormatted}}
+          </div>
+          <div class="col-2">
+            {{EmailAddressTypeEnumValue.get(emailStatus.emailAddressType)}}: {{emailStatus.emailAddress}}
+          </div>
+          <div class="col-1">
+            {{SaleEmailStatusEnumValue.get(emailStatus.status)}}
+          </div>
+          <div class="col-2">
+            {{SaleEmailStatusDescription.get(emailStatus.status)}}
+          </div>
+          <div class="col-5">
+            {{emailStatus.description}}
+          </div>
+        </div>
+      </ng-template>
+    </td>
+    <td>
+      <div>
+        <nb-icon (click)="onShowPreview(rowData)" class="clickable view-sale" container="body" icon="eye-outline"
+                 ngbPopover="View Sale" placement="bottom" triggers="mouseenter:mouseleave"></nb-icon>
+      </div>
+    </td>
+  </tr>
+  <tr *ngIf="rowData._expandStatuses">
+    <td colspan="999">
+      <ng-container *ngTemplateOutlet="expanded"></ng-container>
+    </td>
+  </tr>
+
+
+</ng-template>

@@ -1,0 +1,131 @@
+@use 'projects/common/src/lib/themes' as *;
+
+
+@include nb-install-component() {
+  .brand-logo-url {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .powered-by span {
+    color: nb-theme(zenthora-color-base-dark);
+    font-weight: 400;
+    font-size: 10px;
+    border-top: 1px solid nb-theme(separator);
+  }
+
+  .portal-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .portal-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .portal-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .menu-sidebar .main-container {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: visible;
+    padding: nb-theme(sidebar-padding);
+  }
+
+  .menu-sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    position: relative;
+    background-color: nb-theme(sidebar-background-color);
+    overflow: visible !important;
+    z-index: 2;
+  }
+
+  .portal-header {
+    background: nb-theme(navbar-background);
+    padding: 0 nb-theme(header-padding);
+  }
+  .sidebar-hidden {
+    width: 1.5rem;
+
+    .show-hide-sidebar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 3rem;
+      width: 3rem;
+      margin-left: -15px;
+      padding: 0;
+      text-align: center;
+      border: none;
+      box-shadow: nb-theme(shadow);
+      background-color: nb-theme(form-control-background);
+      border-top-left-radius: nb-theme(radius);
+      border-bottom-left-radius: nb-theme(radius);
+
+      label {
+        margin: 0;
+      }
+    }
+  }
+
+  .sidebar-hidden .toggle-arrow {
+    transform: rotate(180deg);
+  }
+
+  .toggle-text {
+    white-space: nowrap;
+  }
+  .sidebar-hidden .toggle-text {
+    display: none;
+  }
+  .sidebar-menu {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 17px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .show-hide-sidebar {
+    margin-top: 1.5rem;
+    cursor: pointer;
+
+    label {
+      cursor: pointer;
+    }
+  }
+  .page-content {
+    position: relative;
+    z-index: 1;
+    background: nb-theme(layout-background-color);
+    margin-bottom: 5rem;
+    padding: 2.25rem 2.25rem 0.75rem;
+  }
+
+  .license-agreement {
+    position: fixed;
+    bottom: 2rem;
+    margin-top: 5rem;
+    padding-right: 20rem;
+    width: 100%;
+    z-index: 0;
+  }
+}

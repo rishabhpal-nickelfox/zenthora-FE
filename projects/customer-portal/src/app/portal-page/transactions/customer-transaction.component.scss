@@ -1,0 +1,14 @@
+@use 'projects/common/src/lib/themes' as *;
+
+@include nb-install-component() {
+  .payment_successful {
+    background-color: nb-theme(color-success-light);
+  }
+  .payment_declined {
+    background-color: nb-theme(color-danger-light);
+  }
+  .doc-number {
+    max-width: 300px;
+    word-break: break-all;
+  }
+}

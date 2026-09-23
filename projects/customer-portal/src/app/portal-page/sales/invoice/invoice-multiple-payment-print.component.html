@@ -1,0 +1,93 @@
+<div class="print-page">
+  <div class="print-column">
+    <div *ngIf="paymentResult">
+      <div class="d-flex flex-row justify-content-center payment-result">
+        <div class="d-flex flex-column">
+          <h6 class="d-flex flex-row">
+            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>{{Labels.PaymentSuccess(currencyPrefix, paymentResult.paymentAmount | number :'1.2-2', paymentResult.surchargeAmount ? (paymentResult.surchargeAmount | number :'1.2-2') : null, paymentResult.totalIncludingSurcharge ? (paymentResult.totalIncludingSurcharge | number :'1.2-2') : null)}}
+          </h6>
+          <span *ngIf="paymentResult.authorizationId" class="d-flex justify-content-center">
+                <strong class="pr-1">{{Labels.AuthorizationID}}</strong>
+            {{paymentResult.authorizationId}}</span>
+          <span *ngIf="paymentResult.approvalId" class="d-flex justify-content-center">
+                <strong class="pr-1">{{Labels.ApprovalID}}</strong>
+            {{paymentResult.approvalId}}</span>
+        </div>
+      </div>
+      <hr>
+    </div>
+    <div>
+      <table class="payments-table w-100">
+        <thead>
+        <tr>
+          <th>
+            <div>{{Labels.Invoice}} #</div>
+          </th>
+
+          <th>
+            <div>{{Labels.Total}}</div>
+          </th>
+
+          <th>
+            <div>{{Labels.AppliedAmount}}</div>
+          </th>
+
+          <th>
+            <div>{{Labels.AmountDue}}</div>
+          </th>
+
+
+          <th *ngIf="paymentResult">
+            <div>
+              <div>{{Labels.AmountPaid}}</div>
+            </div>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let payment of payments; let i = index">
+          <td class="doc-number">
+            <div>{{payment.invoice.docNumber}}</div>
+          </td>
+
+          <td>
+            <div>
+        <span
+          *ngIf="isDefined(payment.invoice.total)">{{currencyPrefix}}{{payment.invoice.total |number:'1.2-2'}}</span>
+            </div>
+          </td>
+
+          <td>
+            <div>
+            <span
+              *ngIf="isDefined(payment.invoice.appliedAmount)">{{currencyPrefix}}{{payment.invoice.appliedAmount |number:'1.2-2'}}</span>
+            </div>
+          </td>
+
+          <td>
+            <div>
+            <span
+              *ngIf="isDefined(payment.invoice.amountDue)">{{currencyPrefix}}{{payment.invoice.amountDue |number:'1.2-2'}}</span>
+            </div>
+          </td>
+
+          <td *ngIf="paymentResult" class="payment-amount">
+            <div class="px-3">
+              {{currencyPrefix}}{{payment.paymentAmount |number:'1.2-2'}}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7">
+            <div class="d-flex">
+              <div class="ml-auto">
+                <b>{{Labels.TotalAmountDue}}: {{currencyPrefix}}{{totalLeftToPay |number:'1.2-2'}}</b>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

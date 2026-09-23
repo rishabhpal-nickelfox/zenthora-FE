@@ -1,0 +1,154 @@
+<div [innerHTML]="styles"></div>
+
+<div *ngIf="layout" class="d-flex">
+  <div [style.grid-template-columns]="getColumns()"
+       class="table w-100">
+    <div class="thead">
+      <div class="tr">
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.LINE_NUM)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.LINE_NUM)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.lineNumHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.ITEM)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.ITEM)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.itemHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.SKU)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.SKU)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.skuHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.SERVICE_DATE)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.serviceDateHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.categoryClassHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.OTHER_1)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.OTHER_1)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.other1Header}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.OTHER_2)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.OTHER_2)" [style.grid-row]="1"
+             class="th">
+          <strong>{{viewService.other2Header}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+             [style.grid-row]="1" class="th">
+          <strong>{{viewService.descriptionHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.QTY)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.QTY)" [style.grid-row]="1" class="th">
+          <strong>{{viewService.quantityHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.RATE)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.RATE)" [style.grid-row]="1" class="th">
+          <strong>{{viewService.rateHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.AMOUNT)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.AMOUNT)" [style.grid-row]="1" class="th">
+          <strong>{{viewService.amountHeader}}</strong>
+        </div>
+        <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.TAX)"
+             [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.TAX)" [style.grid-row]="1" class="th">
+          <strong>{{viewService.taxableHeader}}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="tbody">
+      <div *ngFor="let invoiceItem of data.invoiceItems; index as i;" class="tr">
+        <ng-container *ngIf="viewService.isItemOrGroup(invoiceItem); else description">
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.LINE_NUM)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.LINE_NUM)" [style.grid-row]="i+2" class="td">
+            <span>{{i + 1}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.ITEM)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.ITEM)" [style.grid-row]="i+2" class="td">
+            <span [class.ml-4]="invoiceItem.isChild">{{invoiceItem.name}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.SKU)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.SKU)" [style.grid-row]="i+2" class="td">
+            <span>{{invoiceItem.sku}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.SERVICE_DATE)" [style.grid-row]="i+2" class="td">
+            <span>{{invoiceItem.serviceDate}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)" [style.grid-row]="i+2"
+               class="td">
+            <span>{{invoiceItem.categoryClass}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.OTHER_1)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.OTHER_1)" [style.grid-row]="i+2" class="td">
+            <span>{{invoiceItem.other1}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.OTHER_2)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.OTHER_2)" [style.grid-row]="i+2" class="td">
+            <span>{{invoiceItem.other2}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.DESCRIPTION)" [style.grid-row]="i+2"
+               class="td">
+            <span>{{invoiceItem.description}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.QTY)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.QTY)" [style.grid-row]="i+2" class="td">
+            <span>{{invoiceItem.quantity}}</span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.RATE)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.RATE)" [style.grid-row]="i+2" class="td">
+            <span *ngIf="viewService.isItemOrGroup(invoiceItem)"><span
+              *ngIf="ObjectHelper.isDefined(invoiceItem.rate)">${{invoiceItem.rate |number:'1.2-2'}}</span></span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.AMOUNT)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.AMOUNT)" [style.grid-row]="i+2" class="td">
+            <span *ngIf="viewService.isItemOrGroup(invoiceItem)"><span
+              *ngIf="ObjectHelper.isDefined(invoiceItem.amount)">${{invoiceItem.amount |number:'1.2-2'}}</span></span>
+          </div>
+          <div [class.d-none]="!show(InvoiceItemsTableColumnsEnum.TAX)"
+               [style.grid-column]="getOrder(InvoiceItemsTableColumnsEnum.TAX)" [style.grid-row]="i+2" class="td">
+            <ng-container *ngIf="ObjectHelper.isDefined(invoiceItem.tax); else taxable">${{invoiceItem.tax |number:'1.2-2'}}</ng-container>
+            <ng-template #taxable><nb-icon *ngIf="invoiceItem.taxable"
+                                           icon="checkmark-outline"></nb-icon></ng-template>
+
+          </div>
+        </ng-container>
+        <ng-template #description>
+          <div
+            [style.grid-column-end]="viewService.layout.length + 1" [style.grid-column-start]="1" [style.grid-row]="i+2"
+            class="td d-flex">
+            <span class="ml-auto">{{invoiceItem.description}}</span>
+          </div>
+        </ng-template>
+      </div>
+      <div class="tr">
+        <div [style.grid-column]="'1 / -1'" [style.grid-template-columns]="getMemoTotalsColumns()"
+             class="memo-totals-row">
+          <div class="td customer-memo" style="white-space: pre-wrap;">
+            <div *ngIf="!viewService.hideCustomerMemo">{{viewService.customerMemo}}</div>
+          </div>
+          <div class="TOTAL_TABLE">
+            <div #total_table class="d-flex flex-column">
+              <div *ngFor="let row of totalsRows"
+                   [style.grid-template-columns]="getTotalsColumns()"
+                   class="totals-row tr">
+                <div class="td"><strong>{{row.label}}</strong></div>
+                <div class="td"><span>${{row.amount | number : '1.2-2'}}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

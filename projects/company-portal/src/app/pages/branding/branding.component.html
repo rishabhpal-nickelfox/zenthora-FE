@@ -1,0 +1,100 @@
+<app-branding-createedit (cancelEvent)="onBrandingEditCanceled()"
+                                  (saveEvent)="onBrandingSaved($event)"
+                                  *ngIf="showCreateEditForm"></app-branding-createedit>
+<div [hidden]="showCreateEditForm">
+  <app-table-component #table
+                       [buttonsPanelTemplate]="buttonPanelTemplate"
+                       [filters]="filters"
+                       [headers]="headers"
+                       [objectOperatingService]="service"
+                       [rowTemplate]="rowtemplate"></app-table-component>
+</div>
+
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button ngbPopover="Create New" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="onCreate()" class="btn btn-sm btn-rectangle btn-primary" type="button">
+        <nb-icon icon="plus-outline"></nb-icon>
+        Create New
+      </button>
+      <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success ml-2" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" class="clickable">
+    <td>
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.name}}<span *ngIf="rowData.isDefault" class="pl-1">(Default)</span></span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.companyPortalUrl}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.customerPortalUrl}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.paymentFormsUrl}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.saleFrom}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.receiptFrom}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.emailFrom}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.productName}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.supportPhone}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.supportEmail}}</span>
+      </div>
+    </td>
+    <td (click)="$event.cancelBubble=true;">
+      <div class="d-flex flex-row">
+        <ng-container *ngIf="canEnableDisable(rowData)">
+          <a (click)="onDisable(rowData)" class="px-1 qfiscal-icon" *ngIf="!rowData.disabled">
+            <nb-icon icon="toggle-right" class="enabled" [ngbPopover]="Labels.Disable" placement="bottom" container="body"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+          <a (click)="onEnable(rowData)" class="px-1 qfiscal-icon" *ngIf="rowData.disabled">
+            <nb-icon icon="toggle-left" class="disabled" [ngbPopover]="Labels.Enable" placement="bottom" container="body"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+        </ng-container>
+      </div>
+    </td>
+  </tr>
+</ng-template>

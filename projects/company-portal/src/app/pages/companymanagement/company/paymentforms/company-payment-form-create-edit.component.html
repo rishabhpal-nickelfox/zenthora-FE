@@ -1,0 +1,90 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right">
+            <span *ngIf="isCreateMode">{{Labels.NewPaymentForm}}</span>
+            <span *ngIf="!isCreateMode">{{Labels.EditPaymentForm}}</span>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+
+    <nb-card-body>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.Name"
+                              [required]="true"
+                              [verticalMode]="true">
+            <input class="form-control qbo-form-control" formControlName="name" maxlength="100"
+                   formControlErrorMessage
+                   [placeholder]="Labels.Name" type="text">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.PaymentFormCode"
+                              [required]="true"
+                              [verticalMode]="true">
+            <input class="form-control qbo-form-control" formControlName="paymentFormCode" maxlength="100"
+                   formControlErrorMessage
+                   [placeholder]="Labels.PaymentFormCode" type="text">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div *ngIf="paymentFormUrl" class="form-group row">
+        <div class="col-md-8">
+          <label class="col-form-label">{{Labels.PaymentFormUrl}}</label>
+          <span (click)="copyPaymentFormUrl()" (keyup.enter)="copyPaymentFormUrl()" class="payment-form-url d-block"
+                role="button" tabindex="0">
+            <nb-icon class="copy-icon" icon="copy-outline"></nb-icon>
+            {{paymentFormUrl}}
+          </span>
+        </div>
+      </div>
+
+      <hr/>
+      <div class="form-group">
+        <label class="col-form-label">{{Labels.PaymentFormTemplate}}</label>
+        <app-payment-form-template-editor
+          [companyLogo]="paymentFormsCompanyLogo"
+          [companyLogoContentType]="paymentFormsCompanyLogoContentType"
+          [template]="paymentFormTemplate"
+          (templateChange)="onPaymentFormTemplateChange($event)">
+        </app-payment-form-template-editor>
+      </div>
+    </nb-card-body>
+
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+  </nb-card>
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div>
+      <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked"
+              class="btn btn-sm btn-rectangle btn-primary" nbSpinnerMessage="" nbSpinnerStatus="success"
+              type="submit">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        {{Labels.Save}}
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger" type="button">
+        <nb-icon icon="close-outline"></nb-icon>
+        {{Labels.Cancel}}
+      </button>
+    </div>
+  </div>
+</ng-template>

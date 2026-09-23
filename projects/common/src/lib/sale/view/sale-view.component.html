@@ -1,0 +1,25 @@
+<div class="parent" [nbSpinner]="!viewModel.saleData">
+  <ng-container [ngSwitch]="viewModel.status">
+    <ng-container *ngSwitchCase=SaleStatusEnum.PAID>
+      <div class="paid-container">
+        <img alt="Paid" src="/assets/zenthoralogo/paid.png"/>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase=SaleStatusEnum.PARTIALLY_PAID>
+      <div class="partially-paid-container">
+        <img alt="Partially Paid" src="/assets/zenthoralogo/partially_paid.png"/>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase=SaleStatusEnum.CANCELLED>
+      <div class="cancelled-container">
+        <img alt="Cancelled" src="/assets/zenthoralogo/cancelled.png"/>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="viewModel.saleData">
+    <app-sale-email-full-payment-template-interpret [invoiceTemplateDataModel]="viewModel.saleData"></app-sale-email-full-payment-template-interpret>
+  </ng-container>
+</div>
+
+
+

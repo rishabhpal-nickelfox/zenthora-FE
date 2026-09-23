@@ -1,0 +1,79 @@
+<app-platform-createedit #platformCreateEditComponent (saveEvent)="onPlatformSaved($event)"
+                         (cancelEvent)="onPlatformEditCancel($event)"
+                         *ngIf="showCreateEditForm"></app-platform-createedit>
+<div [hidden]="showCreateEditForm">
+  <app-table-component #table
+                       [headers]="headers"
+                       [filters]="filters"
+                       [objectOperatingService]="service"
+                       [buttonsPanelTemplate]="buttonPanelTemplate"
+                       [rowTemplate]="rowtemplate"></app-table-component>
+</div>
+
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button [ngbPopover]="Labels.CreateNew" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="onCreate()" class="btn btn-sm btn-rectangle btn-primary" type="button">
+        <nb-icon icon="plus-outline"></nb-icon>
+        {{Labels.CreateNew}}
+      </button>
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success ml-2" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+    </div>
+    <label class="checkbox-container">
+      <input (ngModelChange)="onHideInactive()" [ngModel]="hideInactive" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">{{Labels.HideInactive}}</span>
+    </label>
+  </div>
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" class="clickable">
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.name}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span><nb-icon *ngIf="rowData.trusted" icon="checkmark-outline"></nb-icon></span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span><nb-icon *ngIf="rowData.epsCheckout" icon="checkmark-outline"></nb-icon></span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.activeCompaniesCount}} / {{rowData.companiesCount}}</span>
+      </div>
+    </td>
+    <td (click)="$event.cancelBubble=true;">
+      <div class="d-flex flex-row">
+        <div class="pr-2">
+          <a (click)="onShowDisableDialog(rowData)" class="px-1 qfiscal-icon" *ngIf="!rowData.disabled">
+            <nb-icon icon="toggle-right" class="enabled" [ngbPopover]="Labels.Disable" placement="bottom" container="body"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+          <a (click)="onShowEnableDialog(rowData)" class="px-1 qfiscal-icon" *ngIf="rowData.disabled">
+            <nb-icon icon="toggle-left" class="disabled" [ngbPopover]="Labels.Enable" placement="bottom" container="body"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+        </div>
+        <div>
+          <a (click)="onShowDeleteDialog(rowData)" class="qfiscal-icon" *ngIf="rowData.companiesCount == 0">
+            <i class="far fa-trash-alt" [ngbPopover]="Labels.Delete" triggers="mouseenter:mouseleave"></i></a>
+        </div>
+      </div>
+    </td>
+  </tr>
+</ng-template>

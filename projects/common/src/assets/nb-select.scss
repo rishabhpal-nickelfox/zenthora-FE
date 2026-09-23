@@ -1,0 +1,19 @@
+@use '../lib/themes' as *;
+
+nb-select .select-button.placeholder {
+  color: nb-theme(form-control-placeholder-color);
+}
+
+nb-select.qbo-form-control-select .select-button {
+  transition: border-color 0.1s, box-shadow 0.1s;
+}
+
+nb-select.qbo-form-control-select .select-button:hover {
+  box-shadow: nb-theme(form-control-border-shadow-hover);
+}
+
+nb-select.qbo-form-control-select .select-button:focus,
+nb-select.qbo-form-control-select.open .select-button {
+  border-color: nb-theme(form-control-border-color-focus);
+  box-shadow: none;
+}

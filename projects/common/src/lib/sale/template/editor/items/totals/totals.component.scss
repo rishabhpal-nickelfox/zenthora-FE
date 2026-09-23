@@ -1,0 +1,49 @@
+@use "../../../../../themes" as *;
+
+@include nb-install-component() {
+  * {
+    line-height: 1.5
+  }
+  .table {
+    display: grid;
+    border-collapse: collapse;
+    flex: 1;
+    word-wrap: break-word;
+    white-space: normal;
+    box-sizing: border-box;
+  }
+
+  .thead,
+  .tbody,
+  .tr {
+    display: contents;
+  }
+
+  .th,
+  .td {
+    height: 100%;
+  }
+
+  .th {
+    font-weight: 500;
+    padding: 0.2rem !important;
+  }
+
+  .td {
+    padding: 0.4rem !important;
+    white-space: pre-line;
+  }
+
+  .modal-body {
+    overflow: visible;
+  }
+
+  div.number-value  {
+    text-align: right;
+  }
+
+  .remove-btn {
+    color: nb-theme(color-danger);
+    margin-right: 0.5rem;
+  }
+}

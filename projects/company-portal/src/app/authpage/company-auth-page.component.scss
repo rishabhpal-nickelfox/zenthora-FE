@@ -1,0 +1,71 @@
+@use "projects/common/src/lib/themes" as *;
+
+
+@include nb-install-component() {
+  .auth {
+    background: nb-theme(background-basic-color-1);
+  }
+
+  .auth-content {
+    min-height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: linear-gradient(rgba(255, 255, 255, .64), rgba(255, 255, 255, .64)), url('/assets/zenthoralogo/triangles.png');
+
+  }
+
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .zenthora-logo {
+    max-width: 100%;
+  }
+
+  .zenthora-online-header {
+    margin-left: auto;
+    font-family: "Open Sans Light", sans-serif;
+    font-weight: bold;
+    color: #009a49;
+    font-size: 5rem;
+  }
+
+  app-login, app-forgot-password, app-roleselect, app-change-password-login {
+    width: 100%;
+  }
+
+  .logo-container, .login-container, .eula-container {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+
+
+  .logo-container {
+    max-width: 600px;
+    padding: 100px 60px 60px;
+  }
+
+  .login-container {
+    max-width: 600px;
+
+    background: rgba(0, 128, 55, 0.81);
+    padding: 50px 50px 30px;
+    border-radius: 20px;
+  }
+
+  .eula-container {
+    max-width: 800px;
+
+    background: rgba(0, 128, 55, 0.81);
+    padding: 60px;
+    border-radius: 10px;
+
+    > * {
+      width: 100%;
+    }
+  }
+}

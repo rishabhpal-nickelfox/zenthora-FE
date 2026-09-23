@@ -1,0 +1,47 @@
+@use "../../../../../themes" as *;
+
+@include nb-install-component() {
+  * {
+    line-height: 1.5
+  }
+  .table {
+    display: grid;
+    border-collapse: collapse;
+    /* These are just initial values which are overriden using JavaScript when a column is resized */
+    flex: 1;
+    word-wrap: break-word;
+    white-space: normal;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .thead,
+  .tbody,
+  .tr {
+    display: contents;
+  }
+
+  .tr.totals-row {
+    display: grid;
+  }
+
+  .memo-totals-row {
+    display: grid;
+    min-width: 0;
+  }
+
+  .th,
+  .td {
+    height: 100%;
+  }
+
+  .th {
+    font-weight: 500;
+    padding: 0.2rem !important;
+  }
+
+  .td {
+    padding: 0.4rem !important;
+  }
+
+}

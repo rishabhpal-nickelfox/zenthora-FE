@@ -1,0 +1,11 @@
+<div class="d-flex flex-row">
+    <select class="form-control qbo-form-control px-2" [disabled]="disabledMonth" [ngModel]="month" (change)="changeMonth($event.target.value)">
+        <option [value]="null">Month</option>
+        <option *ngFor="let m of months" [value]="m">{{getMonthLabel(m)}}
+        </option>
+    </select>
+    <select class="form-control qbo-form-control px-2" [disabled]="disabledYear" [ngModel]="year" (change)="changeYear($event.target.value)">
+        <option [value]="null">Year</option>
+        <option *ngFor="let y of years" [value]="y">{{y}}</option>
+    </select>
+</div>

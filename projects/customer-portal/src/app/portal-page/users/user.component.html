@@ -1,0 +1,79 @@
+<app-customer-user-edit *ngIf="showCreateEditForm"
+                        (saveEvent)="onSave($event)"
+                        (cancelEvent)="onCancel()"></app-customer-user-edit>
+<app-user-table #tableElement
+                     [hidden]="showCreateEditForm"
+                     [buttonsPanelTemplate]="buttonPanelTemplate" [filters]="filters"
+                     [headers]="headers"
+                     [objectOperatingService]="service"
+                     [rowTemplate]="rowtemplate"></app-user-table>
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button ngbPopover="Invite New" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-primary mr-2" (click)="onCreate()" [disabled]="maxUsersExceeded">
+        <nb-icon icon="plus-outline"></nb-icon>
+        Invite New
+      </button>
+      <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        Refresh
+      </button>
+    </div>
+    <div *ngIf="maxUsersExceeded" class="val-message">
+      {{Labels.MaxNumberOfUsers(table.maxCustomerUsersInCustomer, companyName)}}
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" class="clickable">
+    <td>
+      <div>
+                <span>
+                    {{rowData.id}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div class="invitation-row">
+        <span class="user-email">{{rowData.email}}</span>
+        <div class="invitation-details" *ngIf="isInvited(rowData)">
+          <span class="invitation-expiration" [class.expired]="isInvitationExpired(rowData)">
+            {{getInvitationExpiration(rowData)}}
+          </span>
+          <span class="invitation-actions">
+            <a (click)="$event.cancelBubble=true; onReinvite(rowData)" class="invitation-action reinvite"
+               container="body" [ngbPopover]="Labels.Reinvite" placement="bottom"
+               triggers="mouseenter:mouseleave">
+              <nb-icon icon="email-outline"></nb-icon>
+            </a>
+            <a (click)="$event.cancelBubble=true; onRevoke(rowData)" *ngIf="!isCurrentUser(rowData)"
+               class="invitation-action revoke"
+               container="body" [ngbPopover]="Labels.RevokeInvitation" placement="bottom"
+               triggers="mouseenter:mouseleave">
+              <nb-icon icon="close-circle-outline"></nb-icon>
+            </a>
+          </span>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                  {{getName(rowData)}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <div *ngFor="let permission of rowData.permissions" class="pt-1">
+          <div [class.pl-4]="isChildPermission(permission)">
+            {{CustomerPermissionEnumHelper.getDisplayName(permission)}}
+          </div>
+        </div>
+      </div>
+    </td>
+
+  </tr>
+</ng-template>

@@ -1,0 +1,475 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "eps-ui": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "FE",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "projects/common/polyfills.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            },
+            "assets": [
+              "src/favicon.ico",
+              "src/probe.html",
+              "src/.htaccess",
+              "src/nginx.default",
+              "src/robots.txt",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/common/src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/company-portal/src/assets",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/customer-portal/src/assets",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              "node_modules/@nebular/theme/styles/prebuilt/default.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "node_modules/dragula/dist/dragula.css",
+              "node_modules/ngx-ui-switch/ui-switch.component.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "projects/common/src/assets/toastr.scss",
+              "projects/company-portal/src/styles.scss",
+              "projects/customer-portal/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js",
+              "node_modules/sprintf-js/src/sprintf.js",
+              "projects/common/src/assets/hermes/hermes.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "decimal.js",
+              "deep-equal",
+              "moment-timezone",
+              "lodash/cloneDeep",
+              "assets/hermes/hermes.min.js",
+              "util",
+              "sprintf-js",
+              "eva-icons",
+              "dragula",
+              "quill-delta",
+              "b64-to-blob",
+              "moment",
+              "text-mask-addons/dist/textMaskAddons",
+              "text-mask-core/dist/textMaskCore",
+              "dayjs",
+              "dayjs/plugin/customParseFormat",
+              "dayjs/plugin/isBetween",
+              "dayjs/plugin/isSameOrAfter",
+              "dayjs/plugin/isSameOrBefore",
+              "dayjs/plugin/isoWeek"
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
+          },
+          "configurations": {
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "tsConfig": "src/tsconfig.dev.json"
+            },
+            "production": {
+              "optimization": true,
+              "aot": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "fileReplacements": [
+                {
+                  "replace": "/environments/environment.ts",
+                  "with": "/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "buildTarget": "eps-ui:build",
+            "port": 3001,
+            "host": "0.0.0.0"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "eps-ui:build:production"
+            },
+            "development": {
+              "buildTarget": "eps-ui:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "eps-ui:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "company-portal": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/company-portal",
+      "sourceRoot": "projects/company-portal/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "FE/company-portal",
+            "index": "projects/company-portal/src/index.html",
+            "main": "projects/company-portal/src/main.ts",
+            "tsConfig": "projects/company-portal/tsconfig.app.json",
+            "polyfills": "projects/common/polyfills.ts",
+            "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            },
+            "assets": [
+              "projects/company-portal/src/favicon.ico",
+              "projects/company-portal/src/probe.html",
+              "projects/company-portal/src/.htaccess",
+              "projects/company-portal/src/nginx.default",
+              "projects/company-portal/src/robots.txt",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/common/src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/company-portal/src/assets/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              "node_modules/@nebular/theme/styles/prebuilt/default.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "node_modules/dragula/dist/dragula.css",
+              "node_modules/ngx-ui-switch/ui-switch.component.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "projects/common/src/assets/toastr.scss",
+              "projects/company-portal/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js",
+              "node_modules/sprintf-js/src/sprintf.js",
+              "projects/common/src/assets/hermes/hermes.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "decimal.js",
+              "deep-equal",
+              "moment-timezone",
+              "lodash/cloneDeep",
+              "assets/hermes/hermes.min.js",
+              "util",
+              "sprintf-js",
+              "eva-icons",
+              "dragula",
+              "quill-delta",
+              "b64-to-blob",
+              "moment",
+              "text-mask-addons/dist/textMaskAddons",
+              "text-mask-core/dist/textMaskCore",
+              "dayjs",
+              "dayjs/plugin/customParseFormat",
+              "dayjs/plugin/isBetween",
+              "dayjs/plugin/isSameOrAfter",
+              "dayjs/plugin/isSameOrBefore",
+              "dayjs/plugin/isoWeek"
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
+          },
+          "configurations": {
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "tsConfig": "projects/company-portal/tsconfig.dev.json"
+            },
+            "production": {
+              "optimization": true,
+              "aot": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "fileReplacements": [
+                {
+                  "replace": "/environments/environment.ts",
+                  "with": "/environments/environment.prod.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "buildTarget": "company-portal:build",
+            "port": 3001,
+            "host": "0.0.0.0"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "company-portal:build:production"
+            },
+            "development": {
+              "buildTarget": "company-portal:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "company-portal:build"
+          }
+        }
+      }
+    },
+    "customer-portal": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/customer-portal",
+      "sourceRoot": "projects/customer-portal/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "FE/customer-portal",
+            "index": "projects/customer-portal/src/index.html",
+            "main": "projects/customer-portal/src/main.ts",
+            "tsConfig": "projects/customer-portal/tsconfig.app.json",
+            "polyfills": "projects/common/polyfills.ts",
+            "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            },
+            "assets": [
+              "projects/customer-portal/src/favicon.ico",
+              "projects/customer-portal/src/probe.html",
+              "projects/customer-portal/src/.htaccess",
+              "projects/customer-portal/src/nginx.default",
+              "projects/customer-portal/src/robots.txt",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/common/src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/customer-portal/src/assets/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              "node_modules/@nebular/theme/styles/prebuilt/default.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "node_modules/dragula/dist/dragula.css",
+              "node_modules/ngx-ui-switch/ui-switch.component.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "projects/common/src/assets/toastr.scss",
+              "projects/customer-portal/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js",
+              "node_modules/sprintf-js/src/sprintf.js",
+              "projects/common/src/assets/hermes/hermes.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "decimal.js",
+              "deep-equal",
+              "moment-timezone",
+              "lodash/cloneDeep",
+              "assets/hermes/hermes.min.js",
+              "util",
+              "sprintf-js",
+              "eva-icons",
+              "dragula",
+              "quill-delta",
+              "b64-to-blob",
+              "moment",
+              "text-mask-addons/dist/textMaskAddons",
+              "text-mask-core/dist/textMaskCore",
+              "dayjs",
+              "dayjs/plugin/customParseFormat",
+              "dayjs/plugin/isBetween",
+              "dayjs/plugin/isSameOrAfter",
+              "dayjs/plugin/isSameOrBefore",
+              "dayjs/plugin/isoWeek"
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
+          },
+          "configurations": {
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "tsConfig": "projects/customer-portal/tsconfig.dev.json"
+            },
+            "production": {
+              "optimization": true,
+              "aot": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "fileReplacements": [
+                {
+                  "replace": "/environments/environment.ts",
+                  "with": "/environments/environment.prod.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "buildTarget": "customer-portal:build",
+            "port": 3002,
+            "host": "0.0.0.0"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "customer-portal:build:production"
+            },
+            "development": {
+              "buildTarget": "customer-portal:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "customer-portal:build"
+          }
+        }
+      }
+    },
+    "common": {
+      "projectType": "library",
+      "root": "projects/common",
+      "sourceRoot": "projects/common/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/common/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/common/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/common/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false,
+    "cache": {
+      "enabled": false
+    },
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
+  }
+}

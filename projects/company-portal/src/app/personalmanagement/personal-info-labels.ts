@@ -1,0 +1,15 @@
+export const PersonalInfoLabels = {
+  Header: 'Personal Information',
+  FirstName: 'First Name',
+  MiddleName: 'Middle Name',
+  LastName: 'Last Name',
+  Email: 'Login (Email)',
+  ChangePassword: 'Password',
+  MainPhone: 'Main Phone',
+  WorkPhone: 'Work Phone',
+  Mobile: 'Mobile',
+  Fax: 'Fax',
+  CCEmail: 'CC Email',
+  ContactInfo: 'Contact Info',
+  Submit: 'Save',
+} as const;

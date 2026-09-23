@@ -1,0 +1,103 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage="" nbSpinnerSize="giant"
+      nbSpinnerStatus="success" novalidate>
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right"><span *ngIf="isCreateMode">{{Labels.CreateHeader}}</span><span
+            *ngIf="!isCreateMode">{{Labels.EditHeader}}</span></div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row form-group">
+        <div class="col-md-7">
+          <app-extended-input [labelText]="Labels.Email"
+                              [required]="true"
+                              [verticalMode]="true">
+            <input *ngIf="_email.enabled"
+                   [formControl]="_email" [maxlength]="MAX_LENGTH.EMAIL" [placeholder]="Labels.Email"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   type="text">
+            <span *ngIf="_email.disabled">{{_email.getRawValue()}}</span>
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="row">
+        <div *ngIf="_firstName.enabled || isDefined(_firstName.getRawValue())" class="col-md-4">
+          <app-extended-input [labelText]="Labels.FirstName"
+                              [required]="_firstName.enabled"
+                              [verticalMode]="true">
+            <input *ngIf="_firstName.enabled" [formControl]="_firstName" [maxlength]="MAX_LENGTH.FIRST_NAME"
+                   [placeholder]="Labels.FirstName"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   type="text">
+            <span *ngIf="_firstName.disabled">{{_firstName.getRawValue()}}</span>
+
+          </app-extended-input>
+
+        </div>
+        <div *ngIf="_middleName.enabled || isDefined(_middleName.getRawValue())"
+             class="col-md-4">
+          <app-extended-input [labelText]="Labels.MiddleName"
+                              [verticalMode]="true">
+            <input *ngIf="_middleName.enabled" [formControl]="_middleName" [maxlength]="MAX_LENGTH.MIDDLE_NAME"
+                   [placeholder]="Labels.MiddleName"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   type="text">
+            <span *ngIf="_middleName.disabled">{{_middleName.getRawValue()}}</span>
+          </app-extended-input>
+        </div>
+        <div *ngIf="_lastName.enabled || isDefined(_lastName.getRawValue())" class="col-md-4">
+          <app-extended-input [labelText]="Labels.LastName"
+                              [required]="_lastName.enabled"
+                              [verticalMode]="true">
+            <input *ngIf="_lastName.enabled" [formControl]="_lastName" [maxlength]="MAX_LENGTH.LAST_NAME"
+                   [placeholder]="Labels.LastName"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   type="text">
+            <span *ngIf="_lastName.disabled">{{_lastName.getRawValue()}}</span>
+          </app-extended-input>
+        </div>
+      </div>
+      <hr>
+
+      <app-user-permissions-component [formControl]="_permissions" formControlErrorMessage></app-user-permissions-component>
+    </nb-card-body>
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+
+  </nb-card>
+
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked"
+              class="btn btn-sm btn-rectangle btn-primary ml-auto"
+              nbSpinnerMessage="" nbSpinnerSize="small" nbSpinnerStatus="success" type="submit">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        <ng-container *ngIf="isCreateMode">{{Labels.Invite}}</ng-container>
+        <ng-container *ngIf="!isCreateMode">{{Labels.Save}}</ng-container>
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger ml-auto" type="button">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h4 class="modal-title">Select Currency</h4>
+  <button (click)="activeModal.dismiss()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex flex-column">
+    <div>
+            <span>You have invoices in different currencies. Please select one to pay
+            </span>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="apply(currency)" *ngFor="let currency of currencies" class="btn btn-xs btn-rectangle btn-warning"
+          type="button">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    {{currency}}
+  </button>
+  <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger" type="button">
+    <nb-icon icon="minus-outline"></nb-icon>
+    Cancel
+  </button>
+</div>

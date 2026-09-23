@@ -1,0 +1,42 @@
+@use "../../../themes" as *;
+
+@include nb-install-component() {
+
+  .columns-row {
+    display: flex;
+    align-items: stretch;
+    background-color: nb-theme(table-row-odd);
+  }
+
+  .column {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    cursor: grab;
+  }
+
+  .column.cdk-drag-preview {
+    background-color: nb-theme(table-row-odd);
+    box-shadow: nb-theme(shadow);
+    opacity: 0.9;
+    overflow: hidden;
+  }
+
+  .column.cdk-drag-placeholder {
+    opacity: 0.3;
+  }
+
+  .action-btn {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+  }
+
+  .remove-btn {
+    color: nb-theme(color-danger);
+    margin-right: 0.5rem;
+  }
+
+}

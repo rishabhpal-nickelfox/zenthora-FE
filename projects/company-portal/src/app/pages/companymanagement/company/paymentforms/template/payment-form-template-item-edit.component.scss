@@ -1,0 +1,72 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+  .modal-body {
+    overflow: visible;
+  }
+
+  form,
+  app-rich-text-editor {
+    width: 100%;
+  }
+
+  app-rich-text-editor {
+    display: block;
+    min-width: 900px;
+  }
+
+  ::ng-deep app-rich-text-editor .rich-text-editor {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  ::ng-deep app-rich-text-editor quill-editor,
+  ::ng-deep app-rich-text-editor .ql-container,
+  ::ng-deep app-rich-text-editor .ql-editor {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  ::ng-deep app-rich-text-editor .ql-container {
+    min-width: 100%;
+  }
+
+  .payment-form-template-item-edit {
+    &__option-input-wrapper {
+      flex: 1 1 auto;
+    }
+
+    &__option-remove-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      min-height: 2.25rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      opacity: .7;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &__logo-preview-box {
+      min-height: 140px;
+      padding: 12px;
+      border: 1px solid #e3e3e3;
+      background: #ffffff;
+      overflow: hidden;
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}

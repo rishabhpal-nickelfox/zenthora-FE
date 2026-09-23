@@ -1,0 +1,17 @@
+export const CustomerUserPersonalInfoLabels = {
+  Header: 'Personal Information',
+  FirstName: 'First Name',
+  MiddleName: 'Middle Name',
+  LastName: 'Last Name',
+  Email: 'Login (Email)',
+  ChangePassword: 'Change Password',
+  Unregister: 'Unregister',
+  UnregisterHeader: 'Unregistering',
+  UnregisterBody: (roleName: string) => `Unregistering will remove you as a user on the account for <strong>${roleName}</strong>. \nWould you like to continue?`,
+  Unregistered: (roleName: string) => `${roleName} unregistered`,
+  Submit: 'Save',
+  PasswordChangedMessage: 'Password changed',
+  Cancel: 'Cancel',
+  Yes: "Yes",
+  No: "No",
+} as const;

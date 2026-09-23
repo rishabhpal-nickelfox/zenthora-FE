@@ -1,0 +1,119 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.COMPANY_INFO)}}</h4>
+    <button (click)="close()" aria-label="Close" class="close" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form (ngSubmit)="saveAndClose()" [formGroup]="getForm()">
+<div class="modal-body">
+    <div class="d-flex flex-column toolbar pb-4 pt-2 my-4">
+        <div [innerHTML]="styles" class="template-styles"></div>
+        <div class="d-flex flex-row pb-2">
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_fontColor" [label]="'Font Color'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_titleColor" [label]="'Title Color'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_colorOdd" [label]="'Odd Line'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_borderColor" [includeNone]="true"
+                                  [label]="'Border Color'"></app-color-picker>
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+            <label class="checkbox-container">
+                <input [formControl]="_hideHeader" type="checkbox">
+                <span class="checkmark"></span>
+                <span class="checkbox-descr">Hide Header</span>
+            </label>
+        </div>
+    </div>
+    <div [innerHTML]="styles" class="template-styles"></div>
+    <div class="d-flex flex-row toolbar pb-4 pt-2">
+        <div *ngFor="let key of enumKeys(CompanyInfoRowsEnum)" class="clickable">
+            <span (click)="addRow(key)" *ngIf="canAddRow(key)" class="p-3 mr-2" container="body"
+                  ngbPopover="Click to Add"
+                  placement="bottom" triggers="mouseenter:mouseleave">
+                {{CompanyInfoRowsEnumValue.get(key)}}</span>
+        </div>
+    </div>
+    <div class="table w-30">
+        <div *ngIf="!_hideHeader.value" class="thead">
+            <div class="tr">
+                <div [style.grid-column]="1" [style.grid-row]="1" class="th">
+                    <app-extended-input>
+                        <input [formControl]="_companyInfoHeader"
+                               [placeholder]="Labels.Header"
+                               class="form-control qbo-form-control"
+                               formControlErrorMessage
+                               type="text">
+                    </app-extended-input>
+                </div>
+            </div>
+        </div>
+        <div class="tbody">
+            <div class="tr">
+                <div [style.grid-column]="1" [style.grid-row]="2" class="td">
+                    <div class="d-flex flex-column">
+                        <ng-container *ngTemplateOutlet="companyInfoTemplate"></ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        Save
+    </button>
+    <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+    </button>
+</div>
+</form>
+
+<ng-template #companyInfoTemplate>
+    <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.DISPLAY_NAME, value: viewService.displayName}"
+                  [ngTemplateOutlet]="address"></ng-container>
+    <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.STREET, value: viewService.street}"
+                  [ngTemplateOutlet]="address"></ng-container>
+    <div *ngIf="isAnyPresented([CompanyInfoRowsEnum.CITY, CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])"
+         class="d-flex flex-row">
+        <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.CITY, value: viewService.city}"
+                      [ngTemplateOutlet]="address"></ng-container>
+        <span
+                *ngIf="isPresented(CompanyInfoRowsEnum.CITY) && isAnyPresented([CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])">, </span>
+        <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.STATE, value: viewService.state}"
+                      [ngTemplateOutlet]="address"></ng-container>
+        <span> </span>
+        <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.ZIP, value: viewService.zip}"
+                      [ngTemplateOutlet]="address"></ng-container>
+
+    </div>
+    <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.COUNTRY, value: viewService.country}"
+                  [ngTemplateOutlet]="address"></ng-container>
+    <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.EMAIL, value: viewService.email}"
+                  [ngTemplateOutlet]="address"></ng-container>
+    <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.PHONE, value: viewService.formattedPhone}"
+                  [ngTemplateOutlet]="address"></ng-container>
+    <ng-container [ngTemplateOutletContext]="{id:CompanyInfoRowsEnum.WEB_URL, value: viewService.website}"
+                  [ngTemplateOutlet]="address"></ng-container>
+</ng-template>
+<ng-template #removeButton let-id="id">
+    <nb-icon (click)="deleteRow(id)"
+             class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+             triggers="mouseenter:mouseleave"></nb-icon>
+</ng-template>
+
+<ng-template #address let-id="id" let-value="value">
+    <div *ngIf="isPresented(id) && ObjectHelper.isDefined(value)" class="align-items-baseline">{{value}}
+        <ng-container [ngTemplateOutletContext]="{id:id}"
+                      [ngTemplateOutlet]="removeButton"></ng-container>
+    </div>
+</ng-template>
+

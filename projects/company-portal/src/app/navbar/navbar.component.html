@@ -1,0 +1,24 @@
+<div class="d-flex flex-row align-content-center">
+    <div class="d-flex flex-row zenthora-logo">
+        <div class="pr-5">
+            <img [src]="zenthoraLogo" alt="zenthoraLogo">
+        </div>
+        <div class="d-flex ml-5 title-container align-items-center">
+          <span>{{title}}</span>
+        </div>
+    </div>
+    <div class="ml-auto d-flex flex-row" *ngIf="isLoggedIn()">
+        <div [nbSpinner]="changingRole" nbSpinnerStatus="success" [nbSpinnerMessage]="''">
+            <select #selectRole="ngModel" *ngIf="showRoleSelect()" [ngModel]="currentUser.currentRole.id" (ngModelChange)="setCurrentRole($event)" class="mt-1 form-control qbo-form-control">
+                <option *ngFor="let role of currentUser.roles" [ngValue]="role.id">
+                    {{role.name}} &#64; {{role.entity.legalName}}
+                </option>
+            </select>
+        </div>
+
+        <div class="d-flex flex-column pl-2">
+            <span class="py-1 clickable" (click)="onShowPersonalInfoPage()">{{currentUser.username}}</span>
+            <span class="py-1 clickable" (click)="onLogout()">LOG OUT</span>
+        </div>
+    </div>
+</div>

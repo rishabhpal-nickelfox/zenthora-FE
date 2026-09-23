@@ -1,0 +1,20 @@
+<ng-container [formGroup]="getForm()">
+
+    <div class="d-flex flex-row">
+        <div class="d-flex flex-column pr-3 w-60">
+            <app-extended-input [labelText]="Labels.AuthorizationMessage" [labelContainerClass]="'w-25'"
+                                [labelClass]="'align-label-right'">
+            <textarea class="form-control qbo-form-control" [formControl]="_message" [maxlength]="MAX_LENGTH.AUTHORIZATION_MESSAGE" (focus)="onFormControlFocus()" (blur)="onFormControlBlur()" formControlErrorMessage rows="5"></textarea>
+            </app-extended-input>
+
+        </div>
+
+        <div class="d-flex flex-row flex-wrap pl-3 w-40">
+            <div *ngFor="let pl of placeholders" [hidden]="!isFormControlInFocus">
+                    <button class="btn btn-xs btn-rectangle btn-secondary placeholder mr-2 mb-2" (mousedown)="addPlaceholder($event,pl)" (click)="btnClick()">
+                        {{pl.description}}
+                    </button>
+            </div>
+        </div>
+    </div>
+</ng-container>

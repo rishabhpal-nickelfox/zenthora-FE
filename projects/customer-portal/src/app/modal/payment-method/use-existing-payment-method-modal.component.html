@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <div class="d-flex w-100">
+    <h4 class="modal-title mx-auto">
+      {{Labels.Title}}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross clicked')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+<div class="modal-body d-flex flex-column">
+  <div class="py-2">{{paymentMethodString}}</div>
+  <div class="py-2">{{Labels.Body}}</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-rectangle btn-success" (click)="activeModal.close(true)">
+    <nb-icon icon="plus-outline"></nb-icon>
+    {{Labels.CreateNew}}</button>
+  <button type="button" class="btn btn-sm btn-rectangle btn-primary" (click)="activeModal.close(false)">
+    <nb-icon icon="flip-2-outline"></nb-icon>
+    {{showExistingButtonName}}</button>
+  <button type="button" class="btn btn-sm btn-rectangle btn-danger" (click)="activeModal.dismiss('Cancel clicked')">
+    <nb-icon icon="minus-outline"></nb-icon>
+    {{Labels.Cancel}}</button>
+</div>

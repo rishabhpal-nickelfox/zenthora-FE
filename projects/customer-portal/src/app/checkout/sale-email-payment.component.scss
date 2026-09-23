@@ -1,0 +1,32 @@
+@use 'projects/common/src/lib/themes' as *;
+
+div.invoice-xml {
+  white-space: pre;
+}
+
+div.authorization-message {
+  white-space: pre-wrap;
+  line-height: 1.2rem;
+  font-style: italic;
+}
+
+.sign-in-link, .sign-out-link {
+  font-style: italic;
+  color: nb-theme(link-text-color);
+}
+
+.sign-in-link:hover, .sign-out-link:hover {
+  color: nb-theme(link-text-color-hover);
+}
+
+.sign-in-link:focus, .sign-out-link:focus {
+  color: nb-theme(link-text-color-focus);
+}
+
+.text-hint {
+  font-size: 0.8rem;
+}
+
+.payment-info {
+  max-width: 830px;
+}

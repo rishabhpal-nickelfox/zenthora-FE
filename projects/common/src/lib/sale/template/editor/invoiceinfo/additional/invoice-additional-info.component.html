@@ -1,0 +1,28 @@
+<div [innerHTML]="styles"></div>
+
+<div *ngIf="layout" class="d-flex" [className]="id">
+  <div class="table w-100">
+    <div class="thead">
+      <div class="tr">
+        <div *ngFor="let col of columns"
+             [class.d-none]="!show(col.key)"
+             [style.grid-column]="getOrder(col.key)"
+             [style.grid-row]="1"
+             class="th">
+          <strong>{{ col.getHeader()}}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="tbody">
+      <div class="tr">
+        <div *ngFor="let col of columns"
+             [class.d-none]="!show(col.key)"
+             [style.grid-column]="getOrder(col.key)"
+             [style.grid-row]="2"
+             class="td">
+          <span>{{ viewService.data[col.dataKey] }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+@use '../../themes' as *;
+
+.typeahead-text {
+  border: nb-theme(input-border-width) dashed nb-theme(color-warning-default) !important;
+  border-radius: nb-theme(form-control-border-radius);
+  padding: 0.5rem 1rem;
+  line-height: nb-theme(line-height);
+  font-size: nb-theme(text-paragraph-font-size);
+}
+
+.typeahead-text > label {
+  margin: 0 !important;
+}
+
+.typeahead-text > label > .placeholder {
+  color: nb-theme(form-control-placeholder-color);
+  font-size: nb-theme(form-control-placeholder-font-size);
+}
+
+.typeahead-scrollable-container {
+  overflow-y: visible;
+  max-height: 350px;
+
+  .placeholder {
+    padding-left: 1.25rem;
+    color: nb-theme(form-control-placeholder-color);
+    font-style: italic;
+  }
+}
+
+.dropdown-item {
+  text-transform: none !important;
+  font-weight: normal !important;
+}
+
+.dropdown-item:hover {
+  color: nb-theme(card-text-color) !important;
+}
+
+.dropdown-item.typeahead-active, .dropdown-item:active {
+  background-color: nb-theme(dropdown-hover) !important;
+}
+
+.search {
+  position: relative;
+  color: nb-theme(form-control-border-color);
+  font-size: nb-theme(form-control-placeholder-font-size)
+}
+
+.search input {
+  text-indent: 12px;
+}
+
+.search nb-icon {
+  position: absolute;
+  top: 27%;
+  left: 5px;
+  font-size: 14px;
+  color: nb-theme(form-control-placeholder-color)
+}
+::ng-deep typeahead-container.dropdown.dropdown-menu.open {
+  z-index: 1051;
+}
+
+::ng-deep .dropdown-menu, .dropdown-item {
+  background-color: nb-theme(dropdown-menu-background);
+}

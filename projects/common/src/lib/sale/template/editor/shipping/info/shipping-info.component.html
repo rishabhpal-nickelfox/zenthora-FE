@@ -1,0 +1,18 @@
+<div [innerHTML]="styles"></div>
+<div class="table w-100">
+  <div class="thead">
+    <div class="tr">
+      <div [style.grid-column]="1" [style.grid-row]="1" class="th"><strong>{{viewService.shipMethodHeader}}</strong></div>
+      <div [style.grid-column]="2" [style.grid-row]="1" class="th"><strong>{{viewService.shipDateHeader}}</strong></div>
+      <div [style.grid-column]="3" [style.grid-row]="1" class="th"><strong>{{viewService.trackingNumberHeader}}</strong></div>
+    </div>
+  </div>
+  <div class="tbody">
+    <div class="tr">
+      <div [style.grid-column]="1" [style.grid-row]="2" class="td">Amazon</div>
+      <div [style.grid-column]="2" [style.grid-row]="2" class="td"><span>11/11/2024</span></div>
+      <div [style.grid-column]="3" [style.grid-row]="2" class="td">123123123</div>
+    </div>
+  </div>
+</div>
+

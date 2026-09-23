@@ -1,0 +1,93 @@
+<app-invoice-payment (cancelEvent)="onCancel()" *ngIf="showSalePayment">
+
+</app-invoice-payment>
+
+<app-invoice-multiple-payment (cancelEvent)="onMultipleCancel()" (goBackToListEvent)="onMultipleGoBackToInvoiceList()"  *ngIf="showMultipleSalePayment">
+
+</app-invoice-multiple-payment>
+<app-invoice-table
+  #table [buttonsPanelTemplate]="buttonPanelTemplate"
+                     [filters]="filters" [headers]="headers"
+                     [hidden]="!showTable"
+                     [objectOperatingService]="service"
+                     [rowTemplate]="rowtemplate"></app-invoice-table>
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button ngbPopover="Export" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.export()" class="btn btn-sm btn-rectangle btn-danger mr-2" type="button">
+        <nb-icon icon="arrow-upward-outline"></nb-icon>
+        Export
+      </button>
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success" [nbSpinner]="table.loading" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+      <button [ngbPopover]="Labels.ProcessPayment" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="onProcessPayment()" *ngIf="showProcessPaymentButton" [nbSpinner]="table.loading" [disabled]="isProcessPaymentButtonDisabled" class="btn btn-sm btn-rectangle btn-primary ml-2" type="button">
+        <nb-icon icon="plus-outline"></nb-icon>
+        {{Labels.ProcessPayment}}
+      </button>
+    </div>
+    <ng-container *ngIf="showProcessPaymentButton && selectedInvoicesLengthExceedsLimit" [ngTemplateOutlet]="selectedInvoicesLengthNotExceedsLimitMessage">
+    </ng-container>
+    <label class="checkbox-container">
+      <input (ngModelChange)="onShowArchivedSales()" [ngModel]="showArchivedSales" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">{{Labels.ShowArchived}}</span>
+    </label>
+    <label class="checkbox-container">
+      <input [ngModel] = "showPaidSales" (ngModelChange)="onShowPaidSales()" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">{{Labels.ShowPaid}}</span>
+    </label>
+  </div>
+
+</ng-template>
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onViewSale(rowData.id)" [class.archived]="rowData.archived" class="clickable">
+    <td *ngIf="customerPermissionService.canProcessInvoicesPayments" (click)="$event.cancelBubble=true;">
+      <div class="d-flex">
+        <label class="mx-auto checkbox-container" *ngIf="!isCancelled(rowData)">
+          <input type="checkbox" [ngModel]="isSelected(rowData)" (ngModelChange)="onSelectionChange($event, rowData)" [disabled]="!canSelect(rowData)">
+          <span class="checkmark"></span>
+          <span class="checkbox-descr"></span>
+        </label>
+      </div>
+    </td>
+    <td class="doc-number">
+      <div>
+        <span>{{rowData.docNumber}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.docDateFormatted}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.total)">{{getCurrencyPrefix(rowData)}}{{rowData.total |number:'1.2-2'}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.appliedAmount)">{{getCurrencyPrefix(rowData)}}{{rowData.appliedAmount |number:'1.2-2'}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="isDefined(rowData.amountDue)">{{getCurrencyPrefix(rowData)}}{{rowData.amountDue |number:'1.2-2'}}</span>
+      </div>
+    </td>
+    <td class="payment-status">
+      <div>
+        <span>{{PaymentStatusEnumValue.get(rowData.paymentStatus)}}</span>
+      </div>
+    </td>
+  </tr>
+
+
+</ng-template>
+<ng-template #selectedInvoicesLengthNotExceedsLimitMessage>
+  <div class="val-message pb-2">
+    {{Labels.MultiplePaymentInvoiceNumberStringExceedsLimit}}</div>
+</ng-template>

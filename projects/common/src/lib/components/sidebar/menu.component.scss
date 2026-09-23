@@ -1,0 +1,74 @@
+@use "../../themes" as *;
+
+
+@include nb-install-component() {
+
+  .nav-link {
+    padding: 1rem 1rem 1rem 1.5rem;
+    color: nb-theme(menu-text-color);
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .nav-item {
+    background-color: nb-theme(menu-background-color);
+    color: nb-theme(menu-text-color);
+    width: 100%;
+  }
+
+  .nav-item :not(.has-children) .item:hover {
+    background-color: nb-theme(menu-background-color-hover);
+  }
+
+  .nav-item .active:not(.has-children) .item:hover {
+    background-color: nb-theme(menu-item-active-background-color-hover);
+  }
+
+  .parent .active:not(.has-children) {
+    background-color: nb-theme(menu-item-active-background-color);
+  }
+
+  .parent .active {
+    font-weight: bolder;
+  }
+
+  .child .active .item a {
+    font-weight: bolder;
+    background-color: nb-theme(menu-item-active-background-color);
+  }
+
+  .child .active .item a:hover {
+    font-weight: bolder;
+    background-color: nb-theme(menu-item-active-background-color-hover);
+  }
+
+  .child .item a {
+    padding-left: 3.5rem;
+  }
+
+  .parent .has-children .child .nav-link {
+    cursor: pointer;
+  }
+
+  .parent > :not(.has-children) {
+    cursor: pointer;
+  }
+
+  .parent .has-children * {
+    cursor: default;
+  }
+
+  .parent {
+    margin-bottom: 2rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+  }
+
+  .parent .has-children.expanded {
+    padding-bottom: 2rem;
+  }
+
+  nb-icon {
+    margin-right: 1rem;
+  }
+}

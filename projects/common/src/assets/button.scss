@@ -1,0 +1,95 @@
+@use '../lib/themes' as *;
+
+.btn {
+  font-size: nb-theme(button-font-size);
+  font-weight: 400;
+  text-transform: none;
+  padding: nb-theme(btn-padding);
+  box-shadow: nb-theme(button-box-shadow);
+  outline: none;
+}
+
+.btn:focus,
+.btn.focus,
+.btn:focus-visible,
+.btn.focus-visible,
+.btn:not(:disabled):not(.disabled):active:focus,
+.show > .btn.dropdown-toggle:focus {
+  box-shadow: nb-theme(button-box-shadow);
+  outline: none !important;
+}
+
+.btn nb-icon {
+  font-size: nb-theme(button-icon-font-size);
+  margin: nb-theme(button-icon-margin);
+}
+
+$statuses: info, success, primary, warning, danger;
+
+@each $status in $statuses {
+  .btn.btn-#{$status} {
+    background-color: nb-theme(btn-background-#{$status});
+    color: nb-theme(btn-color-#{$status});
+    border: nb-theme(btn-border-#{$status});
+    box-shadow: nb-theme(button-box-shadow);
+  }
+
+  .btn-outline-#{$status} {
+    background-color: nb-theme(btn-background-#{$status}-outline);
+    color: nb-theme(btn-color-#{$status}-outline);
+    border: nb-theme(btn-border-#{$status}-outline);
+    box-shadow: nb-theme(button-box-shadow);
+  }
+
+  .btn:hover.btn-#{$status},
+  .btn:hover.btn-outline-#{$status},
+  .btn.hover.btn-#{$status},
+  .btn.hover.btn-outline-#{$status},
+  .btn.btn-#{$status}:hover,
+  .btn.btn-outline-#{$status}:hover {
+    background-color: nb-theme(btn-background-#{$status}-hover);
+    color: nb-theme(btn-color-#{$status}-hover);
+    border: nb-theme(btn-border-#{$status}-hover);
+    box-shadow: nb-theme(button-box-shadow);
+  }
+
+  .btn:active.btn-#{$status},
+  .btn:active.btn-outline-#{$status},
+  .btn.active.btn-#{$status},
+  .btn.active.btn-outline-#{$status},
+  .btn.btn-#{$status}:not(:disabled):not(.disabled):active,
+  .btn.btn-outline-#{$status}:not(:disabled):not(.disabled):active,
+  .btn.btn-#{$status}:not(:disabled):not(.disabled).active,
+  .btn.btn-outline-#{$status}:not(:disabled):not(.disabled).active,
+  .show > .btn.btn-#{$status}.dropdown-toggle,
+  .show > .btn.btn-outline-#{$status}.dropdown-toggle {
+    background-color: nb-theme(btn-background-#{$status}-active);
+    color: nb-theme(btn-color-#{$status}-active);
+    border: nb-theme(btn-border-#{$status}-active);
+    box-shadow: nb-theme(button-box-shadow);
+  }
+
+  .btn:focus.btn-#{$status},
+  .btn:focus.btn-outline-#{$status},
+  .btn.focus.btn-#{$status},
+  .btn.focus.btn-outline-#{$status},
+  .btn:active:focus.btn-#{$status},
+  .btn:active:focus.btn-outline-#{$status},
+  .btn.btn-#{$status}:focus,
+  .btn.btn-outline-#{$status}:focus,
+  .btn.btn-#{$status}:focus-visible,
+  .btn.btn-outline-#{$status}:focus-visible,
+  .btn.btn-#{$status}:not(:disabled):not(.disabled):active:focus,
+  .btn.btn-outline-#{$status}:not(:disabled):not(.disabled):active:focus,
+  .show > .btn.btn-#{$status}.dropdown-toggle:focus,
+  .show > .btn.btn-outline-#{$status}.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, nb-theme(btn-background-#{$status}) 30%, transparent);
+    outline: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .popover.compact-button-hint {
+    display: none;
+  }
+}

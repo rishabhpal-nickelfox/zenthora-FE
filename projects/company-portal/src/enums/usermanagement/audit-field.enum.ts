@@ -1,0 +1,31 @@
+export enum AuditFieldEnum {
+  admins = 'Administrators',
+  ein = 'EIN',
+  email = 'Email',
+  legalName = 'Legal name',
+  permissions = 'Permissions',
+  role = 'Role',
+  roles = 'Roles',
+  name = 'Name',
+  active = 'Active',
+
+  //platform
+  epsCheckout = 'Use EPS Checkout Page',
+  emailSale = 'Email Sales',
+  emailReceipt = 'Email Receipt',
+  vaultProductId = 'Vault Product Id',
+  vaultCustomerPortalFeatureName = 'Customer Portal Feature Name',
+  customerPortalEnabled = 'Customer Portal Enabled',
+  paymentFormsEnabled = 'Payment Forms Enabled',
+  vaultPaymentFormsFeatureName = 'Payment Forms Feature Name',
+  emailPaymentsEnabled = 'Email Payments Enabled',
+  vaultEmailPaymentFeatureName = 'Email Payment Feature Name',
+  webhookAuthType = 'Webhook Auth Type',
+  webhookBypassDnsCache = 'Webhook Bypass Dns Cache',
+  webhookMaxNumberOfAttempts = 'Webhook Max Number of Attempts',
+  webhookEnabledEvents = 'Webhook Enabled Events',
+  sendGridSettingsId = "Sendgrid Settings Id",
+  sendGridSettings = "Sendgrid Settings",
+  brandingId = "Branding Id",
+  branding = "Branding"
+}

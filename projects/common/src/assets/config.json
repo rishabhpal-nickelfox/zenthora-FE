@@ -1,0 +1,9 @@
+{
+  "apiUrls": [
+    "https://localhost:8081/api"
+  ],
+  "godaddySitesealKey": "nQVtGdLDoZnIYWZRZqb9aluDvvDXjsq4sPjbuEY3hUjhyxDON4NKKRTr2avZ",
+  "recaptchaEnabled": true,
+  "googleRecaptchaSiteKey": "6LdBvhQhAAAAAMRiKeDyHjoVuyrlgXEbji9bEP4G",
+  "usePortalPrefix": true
+}

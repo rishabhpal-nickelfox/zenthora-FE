@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-center">
+  <h3>{{Labels.Hello}}, {{email}}</h3>
+</div>
+
+<ng-container *ngIf="companyRolesWithCustomerPortalEnabled?.length > 0; else noAvailableCompanies">
+<div class="d-flex justify-content-center">
+  <h6 class="text-hint">{{Labels.Hint}}</h6>
+</div>
+  <div class="mx-auto col-12">
+    <form [formGroup]="getForm()" novalidate>
+      <div class="login-body">
+        <div class="form-group">
+          <app-extended-input>
+            <select [formControl]="_companyId"
+                    class="form-control qbo-form-control'"
+                    formControlErrorMessage>
+              <option [ngValue]="null">Select...</option>
+              <option *ngFor="let company of companyRolesWithCustomerPortalEnabled" [value]="company.customerId">
+                {{company.name}}
+              </option>
+            </select>
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center button-container">
+        <button (click)="submit()" [disabled]="!isSubmitEnabled()" [nbSpinner]="" class="btn btn-sm" nbSpinnerMessage=""
+                nbSpinnerSize="small" nbSpinnerStatus="success" type="button">
+          <nb-icon icon="log-in-outline"></nb-icon>
+          <span class="sign-in">{{Labels.SelectCompany}}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>
+<ng-template #noAvailableCompanies>
+  <div class="d-flex justify-content-center my-auto">
+    <h6 class="text-hint">{{Labels.NoAvailableCompanies}}</h6>
+  </div>
+</ng-template>
+<div class="go-back">
+  <a (click)="onCancel()" href="#">{{Labels.GoBack}}</a>
+</div>

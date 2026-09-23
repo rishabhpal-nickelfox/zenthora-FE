@@ -1,0 +1,105 @@
+<form [formGroup]="getForm()" (ngSubmit)="saveAndClose()" [nbSpinner]="submitLocked" nbSpinnerSize="xsmall" nbSpinnerStatus="success" nbSpinnerMessage="">
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row mr-auto sticky-left">
+          <div class="px-2 align-self-center">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row ml-auto sticky-right">
+          <div class="header-label">
+            {{Labels.Header}}
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-md-4">
+          <app-extended-input [labelText]="Labels.FirstName" [verticalMode]="true" [required]=true >
+            <input type="text" class="form-control qbo-form-control" [formControl]="_firstName" [maxlength]="NAME_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.FirstName">
+          </app-extended-input>
+
+        </div>
+        <div class="col-md-4">
+          <app-extended-input [labelText]="Labels.MiddleName" [verticalMode]="true">
+            <input type="text" class="form-control qbo-form-control" [formControl]="_middleName" [maxlength]="NAME_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.MiddleName">
+          </app-extended-input>
+        </div>
+        <div class="col-md-4">
+          <app-extended-input [labelText]="Labels.LastName" [verticalMode]="true" [required]="true">
+            <input type="text" class="form-control qbo-form-control" [formControl]="_lastName" [maxlength]="NAME_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.LastName">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <app-extended-input [labelText]="Labels.Email" [verticalMode]="true" [required]="true">
+            <input type="text" class="form-control qbo-form-control" [formControl]="_username" [maxlength]="EMAIL_MAX_LENGTH" formControlErrorMessage formControlLowerCase [placeholder]="Labels.Email">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="form-group row py-3">
+        <div class="col-sm-10">
+          <button type="button" (click)="openChangePasswordComponent()" class="btn btn-xs btn-rectangle btn-warning ml-auto">
+            <nb-icon icon="shield-outline"></nb-icon>
+            {{Labels.ChangePassword}}
+          </button>
+        </div>
+      </div>
+
+      <hr>
+
+      <h6>{{Labels.ContactInfo}}</h6>
+      <div [formGroup]="_contactInfo">
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.MainPhone" [required]="true" [verticalMode]="true">
+              <input type="text" class="form-control qbo-form-control ng-trim-ignore" [formControl]="_mainPhone" [textMask]="{mask: MASK.US_PHONE}" formControlErrorMessage [placeholder]="Labels.MainPhone">
+            </app-extended-input>
+          </div>
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.WorkPhone" [verticalMode]="true">
+              <input type="text" class="form-control qbo-form-control ng-trim-ignore" [formControl]="_workPhone" [textMask]="{mask: MASK.US_PHONE}" formControlErrorMessage [placeholder]="Labels.WorkPhone">
+            </app-extended-input>
+          </div>
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.Mobile" [verticalMode]="true">
+              <input type="text" class="form-control qbo-form-control ng-trim-ignore" [formControl]="_mobile" [textMask]="{mask: MASK.US_PHONE}" formControlErrorMessage [placeholder]="Labels.Mobile">
+            </app-extended-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.Fax" [verticalMode]="true">
+              <input type="text" class="form-control qbo-form-control ng-trim-ignore" [formControl]="_fax" [textMask]="{mask: MASK.US_PHONE}" formControlErrorMessage [placeholder]="Labels.Fax">
+            </app-extended-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [labelText]="Labels.CCEmail" [verticalMode]="true">
+              <input type="text" class="form-control qbo-form-control" [formControl]="_ccEmail" [maxlength]="EMAIL_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.CCEmail">
+            </app-extended-input>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+  </nb-card>
+</form>
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button type="submit" class="btn btn-sm btn-rectangle btn-primary ml-auto" [disabled]="!isSubmitEnabled()">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        {{Labels.Submit}}
+      </button>
+    </div>
+  </div>
+</ng-template>

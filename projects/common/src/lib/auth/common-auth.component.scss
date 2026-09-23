@@ -1,0 +1,78 @@
+@use '../themes' as *;
+
+@include nb-install-component() {
+  font-family: "Open Sans Light", sans-serif;
+  padding: 1rem;
+
+  ::ng-deep * {
+    font-size: 15px;
+  }
+
+  h3 {
+    font-size: 20px;
+    color: #ffffff;
+  }
+
+  h6.text-hint {
+    font-style: italic;
+    color: #ffffff;
+  }
+
+  .button-container {
+    color: #ffffff;
+
+    button {
+      background-color: #e87313;
+      color: #ffffff;
+      border-radius: 20px;
+      border: 1px solid #e87313;
+      font-weight: bold;
+
+      nb-icon {
+        color: #ffffff;
+        font-weight: bold;
+      }
+    }
+
+    button:hover {
+      background-color: color-mix(in srgb, #e87313, white 5%)
+    }
+
+    button:focus,
+    button:focus-visible,
+    button.focus,
+    button:not(:disabled):not(.disabled):active:focus {
+      outline: none !important;
+      border-color: #e87313;
+      box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+    }
+
+  }
+
+  .go-back {
+    a {
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+
+  ::ng-deep ::placeholder {
+    font-family: "Open Sans Light", sans-serif;
+    font-size: 14px;
+  }
+
+  ::ng-deep .val-message {
+    color: #ffffff;
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  input, select {
+    border: none;
+  }
+
+
+  select.qbo-form-control {
+    width: -webkit-fill-available;
+  }
+}

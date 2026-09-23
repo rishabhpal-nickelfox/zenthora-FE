@@ -1,0 +1,22 @@
+<div [innerHTML]="styles"></div>
+<div class="table w-100">
+    <div class="tbody">
+        <div class="tr">
+            <div class="td" [style.grid-column]="1" [style.grid-row]="1"><strong>{{viewService.saleHeaderDisplayed}}</strong></div>
+            <div class="td" [style.grid-column]="2" [style.grid-row]="1">1111</div>
+        </div>
+        <div class="tr">
+            <div class="td" [style.grid-column]="1" [style.grid-row]="2"><strong>{{viewService.dateHeader}}</strong></div>
+            <div class="td" [style.grid-column]="2" [style.grid-row]="2">11/11/2024</div>
+        </div>
+        <div class="tr">
+            <div class="td" [style.grid-column]="1" [style.grid-row]="3"><strong>{{viewService.dueDateHeader}}</strong></div>
+            <div class="td" [style.grid-column]="2" [style.grid-row]="3">12/11/2024</div>
+        </div>
+        <div class="tr">
+            <div class="td" [style.grid-column]="1" [style.grid-row]="4"><strong>{{viewService.termsHeader}}</strong></div>
+            <div class="td" [style.grid-column]="2" [style.grid-row]="4">Net 30</div>
+        </div>
+
+    </div>
+</div>

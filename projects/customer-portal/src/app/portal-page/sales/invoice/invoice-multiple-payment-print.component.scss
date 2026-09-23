@@ -1,0 +1,45 @@
+@use 'projects/common/src/lib/themes' as *;
+
+
+@include nb-install-component() {
+  h6 {
+    color: nb-theme(color-heading);
+    font-size: nb-theme(text-heading-6-font-size);
+    font-weight: nb-theme(text-heading-6-font-weight);
+    line-height: nb-theme(text-heading-6-line-height);
+  }
+
+  table > tbody > tr > td > div {
+    display: flex;
+    align-items: center;
+  }
+
+  table {
+    height: fit-content;
+  }
+
+  .payment-result nb-icon {
+    margin-right: 0.1rem;
+    margin-top: 0.1rem;
+  }
+
+  table > thead > tr > th {
+    border-bottom: nb-theme(table-border-width) solid nb-theme(table-separator-color)
+  }
+
+  .doc-number {
+    max-width: 300px;
+    word-break: break-all;
+  }
+
+
+  table > tbody > tr:nth-child(odd):hover {
+    background: none;
+  }
+
+
+  table > tbody > tr:nth-child(even):hover {
+    background: none;
+  }
+
+}

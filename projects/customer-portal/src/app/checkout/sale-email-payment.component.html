@@ -1,0 +1,192 @@
+<div class="sale-email-page" [nbSpinner]="saleLoading">
+  <div *ngIf="isDefined(saleEmailViewModel)" class="sale-email-column d-flex justify-content-center">
+    <div class="receipt">
+      <nb-card>
+        <nb-card-body *ngIf="paymentResult">
+          <ng-container [ngTemplateOutlet]="paymentResultInfo"></ng-container>
+        </nb-card-body>
+      </nb-card>
+      <nb-card>
+        <nb-card-body>
+          <app-sale-view #printSale
+            [docType]="viewService.docType" [viewModel]="saleEmailViewModel"></app-sale-view>
+        </nb-card-body>
+        <hr>
+        <div *ngIf="!processPayment && viewService.showPaymentHistory" class="ml-auto mb-3 mr-3">
+          <ng-template [ngTemplateOutlet]="paymentHistory"></ng-template>
+        </div>
+        <div class="ml-auto mb-3 mr-3">
+          <button (click)="goToPortal()" *ngIf="showGoToPortal"
+                  class="btn btn-xs btn-rectangle btn-success mr-2"
+                  type="button">
+            <nb-icon icon="arrow-forward-outline"></nb-icon>
+            {{Labels.GoToPortal}}
+          </button>
+          <button (click)="print()" class="btn btn-xs btn-rectangle btn-success mr-2" type="button">
+            <nb-icon icon="printer-outline"></nb-icon>
+            {{Labels.Print}}
+          </button>
+          <button (click)="pay()" *ngIf="viewService.showPayment && !processPayment" [disabled]="viewService.disablePayment"
+                  class="btn btn-xs btn-rectangle btn-primary"
+                  type="button">
+            <nb-icon icon="plus-outline"></nb-icon>
+            {{Labels.PayNow}}
+          </button>
+          <button (click)="cancelPayment()" *ngIf="viewService.showPayment && processPayment"
+                  class="btn btn-xs btn-rectangle btn-danger"
+                  type="button">
+            <nb-icon icon="minus-outline"></nb-icon>
+            {{Labels.Cancel}}
+          </button>
+        </div>
+        <div *ngIf="viewService.allowedPaymentMethods.length == 0" class="ml-auto mb-3 mr-3">
+          <ng-container *ngTemplateOutlet="noAllowedPaymentMethods"></ng-container>
+        </div>
+      </nb-card>
+      <div *ngIf="processPayment">
+        <ng-container [ngTemplateOutlet]="paymentInfo"></ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="sale-email-footer">
+    <div class="d-flex flex-column justify-content-center">
+      <div class="d-flex justify-content-center mb-2">
+        <span id="siteseal"></span>
+      </div>
+      <app-recaptcha-terms *ngIf="settingsProvider.isRecaptchaEnabled()" class="mt-2"></app-recaptcha-terms>
+      <div class="d-flex justify-content-center mt-2">
+        <span class="text-hint">{{settingsProvider.copyrightMessage}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #paymentInfo>
+  <form (ngSubmit)="saveAndClose()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+        nbSpinnerSize="xsmall" nbSpinnerStatus="success">
+    <nb-card>
+      <nb-card-body>
+        <div class="payment-info">
+          <div class="row">
+            <div class="d-flex flex-column col-xl-3 col-md-4" id="paymentAmount">
+              <app-extended-input [labelText]="Labels.PaymentAmount"
+                                  [required]="true" [verticalMode]="true">
+                <ng-container *ngIf="viewService.partialPaymentsAllowed; else paymentAmountReadonlyTemplate">
+                  <app-extended-number-input [decimalMax]="2" [decimalMin]="2" [formControl]="_paymentAmount"
+                                             [integerLimit]="11" [placeholder]="Labels.PaymentAmount"
+                                             [prefix]="saleEmailViewModel.currency"
+                                             formControlErrorMessage
+                  ></app-extended-number-input>
+                </ng-container>
+                <ng-template #paymentAmountReadonlyTemplate>
+                  <div
+                    class="mb-2">{{saleEmailViewModel.currency}}{{(getForm().controls.paymentAmount.value || 0) |number:'1.2-2'}}</div>
+                </ng-template>
+              </app-extended-input>
+
+            </div>
+
+          </div>
+
+          <ng-container *ngIf="viewService.showCCPaymentAmountLimitMessage(paymentMethodType)">
+            <ng-template [ngTemplateOutlet]="ccPaymentAmountLimitMessage"></ng-template>
+          </ng-container>
+
+          <ng-container *ngIf="viewService.showPaymentHistory">
+            <ng-template [ngTemplateOutlet]="paymentHistory"></ng-template>
+          </ng-container>
+
+          <ng-container *ngIf="ObjectHelper.isDefined(_surchargeAmount.value)">
+            <app-extended-input [labelText]="Labels.Surcharge(viewService.surchargePercent)" [verticalMode]="false">
+              <div class="my-auto">
+                {{saleEmailViewModel.currency}}{{_surchargeAmount.value |number:'1.2-2'}}
+              </div>
+            </app-extended-input>
+            <app-extended-input [labelText]="Labels.Total" [verticalMode]="false">
+              <div class="my-auto">
+                {{saleEmailViewModel.currency}}{{_totalIncludingSurcharge.value |number:'1.2-2'}}
+              </div>
+            </app-extended-input>
+          </ng-container>
+
+          <hr/>
+          <div [nbSpinner]="paymentMethodsLoading">
+            <ng-container *ngIf="showSignIn; else signOut">
+              <ng-container *ngIf="canSignIn">
+                <ng-template [ngTemplateOutlet]="signIn"></ng-template>
+              </ng-container>
+            </ng-container>
+            <app-payment-methods
+              [class.d-none]="!(paymentMethodsLoading || viewService.customerCanPay)"
+              (deletePaymentMethod)="onDeletePaymentMethod($event)"
+              [copyFromLabel]="Labels.CopyFromBillToAddress"
+              [defaultAddress]="AddressConverterModel.convertSaleAddressTemplateDataToBillingAddress(saleEmailViewModel.saleData.billingAddress)"
+              [formControl]="_paymentMethods">
+            </app-payment-methods>
+            <ng-container *ngIf="!(paymentMethodsLoading || viewService.customerCanPay)" [ngTemplateOutlet]="customerHasNoPermission">
+            </ng-container>
+          </div>
+          <ng-container *ngIf="viewService.customerCanPay">
+            <hr/>
+            <div class="d-flex flex-column">
+              <div [innerHTML]="_sanitizedAuthorizationMessage"
+                   [nbSpinner]="termsOfServiceLoading || privacyStatementLoading"
+                   class="mx-auto authorization-message my-3">
+              </div>
+              <button [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-danger mx-auto"
+                      type="submit">
+                <nb-icon icon="lock-outline"></nb-icon>
+                {{submitButtonName}}
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+  </form>
+</ng-template>
+<ng-template #paymentResultInfo>
+  <app-customer-payment-result
+    [approvalId]="paymentResult.approvalId"
+    [authorizationId]="paymentResult.authorizationId"
+    [currency]="viewService.currency"
+    [paymentAmount]="paymentResult.paymentAmount"
+    [surchargeAmount]="paymentResult.surchargeAmount"
+    [totalIncludingSurcharge]="paymentResult.totalIncludingSurcharge">
+  </app-customer-payment-result>
+  <hr>
+</ng-template>
+<ng-template #paymentHistory>
+  <app-sale-payment-history [justifyContentEnd]="!viewService.showPayment"
+                            [saleViewModel]="saleEmailViewModel"></app-sale-payment-history>
+</ng-template>
+
+<ng-template #ccPaymentAmountLimitMessage>
+  <div class="val-message pb-2">
+    {{Labels.CCPaymentAmountLimitMessage(saleEmailViewModel.currency, saleEmailViewModel.creditCardPaymentAmountLimit | number :'1.2-2', DocTypeEnumValue.get(viewService.docType))}}</div>
+</ng-template>
+
+
+<ng-template #noAllowedPaymentMethods>
+  <div class="val-message pb-2">
+    Please contact {{viewService.companyName}}
+  </div>
+</ng-template>
+
+<ng-template #customerHasNoPermission>
+  <div class="val-message pb-2">
+    You are not allowed to pay
+  </div>
+</ng-template>
+
+<ng-template #signIn>
+  <div class="pb-2">
+    <span>Please <a (click)="onSignIn()" class="sign-in-link">Sign In</a> to use saved payment methods</span>
+  </div>
+</ng-template>
+<ng-template #signOut>
+  <div class="d-flex pb-4 justify-content-end">
+    <span><b>Hello, {{currentPayerEmail}} </b><a (click)="onSignOut()" class="sign-out-link">(Sign Out)</a></span>
+  </div>
+</ng-template>

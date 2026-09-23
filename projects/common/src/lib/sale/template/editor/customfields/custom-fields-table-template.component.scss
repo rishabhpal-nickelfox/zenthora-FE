@@ -1,0 +1,53 @@
+@use "../../../../themes" as *;
+
+@include nb-install-component() {
+
+  .table {
+    display: grid;
+    border-collapse: collapse;
+    flex: 1;
+    word-wrap: break-word;
+    white-space: normal;
+    box-sizing: border-box;
+  }
+
+  .thead,
+  .tbody,
+  .tr {
+    display: contents;
+  }
+
+  .th,
+  .td {
+    height: 100%;
+  }
+
+  .th {
+    font-weight: 500;
+    padding: 0.2rem !important;
+  }
+
+  .td {
+    padding: 0.4rem !important;
+    white-space: pre-line;
+  }
+
+  .column {
+    flex: 1 1 0;
+  }
+
+  .action-btn > * {
+    margin-top: 0.3rem;
+    font-weight: bold;
+    font-size: 27px;
+  }
+
+  input[list]::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
+
+  .modal-body {
+    overflow: visible;
+  }
+
+}

@@ -1,0 +1,10 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+  td.id {
+    width: 7%;
+  }
+  .fa-envelope {
+    color: nb-theme(color-primary-default);
+  }
+}

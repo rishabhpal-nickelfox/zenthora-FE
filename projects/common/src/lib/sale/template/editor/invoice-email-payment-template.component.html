@@ -1,0 +1,142 @@
+<div [innerHTML]="styles"></div>
+    <div class="d-flex flex-row pb-2">
+      <div class="pr-3 d-flex">
+        <nb-select [ngModel]="layoutService.fontSize" (ngModelChange)="onFontSizeChanges($event)" class="qbo-form-control-select">
+          <nb-select-label>
+            Font size: {{layoutService.fontSize}}
+          </nb-select-label>
+          <nb-option *ngFor="let fsz of layoutService.fontSizes"
+                     [value]="fsz">
+            {{fsz}}
+          </nb-option>
+        </nb-select>
+      </div>
+      <div class="pr-3 d-flex">
+        <nb-select [ngModel]="layoutService.lineHeight" (ngModelChange)="onLineHeightChanges($event)" class="qbo-form-control-select">
+          <nb-select-label>
+            Line height: {{layoutService.lineHeight}}
+          </nb-select-label>
+          <nb-option *ngFor="let lh of layoutService.lineHeights"
+                     [value]="lh">
+            {{lh}}
+          </nb-option>
+        </nb-select>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [(ngModel)]="layoutService.fontColor" [label]="'Font Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [(ngModel)]="layoutService.titleColor" [label]="'Title Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [(ngModel)]="layoutService.colorOdd" [label]="'Odd Line'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [(ngModel)]="layoutService.colorEven" [label]="'Even Line'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [(ngModel)]="layoutService.borderColor" [includeNone]="true"
+                          [label]="'Border Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <nb-select [(ngModel)]="layoutService.logoSize" class="qbo-form-control-select">
+          <nb-select-label>
+            Logo Size: {{getInvoiceEmailPaymentTemplateLogoSizeEnumName(layoutService.logoSize)}}
+          </nb-select-label>
+          <nb-option *ngFor="let lsz of InvoiceEmailPaymentTemplateLogoSizeEnumKeys"
+                     [value]="lsz">
+            {{getInvoiceEmailPaymentTemplateLogoSizeEnumName(lsz)}}
+          </nb-option>
+        </nb-select>
+      </div>
+    </div>
+    <div class="d-flex flex-row">
+      <div class="d-flex flex-row pr-5">
+        <label class="col-form-label pr-2">Grid Gap</label>
+        <app-extended-number-input [(ngModel)]="layoutService.gridGap"
+                                   [integerLimit]="2" [placeholder]="'1-10'"
+                                   [suffix]="'px'"
+                                   formControlErrorMessage></app-extended-number-input>
+      </div>
+
+      <label class="checkbox-container">
+        <input [ngModel]="layoutService.minimizeVerticalSize" (ngModelChange)="onMinimizeVerticalSizeChanges($event)" formControlErrorMessage type="checkbox">
+        <span class="checkmark"></span>
+        <span class="checkbox-descr">Minimize Vertical Size When Rendering</span>
+      </label>
+      <div class="d-flex align-items-center">
+        <a (click)="onShowGridChanged()" class="pl-4 d-flex align-items-center show-inactive">
+          <nb-icon *ngIf="showGrid" class="enabled" icon="toggle-right"></nb-icon>
+          <nb-icon *ngIf="!showGrid" class="disabled" icon="toggle-left"></nb-icon>
+          Show Grid
+        </a>
+      </div>
+      <div class="pl-5 d-flex align-items-center">
+        <a (click)="resetToDefaults()" href="#">
+          Reset to Defaults
+        </a>
+      </div>
+    </div>
+    <ng-container *ngIf="companyInfo">
+      <div class="toolbar">
+        <ng-container *ngFor="let component of Object.keys(InvoiceEmailPaymentTemplateComponentsEnum)">
+          <button
+            (click)="handleAdd(component)"
+            *ngIf="showAddButton(component)"
+            class="btn btn-sm"
+            type="button">
+            {{InvoiceEmailPaymentTemplateComponentsEnumValue.get(component)}}
+          </button>
+        </ng-container>
+      </div>
+      <gridster #grid [ngClass]="{'hide-grid': !showGrid}" [options]="options" class="gridster">
+        <gridster-item *ngFor="let item of layout" [item]="item">
+          <ng-container
+            [ngTemplateOutletContext]="getContextForComponent(item)"
+            [ngTemplateOutlet]="component">
+          </ng-container>
+        </gridster-item>
+        <ng-template #component
+                     let-context="context"
+                     let-deleteFunction="deleteFunction"
+                     let-editButtonId="editButtonId"
+                     let-editFunction="editFunction"
+                     let-id="id"
+                     let-itemId="itemId">
+          <div data-grid-content>
+            <div [attr.id]="id"
+                 [componentRef]="itemId"
+                 [id]="id"
+                 appLayoutItem
+                 class="email-item">
+            </div>
+            <div class="action-btn">
+              <button class="edit-btn"
+                      nbButton appearance="filled" shape="round" status="success"
+                      aria-label="Edit"
+                      (mousedown)="editFunction(context, id, $event, editButtonId)"
+                      (touchstart)="editFunction(context, id, $event, editButtonId)"
+                      [id]="editButtonId"
+                      *ngIf="itemId != InvoiceEmailPaymentTemplateComponentsEnum.LOGO"
+                      ngbPopover="Edit Template" placement="bottom" triggers="mouseenter:mouseleave" container="body">
+                <nb-icon icon="edit-2-outline"></nb-icon>
+              </button>
+
+              <button class="remove-btn"
+                      nbButton appearance="filled" shape="round" status="warning"
+                      aria-label="Remove"
+                      (mousedown)="deleteFunction(context, $event, id)"
+                      (touchstart)="deleteFunction(context, $event, id)"
+                      ngbPopover="Remove" placement="bottom" triggers="mouseenter:mouseleave" container="body">
+                <nb-icon icon="close-outline"></nb-icon>
+              </button>
+            </div>
+
+          </div>
+        </ng-template>
+
+      </gridster>
+    </ng-container>
+    <ng-container *ngIf="!companyInfo">
+      <div [nbSpinner]="!companyInfo"></div>
+    </ng-container>

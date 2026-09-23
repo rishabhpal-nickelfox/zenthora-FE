@@ -1,0 +1,41 @@
+@use '../lib/themes' as *;
+
+[val-message],
+.val-message {
+  color: nb-theme(error-color);
+  font-style: italic;
+}
+
+.extended-input__error-message {
+  color: nb-theme(error-color);
+}
+
+input.has-error,
+textarea.has-error,
+select.has-error,
+app-extended-datepicker.has-error {
+  border-color: nb-theme(error-color) !important;
+}
+
+nb-select.has-error .select-button {
+  border-color: nb-theme(error-color) !important;
+}
+
+.has-error,
+.extended-input--error {
+  input,
+  textarea,
+  select,
+  .qbo-form-control,
+  app-extended-datepicker {
+    border-color: nb-theme(error-color) !important;
+  }
+
+  nb-select .select-button {
+    border-color: nb-theme(error-color) !important;
+  }
+
+  .extended-input__label {
+    color: nb-theme(error-color);
+  }
+}

@@ -1,0 +1,37 @@
+<nb-card>
+  <nb-card-header>
+    <div class="d-flex flex-row">
+      <div class="d-flex flex-row flex-grow-1">
+        <div class="mr-auto align-self-center sticky-left">
+          <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+        </div>
+      </div>
+      <div class="d-flex flex-row header-label">
+        <div class="ml-auto sticky-right">
+          <span>{{DocTypeEnumValue.get(docType)}} {{docId}} Preview</span>
+        </div>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body [nbSpinner]="loading">
+    <ng-container *ngIf="salePreviewModel">
+      <app-sale-view [viewModel]="salePreviewModel" [docType]="docType"></app-sale-view>
+      <hr/>
+      <app-sale-payment-history [saleViewModel]="salePreviewModel"></app-sale-payment-history>
+    </ng-container>
+  </nb-card-body>
+  <nb-card-footer>
+    <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+  </nb-card-footer>
+</nb-card>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button type="button" class="btn btn-sm btn-rectangle btn-danger mr-2" (click)="cancel()">
+        <nb-icon icon="minus-outline"></nb-icon>
+       Close
+      </button>
+    </div>
+  </div>
+</ng-template>

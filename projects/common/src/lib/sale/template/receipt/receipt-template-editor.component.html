@@ -1,0 +1,62 @@
+<div *ngIf="!!template">
+  <div class="d-flex flex-column" *ngIf="!externalWidth">
+    <div class="d-flex mb-3">
+      <app-extended-input [labelContainerClass]="'row col-md-2'"
+                          [labelText]="'Receipt Width'"
+                          [required]="true"
+                          [verticalMode]="true">
+        <div class="form-check">
+          <div *ngFor="let r of receiptWidthOptions" class="rd">
+            <input
+              [id]="'receipt-width-' + tabId + '-' + r"
+              [(ngModel)]="width"
+              [ngModelOptions]="{standalone: true}"
+              [value]="r"
+              [name]="'receiptWidth-' + tabId"
+              type="radio"/>
+            <label [for]="'receipt-width-' + tabId + '-' + r">
+              {{ReceiptPrintWidthEnumLabel.get(r)}}
+            </label>
+          </div>
+        </div>
+      </app-extended-input>
+    </div>
+  </div>
+
+  <div class="toolbar" *ngIf="hiddenComponents().length > 0">
+    <button
+      *ngFor="let component of hiddenComponents(); trackBy: trackByValue"
+      (click)="addComponent(component)"
+      class="btn btn-sm"
+      type="button">
+      {{ReceiptTemplateComponentEnumLabel[component]}}
+    </button>
+  </div>
+
+  <div *ngFor="let component of visibleComponents(); trackBy: trackByValue"
+       class="receipt-block">
+    <div [style.width]="ReceiptPrintWidthEnumValue.get(width)" class="receipt-content">
+      <app-receipt-template-preview-block [component]="component"
+                                          [config]="template"
+                                          [saleTableLabel]="saleTableLabel"
+                                          [amountLabel]="amountLabel"></app-receipt-template-preview-block>
+    </div>
+    <div class="action-btn">
+      <button *ngIf="canEditComponent(component)"
+              nbButton appearance="filled" shape="round" status="success"
+              aria-label="Edit"
+              (click)="editComponent(component)"
+              ngbPopover="Edit block" placement="bottom" triggers="mouseenter:mouseleave" container="body"
+              type="button">
+        <nb-icon icon="edit-2-outline"></nb-icon>
+      </button>
+      <button nbButton appearance="filled" shape="round" status="warning"
+              aria-label="Remove"
+              (click)="removeComponent(component)"
+              ngbPopover="Remove block" placement="bottom" triggers="mouseenter:mouseleave" container="body"
+              type="button">
+        <nb-icon icon="close-outline"></nb-icon>
+      </button>
+    </div>
+  </div>
+</div>

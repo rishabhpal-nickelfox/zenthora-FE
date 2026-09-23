@@ -1,0 +1,168 @@
+<ng-container [formGroup]="getForm()">
+
+  <div *ngIf="showFullTabs; else shortTabs">
+    <div class="row">
+      <div class="col-12">
+        <nb-tabset #paymentMethod>
+          <nb-tab
+            [active]="_paymentMethodType.value == PaymentMethodTypeEnum.CREDIT_CARD"
+            [tabId]="PaymentMethodTypeEnum.CREDIT_CARD"
+            [tabTitle]="PaymentMethodTypeEnumValue.get(PaymentMethodTypeEnum.CREDIT_CARD)">
+            <div *ngIf="showPaymentMethodsCarousel">
+              <carousel *ngIf="carouselReady"
+                [interval]="0"
+                [itemsPerSlide]="itemsPerSlide"
+                [noWrap]="false"
+                [showIndicators]="false"
+                [singleSlideOffset]="true"
+                [startFromIndex]="selectedIndex">
+                <slide>
+                  <ng-container [ngTemplateOutlet]="newPaymentMethodPreview"></ng-container>
+                </slide>
+                <slide *ngFor="let pm of filteredPaymentMethods">
+                  <ng-container
+                    [ngTemplateOutletContext]="{paymentMethod: pm}"
+                    [ngTemplateOutlet]="paymentMethodPreview">
+                  </ng-container>
+                </slide>
+              </carousel>
+            </div>
+
+            <div *ngIf="showPaymentMethodsRow" class="d-flex flex-row pb-3">
+              <ng-container [ngTemplateOutlet]="newPaymentMethodPreview"></ng-container>
+              <ng-container *ngFor="let pm of filteredPaymentMethods">
+                <ng-container
+                  [ngTemplateOutletContext]="{paymentMethod: pm}"
+                  [ngTemplateOutlet]="paymentMethodPreview">
+                </ng-container>
+              </ng-container>
+            </div>
+
+            <ng-container [ngTemplateOutlet]="creditCardTemplate"></ng-container>
+          </nb-tab>
+
+          <nb-tab
+            [active]="_paymentMethodType.value == PaymentMethodTypeEnum.ACH"
+            [tabId]="PaymentMethodTypeEnum.ACH"
+            [tabTitle]="PaymentMethodTypeEnumValue.get(PaymentMethodTypeEnum.ACH)">
+            <div *ngIf="showPaymentMethodsCarousel">
+              <carousel
+                [interval]="0"
+                [itemsPerSlide]="itemsPerSlide"
+                [noWrap]="false"
+                [showIndicators]="false"
+                [singleSlideOffset]="true"
+                [startFromIndex]="selectedIndex">
+                <slide>
+                  <ng-container [ngTemplateOutlet]="newPaymentMethodPreview"></ng-container>
+                </slide>
+                <slide *ngFor="let pm of filteredPaymentMethods">
+                  <ng-container
+                    [ngTemplateOutletContext]="{paymentMethod: pm}"
+                    [ngTemplateOutlet]="paymentMethodPreview">
+                  </ng-container>
+                </slide>
+              </carousel>
+            </div>
+
+            <div *ngIf="showPaymentMethodsRow" class="d-flex flex-row pb-3">
+              <ng-container [ngTemplateOutlet]="newPaymentMethodPreview"></ng-container>
+              <ng-container *ngFor="let pm of filteredPaymentMethods">
+                <ng-container
+                  [ngTemplateOutletContext]="{paymentMethod: pm}"
+                  [ngTemplateOutlet]="paymentMethodPreview">
+                </ng-container>
+              </ng-container>
+            </div>
+            <ng-container [ngTemplateOutlet]="achTemplate"></ng-container>
+          </nb-tab>
+        </nb-tabset>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #shortTabs>
+    <div class="pt-2">
+      <div *ngIf="showPaymentMethodsCarousel">
+        <carousel
+          [interval]="0"
+          [itemsPerSlide]="itemsPerSlide"
+          [noWrap]="false"
+          [showIndicators]="false"
+          [singleSlideOffset]="true"
+          [startFromIndex]="selectedIndex">
+          <slide>
+            <ng-container [ngTemplateOutlet]="newPaymentMethodPreview"></ng-container>
+          </slide>
+          <slide *ngFor="let pm of filteredPaymentMethods">
+            <ng-container
+              [ngTemplateOutletContext]="{paymentMethod: pm}"
+              [ngTemplateOutlet]="paymentMethodPreview">
+            </ng-container>
+          </slide>
+        </carousel>
+      </div>
+
+      <div *ngIf="showPaymentMethodsRow" class="d-flex flex-row pb-3">
+        <ng-container [ngTemplateOutlet]="newPaymentMethodPreview"></ng-container>
+        <ng-container *ngFor="let pm of filteredPaymentMethods">
+          <ng-container
+            [ngTemplateOutletContext]="{paymentMethod: pm}"
+            [ngTemplateOutlet]="paymentMethodPreview">
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div class="row px-4 py-2">
+        <div class="col-12">
+          <ng-container *ngIf="_paymentMethodType.value == PaymentMethodTypeEnum.CREDIT_CARD"
+                        [ngTemplateOutlet]="creditCardTemplate"></ng-container>
+          <ng-container *ngIf="_paymentMethodType.value == PaymentMethodTypeEnum.ACH"
+                        [ngTemplateOutlet]="achTemplate"></ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #creditCardTemplate>
+    <app-credit-card-info-component
+      [copyFromLabel]="copyFromLabel"
+      [formControl]="_creditCardData"
+      class="w-100">
+    </app-credit-card-info-component>
+  </ng-template>
+
+  <ng-template #achTemplate>
+    <app-ach-group
+      [copyFromLabel]="copyFromLabel"
+      [defaultAddress]="defaultAddress"
+      [formControl]="_achData"
+      class="w-100">
+    </app-ach-group>
+  </ng-template>
+
+</ng-container>
+
+<ng-template #newPaymentMethodPreview>
+  <app-payment-method-preview
+    (click)="selectPaymentMethod(null)"
+    [paymentMethod]="null"
+    [selected]="isSelectedPaymentMethod(null)"
+    class="px-2">
+  </app-payment-method-preview>
+</ng-template>
+
+<ng-template #paymentMethodPreview let-paymentMethod="paymentMethod">
+  <app-payment-method-preview
+    (click)="selectPaymentMethod(paymentMethod)"
+    (delete)="onDeletePaymentMethod($event)"
+    (edit)="onEditPaymentMethod($event)"
+    [companyName]="viewService.companyName"
+    [disabled]="!canSelectPaymentMethod(paymentMethod)"
+    [canEdit]="viewService.canManagePaymentMethods"
+    [canDelete]="viewService.canManagePaymentMethods"
+    [paymentMethod]="paymentMethod"
+    [selected]="isSelectedPaymentMethod(paymentMethod)"
+    class="px-2">
+  </app-payment-method-preview>
+</ng-template>

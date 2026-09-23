@@ -1,0 +1,193 @@
+<div class="modal-header">
+  <h4
+    class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.ITEMS)}}</h4>
+  <button (click)="close()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex flex-column toolbar pb-4 pt-2 my-4">
+    <div [innerHTML]="styles" class="template-styles"></div>
+    <div class="d-flex flex-row flex-wrap mb-4">
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_fontColor" [label]="'Font Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_titleColor" [label]="'Title Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_colorOdd" [label]="'Odd Line'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_colorEven" [label]="'Even Line'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_borderColor" [includeNone]="true"
+                          [label]="'Border Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_customerMemoColor" [includeNone]="true"
+                          [label]="'Customer Memo Color'"></app-color-picker>
+      </div>
+    </div>
+    <div class="d-flex flex-row flex-wrap mt-4">
+      <div *ngFor="let key of enumKeys(InvoiceItemsTableColumnsEnum)" class="clickable mb-2">
+            <span (click)="addColumn(key)" *ngIf="canAddColumn(key)" class="p-3 mr-3" container="body"
+                  ngbPopover="Click to Add" placement="bottom" triggers="mouseenter:mouseleave">
+                {{InvoiceItemsTableColumnsEnumValue.get(key)}}</span>
+      </div>
+    </div>
+    <div class="d-flex flex-row mt-4">
+        <label class="checkbox-container">
+          <input [formControl]="_autoColumnWidths" type="checkbox">
+          <span class="checkmark"></span>
+          <span class="checkbox-descr">Auto Column Widths</span>
+        </label>
+    </div>
+  </div>
+  <div *ngIf="getForm().errors && getForm().errors.layout" class="val-message">
+    The minimum number of columns is 3
+  </div>
+  <div [style.width.px]="viewService.renderWidthPx" aria-hidden="true" class="columns-probe">
+    <app-invoice-email-payment-template-invoice-items #columnsProbe
+                                                     [previewAutoColumnWidths]="_autoColumnWidths.value"
+                                                     [previewLayout]="layout"></app-invoice-email-payment-template-invoice-items>
+  </div>
+  <div #gridWrap class="d-flex flex-row grid-wrap">
+    <div (cdkDropListDropped)="onColumnDrop($event)" [style.width.px]="viewService.gridWidthPx"
+         cdkDropList cdkDropListOrientation="mixed" class="columns-row">
+      <div *ngFor="let item of layout; index as i" [style.width.px]="columnWidthPx(item)"
+           cdkDrag cdkDragBoundary=".columns-row" cdkDragLockAxis="x" cdkDragPreviewContainer="parent"
+           class="column">
+        <ng-container *ngIf="columnFields.get(item.id) as field"
+                      [ngTemplateOutletContext]="{control: field.control, property: field.property, columnId: item.id}"
+                      [ngTemplateOutlet]="itemTableColumnTemplate"></ng-container>
+        <div (mousedown)="$event.stopPropagation()" class="action-btn clickable">
+          <nb-icon (click)="deleteColumn(item.id)"
+                   class="remove-btn" container="body" icon="close" ngbPopover="Remove"
+                   placement="bottom" triggers="mouseenter:mouseleave"></nb-icon>
+        </div>
+        <div (mousedown)="$event.stopPropagation()" (pointerdown)="startResize($event, i)"
+             *ngIf="!_autoColumnWidths.value && i < layout.length - 1" class="resize-handle"></div>
+      </div>
+    </div>
+  </div>
+  <hr/>
+  <div class="d-flex flex-row flex-wrap toolbar py-4 my-4">
+    <div *ngFor="let key of enumKeys(InvoiceItemsTableTotalsEnum)" class="clickable mb-2">
+            <span (click)="addTotalRow(key)" *ngIf="canAddTotalRow(key)" class="p-3 mr-3" container="body"
+                  ngbPopover="Click to Add"
+                  placement="bottom" triggers="mouseenter:mouseleave">
+                {{InvoiceItemsTableTotalsEnumValue.get(key)}}</span>
+    </div>
+    <div class="clickable">
+             <span (click)="addCustomerMemo()" *ngIf="canAddCustomerMemo()" class="p-3 mr-3" container="body"
+                   ngbPopover="Click to Add"
+                   placement="bottom" triggers="mouseenter:mouseleave">Customer Memo</span>
+    </div>
+  </div>
+  <div *ngIf="getForm().errors && isDefined(getForm().errors.totals)" class="val-message">
+    The minimum number of rows is 1
+  </div>
+  <div *ngIf="!_autoColumnWidths.value && layout.length > 3" class="d-flex flex-row mb-3">
+    <label class="checkbox-container">
+      <input [formControl]="_autoTotalsWidth" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">Auto Totals Width</span>
+    </label>
+  </div>
+  <div [style.width.px]="viewService.gridWidthPx" class="d-flex memo-totals">
+    <div [style.grid-template-columns]="memoTotalsColumns" class="table">
+      <div class="tbody">
+        <div class="tr">
+          <div [style.grid-column]="1" class="td customer-memo"
+               style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div [ngStyle]="{ 'visibility': _hideCustomerMemo.value ? 'hidden' : 'visible' }"
+                 style="white-space: pre-wrap; flex-grow: 1;">{{viewService.customerMemo}}
+            </div>
+            <div *ngIf="!_hideCustomerMemo.value">
+              <nb-icon (click)="deleteCustomerMemo()"
+                       class="remove-btn" container="body" icon="close" ngbPopover="Remove"
+                       placement="bottom" triggers="mouseenter:mouseleave"></nb-icon>
+            </div>
+          </div>
+
+          <div [style.grid-column]="2" [style.grid-template-columns]="totalsColumnsPx" class="totals-cell"
+               style="display: grid;">
+            <div (pointerdown)="startLabelsResize($event)" *ngIf="isTotalsSplitEnabled"
+                 [style.left.px]="-8" class="resize-handle"></div>
+            <div (pointerdown)="startAmountResize($event)" *ngIf="isTotalsSplitEnabled"
+                 [style.left.px]="totalsLabelWidthPx - 8" class="resize-handle"></div>
+            <div class="tbody">
+              <div *ngFor="let row of totalsRows" class="tr">
+                <div [style.grid-column]="1" class="td">
+                  <strong>{{row.label}}</strong>
+                </div>
+                <div [style.grid-column]="2" class="td">
+                  <div class="d-flex flex-row">
+                    <span>${{row.amount | number:'1.2-2'}}</span>
+                    <ng-container
+                      [ngTemplateOutletContext]="{id: row.id}"
+                      [ngTemplateOutlet]="removeTotalRowButton"></ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button (click)="saveAndClose()" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+  <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+    <nb-icon icon="minus-outline"></nb-icon>
+    Cancel
+  </button>
+</div>
+
+
+<ng-template #removeTotalRowButton let-id="id">
+  <nb-icon (click)="deleteTotalRow(id)"
+           class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+           triggers="mouseenter:mouseleave"></nb-icon>
+</ng-template>
+
+<ng-template #itemTableColumnTemplate let-columnId="columnId" let-control="control" let-property="property">
+  <div class="table w-100 h-100">
+    <div class="thead">
+      <div class="tr">
+        <div [style.grid-column]="1" class="th">
+          <app-extended-input>
+            <textarea (input)="syncHeaderHeights()" (mousedown)="$event.stopPropagation()"
+                      (keydown.enter)="$event.preventDefault()"
+                      [formControl]="control"
+                      [maxlength]="MAX_LENGTH.HEADER"
+                      [placeholder]="Labels.Header"
+                      [title]="columnTitle(columnId, control)"
+                      class="form-control qbo-form-control header-input"
+                      formControlErrorMessage
+                      rows="1"></textarea>
+          </app-extended-input>
+        </div>
+      </div>
+    </div>
+    <div class="tbody">
+      <div *ngFor="let item of previewData; index as i" class="tr">
+        <div [ngSwitch]="property" [style.grid-column]="1" class="td">
+          <span *ngSwitchCase="'lineNum'">{{i + 1}}</span>
+          <span *ngSwitchCase="'rate'">${{item[property] | number:'1.2-2'}}</span>
+          <span *ngSwitchCase="'amount'">${{item[property] | number:'1.2-2'}}</span>
+          <span *ngSwitchCase="'tax'">${{item[property] | number:'1.2-2'}}</span>
+          <span *ngSwitchCase="'taxable'"><nb-icon icon="checkmark-outline"></nb-icon></span>
+          <span *ngSwitchDefault>{{item[property]}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

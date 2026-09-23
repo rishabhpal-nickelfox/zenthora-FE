@@ -1,0 +1,72 @@
+<div class="form-group">
+
+    <hr>
+    <label>
+        <span [hidden]=!showRoleTree>{{Labels.RolesInEntity(entity?.legalName)}}</span>
+        <span *ngIf=showPending class="pl-1">[{{Labels.Pending}}]</span>
+    </label>
+    <div class="form-group" *ngIf="showRoleTree" [nbSpinner]="loading">
+
+        <div class="pl-5">
+            <div class="d-flex flex-row py-2 accept">
+                <label class="checkbox-container">
+                    <input type="checkbox" [formControl]="_selectAllRoles">
+                    <span class="checkmark"></span>
+                    <span class="checkbox-descr"
+                          [innerText]="_selectAllRoles.value? 'Uncheck All': 'Check All'"></span>
+                </label>
+            </div>
+            <ng-container [formGroup]="getForm()">
+                <ng-container formArrayName="roles">
+                    <ng-container *ngFor="let roleControl of _rolesControl.controls; let i = index">
+                        <div class="d-flex flex-row pl-5">
+                            <label class="checkbox-container">
+                                <input type="checkbox" [formControl]="roleControl">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-descr" [innerText]="getRoleName(i)"></span>
+                            </label>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-rectangle btn-primary m-1" [disabled]="loading" (click)="changeRoles()">
+                        <nb-icon icon="checkmark-outline"></nb-icon>
+                        {{Labels.Change}}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-rectangle btn-danger m-1" (click)="cancelChangingRoles()">
+                        <nb-icon icon="minus-outline"></nb-icon>
+                        {{Labels.Cancel}}
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+
+    </div>
+    <div class="form-group">
+        <table class="col-md-12 col-lg-6">
+            <thead>
+            <tr>
+                <th style="width: 30%" scope="col">
+                    <div>{{Labels.Entity}}</div>
+                </th>
+                <th scope="col">
+                    <div>{{Labels.Roles}}</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let roleGroup of roleGroups">
+                <tr (click)="onEditRoleGroup(roleGroup)" class="clickable">
+                    <td>
+                        <div>{{getEntity(roleGroup).legalName}}</div>
+                    </td>
+                    <td>
+                        <div>{{getRolesString(roleGroup)}}</div>
+                    </td>
+                </tr>
+            </ng-container>
+            </tbody>
+        </table>
+
+    </div>
+</div>

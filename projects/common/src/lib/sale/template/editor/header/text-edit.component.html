@@ -1,0 +1,27 @@
+<div [innerHTML]="styles" class="template-styles"></div>
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.TEXT)}}</h4>
+  <button (click)="close()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex flex-row toolbar pb-4 pt-2 my-4">
+    <div class="d-flex flex-row pb-2">
+      <div class="pr-3 d-flex">
+        <app-rich-text-editor [formControl]="_content" [defaultFontSize]="defaultFontSize" [defaultColor]="defaultColor" [placeholders]="CompanySettingsTextTemplatePlaceholderEnumValue" formControlErrorMessage></app-rich-text-editor>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="saveAndClose()" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+  <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+    <nb-icon icon="minus-outline"></nb-icon>
+    Cancel
+  </button>
+</div>

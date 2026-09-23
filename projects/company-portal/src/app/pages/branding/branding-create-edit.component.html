@@ -1,0 +1,147 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right"><span *ngIf="isCreateMode">{{Labels.CreateBranding}}</span><span
+            *ngIf="!isCreateMode">{{Labels.EditBranding}}</span></div>
+        </div>
+      </div>
+    </nb-card-header>
+
+    <nb-card-body>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.Name" [required]="true" [verticalMode]="true">
+            <input [formControl]="_name" [maxlength]="MAX_LENGTH.NAME"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.Name}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.CompanyPortalUrl" [required]="true" [verticalMode]="true">
+            <input [formControl]="_companyPortalUrl" [maxlength]="MAX_LENGTH.PORTAL_URL"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.CompanyPortalUrl}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.CustomerPortalUrl" [required]="true" [verticalMode]="true">
+            <input [formControl]="_customerPortalUrl" [maxlength]="MAX_LENGTH.PORTAL_URL"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.CustomerPortalUrl}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.PaymentFormsUrl" [required]="true" [verticalMode]="true">
+            <input [formControl]="_paymentFormsUrl" [maxlength]="MAX_LENGTH.PORTAL_URL"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.PaymentFormsUrl}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.SaleFrom" [required]="true" [verticalMode]="true">
+            <input [formControl]="_saleFrom" [maxlength]="MAX_LENGTH.SALE_FROM"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.SaleFrom}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.ReceiptFrom" [required]="true" [verticalMode]="true">
+            <input [formControl]="_receiptFrom" [maxlength]="MAX_LENGTH.RECEIPT_FROM"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.ReceiptFrom}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.EmailFrom" [required]="true" [verticalMode]="true">
+            <input [formControl]="_emailFrom" [maxlength]="MAX_LENGTH.EMAIL_FROM"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.EmailFrom}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.ProductName" [required]="true" [verticalMode]="true">
+            <input [formControl]="_productName" [maxlength]="MAX_LENGTH.PRODUCT_NAME"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.ProductName}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-12 signature-formatted">
+          <app-extended-input [labelText]="Labels.SignatureFormatted" [required]="true" [verticalMode]="true">
+            <app-rich-text-editor [formControl]="_signatureFormatted" [options]="{selectFontStyle: true}"></app-rich-text-editor>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.SupportPhone" [required]="true" [verticalMode]="true">
+            <input [formControl]="_supportPhone" class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.SupportPhone}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2">
+        <div class="col-md-6">
+          <app-extended-input [labelText]="Labels.SupportEmail" [required]="true" [verticalMode]="true">
+            <input [formControl]="_supportEmail" [maxlength]="MAX_LENGTH.SUPPORT_EMAIL"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage placeholder="{{Labels.SupportEmail}}" type="text"/>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row no-gutters py-2" *ngIf="branding.isDefault">
+        <label class="checkbox-container">
+          <input [formControl]="_isDefault" formControlErrorMessage type="checkbox">
+          <span class="checkmark"></span>
+          <span class="checkbox-descr">{{Labels.Default}}</span>
+        </label>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+
+  </nb-card>
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked"
+              class="btn btn-sm btn-rectangle btn-primary" nbSpinnerMessage=""
+              nbSpinnerStatus="success"
+              type="submit">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        {{Labels.Submit}}
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger" type="button">
+        <span><nb-icon icon="minus-outline"></nb-icon>
+          {{Labels.Cancel}}</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

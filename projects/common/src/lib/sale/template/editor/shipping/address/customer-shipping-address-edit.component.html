@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.SHIPPING_ADDRESS)}}</h4>
+    <button (click)="close()" aria-label="Close" class="close" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="d-flex flex-row toolbar pb-4 pt-2 my-4">
+        <div [innerHTML]="styles" class="template-styles"></div>
+        <div class="d-flex flex-row pb-2">
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_fontColor" [label]="'Font Color'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_titleColor" [label]="'Title Color'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_colorOdd" [label]="'Odd Line'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_borderColor" [includeNone]="true"
+                                  [label]="'Border Color'"></app-color-picker>
+            </div>
+        </div>
+    </div>
+    <div [innerHTML]="styles" class="template-styles"></div>
+    <div class="table w-30">
+        <div class="thead">
+            <div class="tr">
+                <div [style.grid-column]="1" [style.grid-row]="1" class="th">
+                    <app-extended-input>
+                        <input [formControl]="_addressHeader" [maxlength]="MAX_LENGTH.HEADER"
+                               [placeholder]="Labels.Header"
+                               class="form-control qbo-form-control"
+                               formControlErrorMessage
+                               type="text">
+                    </app-extended-input>
+                </div>
+            </div>
+        </div>
+        <div class="tbody">
+            <div class="tr">
+                <div [style.grid-column]="1" [style.grid-row]="2" class="td">{{shippingAddress}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button (click)="saveAndClose()" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        Save
+    </button>
+    <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+    </button>
+</div>

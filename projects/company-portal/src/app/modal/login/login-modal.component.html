@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <div class="mx-auto col-xl-4 col-lg-6 col-md-8 col-sm-12">
+        <h4 class="modal-title ">Sign In</h4>
+    </div>
+</div>
+<div class="modal-body d-flex flex-column">
+    <div class="mx-auto col-xl-4 col-lg-6 col-md-8 col-sm-12">
+        <form novalidate [formGroup]="getForm()" (ngSubmit)="submit()">
+
+            <div class="form-group">
+                <app-extended-input [inputErrors]="getForm().get('username').errors" [hasError]="isFieldNotValid('username')" [errorDefs]="{required: { template: errorService.validationService.REQUIRED, params: ['Login']},
+                                                email: { template: errorService.validationService.EMAIL, params: ['Login']},
+                                                maxlength: { template: errorService.validationService.MAXLENGTH(100), params: ['Login']},
+                                                server: {}}">
+                    <input type="email" class="form-control qbo-form-control" autocomplete="username" formControlName="username" maxlength="100" placeholder="Login">
+                </app-extended-input>
+            </div>
+
+
+            <div class="form-group">
+                <app-extended-input [inputErrors]="getForm().get('password').errors" [hasError]="isFieldNotValid('password')" [errorDefs]="{required: { template: errorService.validationService.REQUIRED, params: ['Password']},
+                                                server: {}}">
+                    <input type="password" class="form-control qbo-form-control" formControlName="password" autocomplete="current-password" placeholder="Password">
+                </app-extended-input>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-rectangle btn-block btn-success" [nbSpinner]="submitLocked" nbSpinnerSize="xsmall" nbSpinnerStatus="success" nbSpinnerMessage="" [disabled]="!isSubmitEnabled()">
+                    <nb-icon icon="log-in-outline"></nb-icon>
+                    Sign In
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <app-recaptcha-terms *ngIf="settingsProvider.isRecaptchaEnabled()" class="mt-5"></app-recaptcha-terms>
+
+</div>
+

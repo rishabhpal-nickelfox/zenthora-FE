@@ -1,0 +1,74 @@
+<div class="d-flex flex-column">
+  <div *ngIf="showPaymentsText" [class.justify-content-end]="justifyContentEnd" class="d-flex mb-3">
+    <span (click)="toggleShowTable()" class="payments-string">{{paymentString}}</span>
+  </div>
+  <div *ngIf="showPayments" class="mb-3">
+    <table>
+      <thead>
+      <th>Date ({{zoneName}})</th>
+      <th>Source</th>
+      <th>Payment Method</th>
+      <th>Last 4</th>
+      <th>Amount</th>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let payment of saleViewModel.transactions; let last = last"
+                    [ngTemplateOutletContext]="{rowData: payment}"
+                    [ngTemplateOutlet]="rowtemplate">
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr [class.actual]="isTransactionActual(rowData)" [class.not-actual]="!isTransactionActual(rowData)">
+    <td>
+      <div>
+                <span>
+                    {{rowData.paymentDate}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{PaymentSourceEnumValue.get(rowData.source)}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span [ngSwitch]="rowData.paymentMethod">
+          <ng-container *ngSwitchCase="TransactionPaymentMethodEnum.CREDIT_CARD">
+            {{CreditCardEnumValue.get(rowData.cardType)}}
+          </ng-container>
+           <ng-container *ngSwitchCase="TransactionPaymentMethodEnum.ACH">
+            {{AccountTypeEnumValue.get(rowData.accountType)}}
+           </ng-container>
+           <ng-container *ngSwitchCase="TransactionPaymentMethodEnum.OTHER">
+             {{rowData.otherPaymentMethodName}}
+           </ng-container>
+           <ng-container *ngSwitchDefault>
+             {{TransactionPaymentMethodEnumValue.get(rowData.paymentMethod)}}
+           </ng-container>
+        </span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{rowData.last4}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>
+           {{saleViewModel.currency}}{{rowData.amount |number:'1.2-2'}}
+        </span>
+      </div>
+    </td>
+  </tr>
+</ng-template>

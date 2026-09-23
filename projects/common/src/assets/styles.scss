@@ -1,0 +1,228 @@
+@use '../lib/themes' as *;
+@use '@nebular/theme/styles/globals' as *;
+@use './button';
+@use './input';
+@use './card';
+@use './checkbox';
+@use './error-msg';
+@use './icon';
+@use './nb-select';
+@use './sale-template-editor';
+@import 'nebular-icons/css/nebular-icons.css';
+
+@include nb-install() {
+  @include nb-theme-global();
+}
+
+* {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.header {
+  align-items: center;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid nb-theme(card-header-text-color);
+  color: nb-theme(card-header-text-color);
+}
+
+.clickable, a {
+  cursor: pointer;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  color: nb-theme(link-text-color);
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: nb-theme(link-text-color-hover);
+}
+
+a:focus,
+a:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 0.25rem;
+}
+
+.clickable span.asc::after, span.desc::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+  border-bottom-color: nb-theme(separator);
+  margin-bottom: 2px;
+}
+
+.clickable span.desc::after {
+ transform: rotate(-180deg);
+}
+
+
+.menu-item > .menu-items.expanded {
+  max-height: none !important;
+}
+
+nb-tab {
+  padding: 1.5rem !important;
+}
+
+nb-accordion {
+  margin-bottom: 1.5rem;
+}
+
+nb-accordion-item {
+  margin-bottom: .5rem;
+}
+
+.ngb-dp-arrow-btn {
+  padding: 0 !important;
+  color: nb-theme(color-primary-default) !important;
+}
+
+.not-blurred {
+  backdrop-filter: blur(10px);
+}
+
+.auto-size .modal-dialog {
+  max-width: none;
+  width: fit-content;
+}
+
+nb-card:not(.qbo-form-control-option) > nb-card-body {
+  overflow: visible !important;
+}
+
+nb-card-body:focus {
+  outline: none;
+}
+
+.scrollable-container, .layout, nb-layout-column {
+  width: stretch;
+  min-width: fit-content;
+}
+
+nav {
+  position: relative;
+  z-index: 8;
+}
+
+.menu-sidebar {
+  overflow: visible;
+  position: relative;
+}
+
+.menu-sidebar .scrollable,
+.menu-sidebar .main-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.menu-sidebar .scrollable::-webkit-scrollbar,
+.menu-sidebar .main-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.app-navbar {
+  position: sticky;
+  position: -webkit-sticky;
+  left: 0;
+  width: 100%;
+  max-width: 100vw;
+  padding: 1.25rem;
+}
+
+th.sticky.no-padding {
+  padding: 0 !important;
+}
+
+input::-webkit-calendar-picker-indicator {
+  opacity: 100;
+  background-color: inherit;
+}
+
+body {
+  -webkit-print-color-adjust: exact;
+}
+
+nb-spinner {
+  z-index: 5 !important;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+nb-layout-footer {
+  z-index: 6;
+}
+
+
+nb-layout .layout .layout-container .content .columns nb-layout-column.fake-nb-layout {
+  padding: 0;
+}
+
+.sticky-right, .sticky-left {
+  position: sticky;
+  position: -webkit-sticky;
+}
+
+.sticky-right {
+  right: 1em;
+}
+
+.sticky-left {
+  left: 1.5em;
+}
+
+.delete-icon {
+  width: 15px;
+}
+
+nb-sidebar .main-container {
+  position: sticky;
+  top: 0;
+}
+
+.modal-backdrop {
+  display: none;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+::ng-deep .disabled-message {
+  padding-top: 0.5rem;
+  padding-bottom: 0.2rem;
+  color: nb-theme(color-danger);
+  font-style: italic;
+  font-size: 10px;
+}
+nb-dialog-container {
+  margin-top: 2rem;
+  overflow-y: auto !important;
+  z-index: 1056;
+}
+.cdk-global-overlay-wrapper {
+  align-items: flex-start !important;
+}
+.w-fit {
+  width: fit-content !important;
+}

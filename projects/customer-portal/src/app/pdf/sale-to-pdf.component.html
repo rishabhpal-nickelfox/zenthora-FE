@@ -1,0 +1,17 @@
+<div class="pdf-page">
+  <div class="pdf-column">
+    <div *ngIf="salePreviewModel" class="d-flex flex-column w-fit">
+      <app-sale-view [docType]="docType" [viewModel]="salePreviewModel" class="w-fit"></app-sale-view>
+      <div class="ml-auto mt-5">
+        <a [href]="href">
+          <button
+            class="btn btn-xs btn-rectangle btn-primary"
+            type="button">
+            <nb-icon icon="plus-outline"></nb-icon>
+            {{Labels.PayNow}}
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

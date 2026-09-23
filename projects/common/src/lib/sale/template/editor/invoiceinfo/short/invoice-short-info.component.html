@@ -1,0 +1,17 @@
+<div [innerHTML]="styles"></div>
+<div class="table w-100">
+    <div class="thead">
+        <div class="tr">
+            <div [style.grid-column]="1" [style.grid-row]="1" class="th"><strong>{{viewService.dateHeader}}</strong></div>
+            <div [style.grid-column]="2" [style.grid-row]="1" class="th"><strong>{{viewService.saleHeaderDisplayed}}</strong></div>
+         </div>
+    </div>
+    <div class="tbody">
+        <div class="tr">
+            <div [style.grid-column]="1" [style.grid-row]="2" class="td">11/11/2024</div>
+            <div [style.grid-column]="2" [style.grid-row]="2" class="td"><span>213</span>
+                <span>VO-30</span></div>
+        </div>
+    </div>
+</div>
+

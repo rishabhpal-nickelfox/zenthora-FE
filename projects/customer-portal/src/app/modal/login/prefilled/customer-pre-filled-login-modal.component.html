@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <div class="d-flex w-100">
+    <h4 class="modal-title mx-auto">
+      {{Labels.SignInHeader(this._email.value)}}
+    </h4>
+  </div>
+  <button (click)="activeModal.dismiss()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body d-flex flex-column">
+  <div class="mx-auto col-md-8 col-sm-12">
+    <form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+      <div class="d-flex flex-column">
+        <div class="form-group">
+            <div class="d-flex flex-column">
+              <div class="d-flex flex-row align-items-baseline">
+                <label class="col-form-label">{{Labels.Password}}</label>
+              </div>
+              <app-extended-input>
+                <input [formControl]="_password" [maxlength]="MAX_LENGTH.PASSWORD" [placeholder]="Labels.Password"
+                       autocomplete="password"
+                       class="form-control qbo-form-control"
+                       formControlErrorMessage type="password">
+              </app-extended-input>
+            </div>
+        </div>
+        <div class="form-group">
+          <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked" class="btn btn-rectangle btn-block btn-primary"
+                  nbSpinnerStatus="success" type="submit">
+            <nb-icon icon="log-in-outline"></nb-icon>
+            <span>{{Labels.Login}}</span>
+          </button>
+        </div>
+      </div>
+      <ng-template #email>
+        {{_email.value}}
+      </ng-template>
+    </form>
+  </div>
+  <app-recaptcha-terms *ngIf="settingsProvider.isRecaptchaEnabled()" class="mt-5"></app-recaptcha-terms>
+
+</div>

@@ -1,0 +1,133 @@
+<ng-container [ngSwitch]="action">
+  <ng-container *ngSwitchCase=actions.LOGIN_SUCCESS>
+    Logged in
+  </ng-container>
+  <ng-container *ngSwitchCase=actions.LOGIN_FAILED_WRONG_PASSWORD>
+    Login failed. Wrong password
+  </ng-container>
+  <ng-container *ngSwitchCase=actions.LOGIN_FAILED_ACCOUNT_DISABLED>
+    Login failed. Disabled account
+  </ng-container>
+  <ng-container *ngSwitchCase=actions.PASSWORD_RESET>
+    New password generated for <span *ngIf="actionData">{{actionData.email}}</span>
+  </ng-container>
+  <ng-container *ngSwitchCase=actions.PASSWORD_RESET_FAILED>
+    Password reset failed. User <span *ngIf="actionData">{{actionData.email}}</span> not found
+  </ng-container>
+  <ng-container *ngSwitchCase=actions.PASSWORD_CHANGED>
+    User <span *ngIf="actionData">#{{actionData.id}}</span> password changed
+  </ng-container>
+  <ng-container *ngSwitchCase=actions.SELECT_ROLE>
+    Role <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}}) &#64; #{{actionData.entity.id}}({{actionData.entity.legalName}})</span>
+    selected
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.COMPANY_CREATED>
+    Entity <span *ngIf="actionData">#{{actionData.id}}</span> created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.COMPANY_UPDATED>
+    Entity <span *ngIf="actionData">#{{actionData.id}}</span> updated
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.CREATE_ROLE>
+    Role <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}}) &#64; #{{actionData.entity.id}}({{actionData.entity.legalName}})</span>
+    created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.UPDATE_ROLE>
+    Role <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}}) &#64; #{{actionData.entity.id}}({{actionData.entity.legalName}})</span>
+    updated
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.DELETE_ROLE>
+    Role <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}}) &#64; #{{actionData.entity.id}}({{actionData.entity.legalName}})</span>
+    deleted
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.CREATE_USER>
+    User <span *ngIf="actionData">#{{actionData.id}}</span> created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.UPDATE_USER>
+    User <span *ngIf="actionData">#{{actionData.id}}</span> updated
+  </ng-container>
+
+
+  <ng-container *ngSwitchCase=actions.DISABLE_USER>
+    User <span *ngIf="actionData">#{{actionData.id}}</span> disabled
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.ENABLE_USER>
+    User <span *ngIf="actionData">#{{actionData.id}}</span> enabled
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.DISABLE_COMPANY>
+    Company <span *ngIf="actionData">#{{actionData.id}}</span> disabled
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.ENABLE_COMPANY>
+    Company <span *ngIf="actionData">#{{actionData.id}}</span> enabled
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.API_TOKEN_CREATE>
+    API token <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}})</span> created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.API_TOKEN_REGENERATE>
+    <div>
+      API token <span *ngIf="actionData">#{{ actionData.oldToken.id }}({{ actionData.oldToken.name }})</span> revoked,
+    </div>
+    <div>
+      API token <span *ngIf="actionData">#{{ actionData.newToken.id }}({{ actionData.newToken.name }})</span> created
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.API_TOKEN_REVOKE>
+    API token <span *ngIf="actionData">#{{actionData.id}}({{actionData.entityLegalName}})</span> revoked
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.CREATE_PLATFORM>
+    Platform <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}})</span> created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.UPDATE_PLATFORM>
+    Platform <span *ngIf="actionData">#{{actionData.id}}</span> updated
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.PLATFORM_TOKEN_GENERATED>
+    Platform Token <span *ngIf="actionData">#{{actionData.id}}</span> generated
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.DELETE_PLATFORM>
+    Platform <span *ngIf="actionData">#{{actionData.id}}</span> deleted
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.CREATE_SENDGRID_SETTINGS>
+    Sendgrid Settings <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}})</span> created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.UPDATE_SENDGRID_SETTINGS>
+    Sendgrid Settings <span *ngIf="actionData">#{{actionData.id}}</span> updated
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.DISABLE_SENDGRID_SETTINGS>
+    Sendgrid Settings <span *ngIf="actionData">#{{actionData.id}}</span> disabled
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.CREATE_PAYMENT_FORM>
+    Payment Form <span *ngIf="actionData">#{{actionData.id}}({{actionData.name}})</span> created
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.UPDATE_PAYMENT_FORM>
+    Payment Form <span *ngIf="actionData">#{{actionData.id}}</span> updated
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.DISABLE_PAYMENT_FORM>
+    Payment Form <span *ngIf="actionData">#{{actionData.id}}</span> disabled
+  </ng-container>
+
+  <ng-container *ngSwitchCase=actions.ENABLE_PAYMENT_FORM>
+    Payment Form <span *ngIf="actionData">#{{actionData.id}}</span> enabled
+  </ng-container>
+</ng-container>

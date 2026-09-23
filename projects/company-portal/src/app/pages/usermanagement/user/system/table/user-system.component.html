@@ -1,0 +1,77 @@
+<app-user-system-create-edit (cancelEvent)="onUserEditCancel()" (saveEvent)="onSubmit($event)"
+                             *ngIf="showCreateEditForm"></app-user-system-create-edit>
+<div [hidden]="showCreateEditForm">
+    <app-user-table #table [buttonsPanelTemplate]="buttonPanelTemplate" [filters]="filters" [headers]="headers"
+                    [objectOperatingService]="userService" [rowTemplate]="rowtemplate"></app-user-table>
+</div>
+
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button [ngbPopover]="Labels.CreateNew" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="onCreate()" class="btn btn-sm btn-rectangle btn-primary"
+              type="button">
+        <nb-icon icon="plus-outline"></nb-icon>
+        {{Labels.CreateNew}}
+      </button>
+
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success ml-2" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+    </div>
+    <label class="checkbox-container">
+      <input (ngModelChange)="onHideInactive()" [ngModel]="hideInactive" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">Hide Inactive</span>
+    </label>
+  </div>
+</ng-template>
+<ng-template #rowtemplate let-rowData="rowData">
+    <tr (click)="onEdit(rowData.id)" class="clickable">
+        <td class="id">
+            <div>
+                <span>{{rowData.id}}</span>
+            </div>
+        </td>
+        <td>
+            <div>
+                <span>{{rowData.email}}
+                    <strong *ngIf="rowData.disabled">[{{Labels.AccountDisabled}}]</strong>
+                </span>
+            </div>
+        </td>
+        <td>
+            <div>
+                <div *ngFor="let entityId of getEntities(rowData)">
+
+
+                    <div class="d-flex flex-row flex-wrap py-1">
+                        <strong class="pr-1">{{rowData.rolesMap.get(entityId)[0].entity.legalName}}
+                            :
+                        </strong>
+                        <div *ngFor="let role of rowData.rolesMap.get(entityId); let last = last;">
+                            <span>{{role.name}}</span>
+                            <span *ngIf="!last" class="pr-1">,</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td (click)="$event.cancelBubble=true;">
+            <div class="d-flex flex-row">
+                <ng-container *ngIf="canDisableEnable(rowData)">
+                    <a (click)="onDisable(rowData)" *ngIf="!rowData.disabled" class="px-1 qfiscal-icon">
+                        <nb-icon [ngbPopover]="Labels.EnableDisableHint(false)" class="enabled" container="body" icon="toggle-right"
+                                 placement="bottom"
+                                 triggers="mouseenter:mouseleave"></nb-icon>
+                    </a>
+                    <a (click)="onEnable(rowData)" *ngIf="rowData.disabled" class="px-1 qfiscal-icon">
+                        <nb-icon [ngbPopover]="Labels.EnableDisableHint(true)" class="disabled" container="body" icon="toggle-left"
+                                 placement="bottom"
+                                 triggers="mouseenter:mouseleave"></nb-icon>
+                    </a>
+                </ng-container>
+            </div>
+        </td>
+    </tr>
+</ng-template>

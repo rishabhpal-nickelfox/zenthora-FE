@@ -1,0 +1,16 @@
+@use '../../themes' as *;
+
+@include nb-install-component() {
+  .date-picker {
+    position: relative;
+  }
+
+  .date-picker nb-icon {
+    position: absolute;
+    right: 5px;
+    top: 20%;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: nb-theme(form-control-placeholder-color)
+  }
+}

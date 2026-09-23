@@ -1,0 +1,35 @@
+@use "../themes" as *;
+
+@include nb-install-component() {
+
+  .recaptcha-terms, .recaptcha-terms > * {
+    font-weight: lighter;
+    font-size: 0.8rem;
+    margin: auto;
+  }
+
+  .recaptcha-terms.light {
+    color: #ffffff;
+
+    a {
+      color: #ffffff;
+    }
+
+    a:hover {
+      color: #eaeaea;
+    }
+  }
+
+  .recaptcha-terms.dark {
+    color: nb-theme(text-hint-color);
+
+    a {
+      color: nb-theme(link-text-color);
+    }
+
+    a:hover {
+      color: nb-theme(link-text-color-hover);
+    }
+  }
+
+}

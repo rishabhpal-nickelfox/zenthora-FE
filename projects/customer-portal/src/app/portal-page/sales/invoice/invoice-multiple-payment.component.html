@@ -1,0 +1,203 @@
+<form (ngSubmit)="saveAndClose()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+      nbSpinnerSize="small" nbSpinnerStatus="success">
+  <nb-card>
+
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right">
+            <span>{{Labels.ProcessPayment}}</span>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div *ngIf="paymentResult">
+        <ng-container [ngTemplateOutlet]="paymentResultInfo"></ng-container>
+      </div>
+
+      <table class="w-100" [nbSpinner]="invoicesLoading">
+        <thead>
+        <tr>
+          <th>
+            <div>{{Labels.Invoice}} #</div>
+          </th>
+
+          <th>
+            <div>{{Labels.Total}}</div>
+          </th>
+
+          <th>
+            <div>{{Labels.AppliedAmount}}</div>
+          </th>
+
+          <th>
+            <div>{{Labels.AmountDue}}</div>
+          </th>
+
+          <th>
+            <div>
+            <div>{{Labels.AmountToCharge}}</div>
+            <ng-container *ngIf="showCCPaymentAmountLimitHint"
+                          [ngTemplateOutlet]="ccPaymentAmountLimitMessage">
+            </ng-container>
+            </div>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let control of _paymentAmounts.controls; let i = index" formArrayName="paymentAmounts">
+          <td class="doc-number">
+            <div>{{invoices[i].docNumber}}</div>
+          </td>
+
+          <td>
+            <div>
+              <span *ngIf="isDefined(invoices[i].total)">{{currencyPrefix}}{{invoices[i].total |number:'1.2-2'}}</span>
+            </div>
+          </td>
+
+          <td>
+            <div>
+            <span
+              *ngIf="isDefined(invoices[i].appliedAmount)">{{currencyPrefix}}{{invoices[i].appliedAmount |number:'1.2-2'}}</span>
+            </div>
+          </td>
+
+          <td>
+            <div>
+            <span
+              *ngIf="isDefined(invoices[i].amountDue)">{{currencyPrefix}}{{invoices[i].amountDue |number:'1.2-2'}}</span>
+            </div>
+          </td>
+
+          <td class="payment-amount">
+            <div class="px-3">
+              <app-extended-input class="w-100">
+                <ng-container *ngIf="invoicePartialPaymentsAllowed; else paymentAmountReadonlyTemplate">
+                  <app-extended-number-input [decimalMax]="2" [decimalMin]="2"
+                                             [formControl]="_paymentAmounts.controls[i]"
+                                             [integerLimit]="11" [placeholder]="Labels.AmountToCharge"
+                                             [prefix]="currencyPrefix"
+                                             formControlErrorMessage></app-extended-number-input>
+                </ng-container>
+                <ng-template #paymentAmountReadonlyTemplate>
+                  {{currencyPrefix}}{{_paymentAmounts.controls[i].value |number:'1.2-2'}}
+                </ng-template>
+              </app-extended-input>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7">
+            <div class="d-flex">
+              <div class="ml-auto">
+                <b>{{Labels.TotalAmountDue}}: {{currencyPrefix}}{{totalLeftToPay |number:'1.2-2'}}</b>
+              </div>
+            </div>
+          </td>
+        <tr>
+          <td colspan="7">
+            <div class="d-flex">
+              <div class="ml-auto">
+                <div class="d-flex justify-content-end pt-1">
+                  <b>{{Labels.TotalAmountToCharge}}: {{currencyPrefix}}{{totalPaymentAmount |number:'1.2-2'}}</b>
+                </div>
+                <div *ngIf="getForm().errors?.totalPaymentAmountExceedsCreditCardPaymentAmountLimit">
+                  <div class="val-message pb-2">
+                    {{Labels.CCMultipleTotalLimitMessage(currencyPrefix, creditCardPaymentAmountLeft | number :'1.2-2')}}</div>
+                </div>
+                <div *ngIf="getForm().errors?.totalPaymentAmountMustBeGreaterThan0">
+                  <div class="val-message pb-2">
+                    {{Labels.CCMultipleTotalMinMessage(currencyPrefix, 0 | number :'1.2-2')}}</div>
+                </div>
+                <div *ngIf="ObjectHelper.isDefined(_surchargeAmount.value)" class="d-flex flex-column">
+                  <div class="d-flex justify-content-end pt-2"><b>{{Labels.Surcharge(surchargePercent)}}: {{currencyPrefix}}{{_surchargeAmount.value |number:'1.2-2'}}</b></div>
+                  <div class="d-flex justify-content-end pt-2"><b>{{Labels.Total}}: {{currencyPrefix}}{{_totalIncludingSurcharge.value |number:'1.2-2'}}</b></div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <hr/>
+      <div class="payment-methods" [nbSpinner]="paymentMethodsLoading">
+        <app-payment-methods
+          (deletePaymentMethod)="onDeletePaymentMethod($event)"
+          [copyFromLabel]="null"
+          [formControl]="_paymentMethods">
+        </app-payment-methods>
+      </div>
+      <hr/>
+      <div class="d-flex flex-column">
+        <div [innerHTML]="sanitizedAuthorizationMessage"
+             [nbSpinner]="termsOfServiceLoading || privacyStatementLoading"
+             class="mx-auto authorization-message my-3">
+        </div>
+        <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked"
+                class="btn btn-xs btn-rectangle btn-danger mx-auto"
+                type="submit">
+          <nb-icon icon="lock-outline"></nb-icon>
+          {{Labels.Submit}}
+        </button>
+      </div>
+
+
+    </nb-card-body>
+
+  </nb-card>
+
+</form>
+<div #printDiv>
+<app-invoice-multiple-payment-print *ngIf="printing" (ready)="onReadyToPrint()" [printModel]="_printModel">
+</app-invoice-multiple-payment-print>
+</div>
+<ng-template #paymentResultInfo>
+  <div class="d-flex flex-row justify-content-center payment-result">
+    <div class="d-flex flex-column">
+      <h6>
+        <nb-icon icon="checkmark-circle-2-outline"></nb-icon>{{Labels.PaymentSuccess(currencyPrefix, paymentResult.paymentAmount | number :'1.2-2', paymentResult.surchargeAmount ? (paymentResult.surchargeAmount | number :'1.2-2') : null, paymentResult.totalIncludingSurcharge ? (paymentResult.totalIncludingSurcharge | number :'1.2-2') : null)}}
+      </h6>
+      <span *ngIf="paymentResult.authorizationId" class="d-flex justify-content-center">
+                <strong class="pr-1">{{Labels.AuthorizationID}}</strong>
+        {{paymentResult.authorizationId}}</span>
+      <span *ngIf="paymentResult.approvalId" class="d-flex justify-content-center">
+                <strong class="pr-1">{{Labels.ApprovalID}}</strong>
+        {{paymentResult.approvalId}}</span>
+    </div>
+  </div>
+  <hr>
+</ng-template>
+<ng-template #ccPaymentAmountLimitMessage>
+  <div class="val-message pb-2">
+    {{Labels.CCMultiplePaymentAmountLimitMessage(currencyPrefix, creditCardPaymentAmountLimit | number :'1.2-2')}}</div>
+</ng-template>
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button (click)="startPrinting()" class="btn btn-sm btn-rectangle btn-success" type="button">
+        <nb-icon icon="printer-outline"></nb-icon>
+        {{Labels.Print}}
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="goBackToInvoiceList()" class="btn btn-sm btn-rectangle btn-primary" type="button">
+        <nb-icon icon="corner-up-left-outline"></nb-icon>
+        {{Labels.BackToInvoiceList}}
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger" type="button">
+        <nb-icon icon="minus-outline"></nb-icon>
+        {{Labels.Cancel}}
+      </button>
+    </div>
+  </div>
+</ng-template>

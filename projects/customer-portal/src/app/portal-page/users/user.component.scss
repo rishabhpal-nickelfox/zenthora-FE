@@ -1,0 +1,61 @@
+@use 'projects/common/src/lib/themes' as *;
+
+@include nb-install-component() {
+  .invitation-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .user-email {
+    white-space: nowrap;
+    color: nb-theme(card-text-color);
+  }
+
+  .invitation-expiration {
+    white-space: nowrap;
+    color: nb-theme(color-info);
+  }
+
+  .invitation-expiration.expired {
+    color: nb-theme(color-danger);
+  }
+
+  .invitation-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+  }
+
+  .invitation-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1rem;
+    white-space: nowrap;
+  }
+
+  .invitation-action {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem 0.25rem;
+  }
+
+  .invitation-action nb-icon {
+    color: inherit;
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .invitation-action.reinvite {
+    color: nb-theme(color-info);
+  }
+
+  .invitation-action.revoke {
+    color: nb-theme(color-danger);
+  }
+}

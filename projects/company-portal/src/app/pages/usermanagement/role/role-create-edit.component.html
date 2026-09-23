@@ -1,0 +1,78 @@
+<form novalidate [formGroup]="getForm()" (ngSubmit)="submit()" [nbSpinner]="submitLocked" nbSpinnerSize="giant"
+      nbSpinnerStatus="success" nbSpinnerMessage="">
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right"><span *ngIf="isCreateMode">{{Labels.CreateHeader}}</span><span
+            *ngIf="!isCreateMode">{{Labels.EditHeader}}</span></div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row form-group">
+        <div class="col-md-7">
+          <app-extended-input [labelText]="Labels.RoleName"
+                              [verticalMode]="true"
+                              [required]="true">
+            <input type="text" class="form-control qbo-form-control" formControlName="roleName"
+                   formControlErrorMessage
+                   [maxlength]="MAX_LENGTH.ROLE_NAME"
+                   [placeholder]="Labels.RoleName">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <label class="col-form-label">{{Labels.Permissions}}</label>
+      <div class="pl-5">
+        <div class="d-flex flex-row py-2 accept">
+          <label class="checkbox-container">
+            <input type="checkbox" [formControl]="_selectAllPermissionsControl">
+            <span class="checkmark"></span>
+            <span class="checkbox-descr"
+                  [innerText]="_selectAllPermissionsControl.value? Labels.UnCheckAll: Labels.CheckAll"></span>
+          </label>
+        </div>
+        <ng-container formArrayName="permissions">
+          <ng-container *ngFor="let permissionControl of _permissionsControl.controls; let i = index">
+            <div class="d-flex flex-row pl-5">
+              <label class="checkbox-container">
+                <input type="checkbox" [formControl]="permissionControl">
+                <span class="checkmark"></span>
+                <span class="checkbox-descr" [innerText]="getPermissionName(i)"></span>
+              </label>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+
+  </nb-card>
+
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button type="submit" class="btn btn-sm btn-rectangle btn-primary ml-auto" [disabled]="!isSubmitEnabled()"
+              [nbSpinner]="submitLocked" nbSpinnerSize="xsmall" nbSpinnerStatus="success" nbSpinnerMessage="">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        Save
+      </button>
+    </div>
+    <div class="px-2">
+      <button type="button" class="btn btn-sm btn-rectangle btn-danger ml-auto" (click)="cancel()">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+      </button>
+    </div>
+  </div>
+</ng-template>

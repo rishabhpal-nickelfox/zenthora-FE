@@ -1,0 +1,66 @@
+import {ReceiptTemplateComponentEnum} from "./receipt-template-component.enum";
+
+export enum ReceiptTemplateFieldEnum {
+  COMPANY_LOGO = 'COMPANY_LOGO',
+  COMPANY_NAME = 'COMPANY_NAME',
+  COMPANY_ADDRESS = 'COMPANY_ADDRESS',
+  COMPANY_WEB_URL = 'COMPANY_WEB_URL',
+  COMPANY_PHONE = 'COMPANY_PHONE',
+  COMPANY_EMAIL = 'COMPANY_EMAIL',
+
+  DATETIME = 'DATETIME',
+  CUSTOMER_NAME = 'CUSTOMER_NAME',
+  CUSTOMER_EMAIL = 'CUSTOMER_EMAIL',
+  PO_NUMBER = 'PO_NUMBER',
+  MEMO = 'MEMO',
+  SALE_TABLE = 'SALE_TABLE',
+  SALE_TOTAL = 'SALE_TOTAL',
+  TAX = 'TAX',
+  DISCOUNT = 'DISCOUNT',
+  TIP = 'TIP',
+  SHIPPING_AMOUNT = 'SHIPPING_AMOUNT',
+  REFERENCE_NUMBER = 'REFERENCE_NUMBER',
+}
+
+export const ReceiptTemplateFieldComponent: Record<ReceiptTemplateFieldEnum, ReceiptTemplateComponentEnum> = {
+  [ReceiptTemplateFieldEnum.COMPANY_LOGO]: ReceiptTemplateComponentEnum.COMPANY_INFO,
+  [ReceiptTemplateFieldEnum.COMPANY_NAME]: ReceiptTemplateComponentEnum.COMPANY_INFO,
+  [ReceiptTemplateFieldEnum.COMPANY_ADDRESS]: ReceiptTemplateComponentEnum.COMPANY_INFO,
+  [ReceiptTemplateFieldEnum.COMPANY_WEB_URL]: ReceiptTemplateComponentEnum.COMPANY_INFO,
+  [ReceiptTemplateFieldEnum.COMPANY_PHONE]: ReceiptTemplateComponentEnum.COMPANY_INFO,
+  [ReceiptTemplateFieldEnum.COMPANY_EMAIL]: ReceiptTemplateComponentEnum.COMPANY_INFO,
+
+  [ReceiptTemplateFieldEnum.DATETIME]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.CUSTOMER_NAME]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.CUSTOMER_EMAIL]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.PO_NUMBER]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.MEMO]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.SALE_TABLE]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.SALE_TOTAL]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.TAX]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.DISCOUNT]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.TIP]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.SHIPPING_AMOUNT]: ReceiptTemplateComponentEnum.SALE_INFO,
+  [ReceiptTemplateFieldEnum.REFERENCE_NUMBER]: ReceiptTemplateComponentEnum.PAYMENT_INFO,
+};
+
+export const ReceiptTemplateFieldLabel: Record<ReceiptTemplateFieldEnum, string> = {
+  [ReceiptTemplateFieldEnum.COMPANY_LOGO]: 'Company Logo',
+  [ReceiptTemplateFieldEnum.COMPANY_NAME]: 'Company Name',
+  [ReceiptTemplateFieldEnum.COMPANY_ADDRESS]: 'Company Address',
+  [ReceiptTemplateFieldEnum.COMPANY_WEB_URL]: 'Company Web URL',
+  [ReceiptTemplateFieldEnum.COMPANY_PHONE]: 'Company Phone',
+  [ReceiptTemplateFieldEnum.COMPANY_EMAIL]: 'Company Email',
+  [ReceiptTemplateFieldEnum.DATETIME]: 'Date & Time',
+  [ReceiptTemplateFieldEnum.CUSTOMER_NAME]: 'Customer Name',
+  [ReceiptTemplateFieldEnum.CUSTOMER_EMAIL]: 'Customer Email',
+  [ReceiptTemplateFieldEnum.PO_NUMBER]: 'PO Number',
+  [ReceiptTemplateFieldEnum.MEMO]: 'Memo',
+  [ReceiptTemplateFieldEnum.SALE_TABLE]: 'Sale Table',
+  [ReceiptTemplateFieldEnum.SALE_TOTAL]: 'Sale Total',
+  [ReceiptTemplateFieldEnum.TAX]: 'Tax',
+  [ReceiptTemplateFieldEnum.DISCOUNT]: 'Discount',
+  [ReceiptTemplateFieldEnum.TIP]: 'Tip',
+  [ReceiptTemplateFieldEnum.SHIPPING_AMOUNT]: 'Shipping Amount',
+  [ReceiptTemplateFieldEnum.REFERENCE_NUMBER]: 'Reference Number',
+};

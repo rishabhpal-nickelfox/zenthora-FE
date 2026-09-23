@@ -1,0 +1,60 @@
+<form [formGroup]="getForm()" (ngSubmit)="saveAndClose()" [nbSpinner]="submitLocked" nbSpinnerStatus="success" nbSpinnerMessage="">
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row mr-auto sticky-left">
+          <div class="px-2 align-self-center">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row ml-auto sticky-right">
+          <div class="header-label">
+            {{Labels.Header}}
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row d-flex flex-row flex-wrap">
+        <div class="col-md-4 d-flex flex-column">
+          <app-extended-input [labelText]="Labels.FirstName" [verticalMode]="true" [required]=true>
+            <input type="text" class="form-control qbo-form-control" [formControl]="_firstName" [maxlength]="NAME_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.FirstName">
+          </app-extended-input>
+        </div>
+        <div class="col-md-4 d-flex flex-column">
+          <app-extended-input [labelText]="Labels.MiddleName" [verticalMode]="true">
+            <input type="text" class="form-control qbo-form-control" [formControl]="_middleName" [maxlength]="NAME_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.MiddleName">
+          </app-extended-input>
+        </div>
+        <div class="col-md-4 d-flex flex-column">
+          <app-extended-input [labelText]="Labels.LastName" [verticalMode]="true" [required]="true">
+            <input type="text" class="form-control qbo-form-control" [formControl]="_lastName" [maxlength]="NAME_MAX_LENGTH" formControlErrorMessage [placeholder]="Labels.LastName">
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <button type="button" (click)="openChangePasswordComponent()" class="my-3 btn btn-xs btn-rectangle btn-warning align-self-start">
+          <nb-icon icon="shield-outline"></nb-icon>
+          {{Labels.ChangePassword}}
+        </button>
+        <button type="button" (click)="onUnregister()" class="my-3 btn btn-xs btn-rectangle btn-danger align-self-start">
+          <nb-icon icon="person-delete-outline"></nb-icon>
+          {{Labels.Unregister}}
+        </button>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+    </nb-card-footer>
+  </nb-card>
+</form>
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="px-2">
+      <button type="submit" class="btn btn-sm btn-rectangle btn-primary ml-auto" [disabled]="!isSubmitEnabled()">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        {{Labels.Submit}}
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,857 @@
+<div [innerHTML]="styles" id="styles"></div>
+<div class="invoice-template-interpret" [class.legacy-layout]="viewService.legacyLayout">
+  <div class="stamp"
+       *ngIf="viewService.invoice.statusStampUrl || viewService.invoice.deletedStampUrl">
+    <img *ngIf="viewService.invoice.statusStampUrl" [src]="viewService.invoice.statusStampUrl"
+         [alt]="viewService.invoice.statusLabel || 'Status'"/>
+    <img *ngIf="viewService.invoice.deletedStampUrl" [src]="viewService.invoice.deletedStampUrl" alt="Deleted"/>
+  </div>
+  <div #gridElement [ngStyle]="{'color': viewService.fontColor}" [style.grid-template-rows]="viewService.getGridTemplateRows()"
+       class="EMAIL_PAYMENT" [class.legacy-layout]="viewService.legacyLayout">
+
+    <div *ngIf="viewService.getGridArea('LOGO')" [style.grid-area]="viewService.getGridArea('LOGO')"
+         class="LOGO d-flex flex-row">
+      <div *ngIf="viewService.logoPreview">
+        <img [src]="viewService.logoPreview" [style.width]="viewService.logoWidth" alt="Paid"
+             class="img-preview"/>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let lineArea of viewService.lines">
+      <div [style.grid-area]="viewService.getGridAreaForComponent(lineArea)">
+        <div [className]="'LINE line'+lineArea.lineId"></div>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let textArea of viewService.texts">
+      <div [style.grid-area]="viewService.getGridAreaForComponent(textArea)">
+        <div [className]="'TEXT text'+textArea.textId">
+          <app-rich-text-viewer [value]="viewService.getText(textArea.textId)"></app-rich-text-viewer>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let cit of viewService.companyInfoTemplates">
+      <div class="COMPANY_INFO" [style.grid-area]="viewService.getGridAreaForComponent(cit)">
+        <div [className]="cit.companyInfoId">
+          <div *ngIf="viewService.getCompanyInfoTemplate(cit.companyInfoId) as companyInfoTemplate"
+               class="d-flex flex-column table">
+            <div *ngIf="!companyInfoTemplate.hideHeader" class="tr">
+              <div class="th">
+                <strong>{{companyInfoTemplate.companyInfoHeader}}</strong>
+              </div>
+            </div>
+            <div class="tr">
+              <div class="td">
+                <div class="address">
+                  <div
+                    *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.DISPLAY_NAME)">{{viewService.companyInfo.displayName}}</div>
+                  <div
+                    *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.STREET)">{{viewService.companyInfo.street}}</div>
+                  <div
+                    *ngIf="viewService.isAnyCompanyInfoRowPresented(companyInfoTemplate,[CompanyInfoRowsEnum.CITY, CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])">
+                            <span
+                              *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.CITY)">{{viewService.companyInfo.city}}
+                              <span
+                                *ngIf="viewService.isAnyCompanyInfoRowPresented(companyInfoTemplate,[CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])">, </span></span>
+                    <span
+                      *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.STATE)">{{viewService.companyInfo.state}} </span>
+                    <span
+                      *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.ZIP)">{{viewService.companyInfo.zip}}</span>
+                  </div>
+                  <div
+                    *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.COUNTRY)">{{viewService.companyInfo.country}}</div>
+                  <div
+                    *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.EMAIL)">{{viewService.companyInfo.email}}</div>
+                  <div
+                    *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.PHONE)">{{viewService.formattedPhone}}</div>
+                  <div
+                    *ngIf="viewService.isCompanyInfoRowPresented(companyInfoTemplate, CompanyInfoRowsEnum.WEB_URL)">{{viewService.companyInfo.website}}</div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div *ngIf="viewService.getGridArea('SALE_SHORT_INFO')"
+         [style.grid-area]="viewService.getGridArea('SALE_SHORT_INFO')" class="SALE_SHORT_INFO">
+      <div class="d-flex flex-column table">
+        <div class="d-flex flex-row tr">
+          <div class="th w-50"><strong>{{viewService.saleShortInfoTemplate.dateHeader}}</strong></div>
+          <div class="th w-50"><strong>{{viewService.saleShortInfoTemplate.saleHeader}}</strong></div>
+        </div>
+        <div class="d-flex flex-row tr">
+          <div class="td w-50"><span>{{viewService.invoice.saleShortInfo.docDate}}</span></div>
+          <div class="td w-50"><span>{{viewService.invoice.saleShortInfo.docNumber}}</span></div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="viewService.getGridArea('SALE_FULL_INFO')"
+         [style.grid-area]="viewService.getGridArea('SALE_FULL_INFO')" class="SALE_FULL_INFO">
+      <div class="d-flex flex-column table">
+        <div class="d-flex flex-row tr">
+          <div class="td w-50"><strong>{{viewService.saleFullInfoTemplate.saleHeader}}</strong></div>
+          <div class="td w-50"><span>{{viewService.invoice.saleFullInfo.docNumber}}</span></div>
+        </div>
+        <div class="d-flex flex-row tr">
+          <div class="td w-50"><strong>{{viewService.saleFullInfoTemplate.dateHeader}}</strong></div>
+          <div class="td w-50"><span>{{viewService.invoice.saleFullInfo.docDate}}</span></div>
+        </div>
+        <div class="d-flex flex-row tr">
+          <div class="td w-50"><strong>{{viewService.saleFullInfoTemplate.dueDateHeader}}</strong></div>
+          <div class="td w-50"><span>{{viewService.invoice.saleFullInfo.dueDate}}</span></div>
+        </div>
+        <div class="d-flex flex-row tr">
+          <div class="td w-50"><strong>{{viewService.saleFullInfoTemplate.termsHeader}}</strong></div>
+          <div class="td w-50"><span>{{viewService.invoice.saleFullInfo.term}}</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div
+      *ngIf="ObjectHelper.isDefined(viewService.invoice.billingAddress) && viewService.getGridArea('BILLING_ADDRESS')"
+      [style.grid-area]="viewService.getGridArea('BILLING_ADDRESS')" class="BILLING_ADDRESS">
+      <div class="d-flex flex-column table">
+        <div class="tr">
+          <div class="th">
+            <strong>{{viewService.billToTemplate.addressHeader}}</strong>
+          </div>
+        </div>
+        <div class="tr">
+          <div *ngIf="viewService.invoice.billingAddress as b" class="td address">
+            <div *ngIf="b.addressText">{{b.addressText}}</div>
+            <div *ngIf="b.companyName">{{b.companyName}}</div>
+            <div *ngIf="b.firstName || b.lastName"><span *ngIf="b.firstName">{{b.firstName}} </span>{{b.lastName}}
+            </div>
+            <div *ngIf="b.address1">{{b.address1}}</div>
+            <div *ngIf="b.address2">{{b.address2}}</div>
+            <div *ngIf="b.city || b.state || b.zip"><span *ngIf="b.city">{{b.city}}<span
+              *ngIf="b.state || b.zip">, </span></span><span *ngIf="b.state">{{b.state}} </span><span
+              *ngIf="b.zip">{{b.zip}}</span></div>
+            <div *ngIf="b.country">{{b.country}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="viewService.getGridArea('SHIPPING_ADDRESS')"
+         [style.grid-area]="viewService.getGridArea('SHIPPING_ADDRESS')" class="SHIPPING_ADDRESS">
+      <div class="d-flex flex-column table">
+        <div class="tr">
+          <div class="th">
+            <strong>{{viewService.shipToTemplate.addressHeader}}</strong>
+          </div>
+        </div>
+        <div class="tr">
+          <div *ngIf="viewService.invoice.shippingAddress as s" class="td address">
+            <div *ngIf="s.addressText">{{s.addressText}}</div>
+            <div *ngIf="s.companyName">{{s.companyName}}</div>
+            <div *ngIf="s.firstName || s.lastName"><span *ngIf="s.firstName">{{s.firstName}} </span>{{s.lastName}}
+            </div>
+            <div *ngIf="s.address1">{{s.address1}}</div>
+            <div *ngIf="s.address2">{{s.address2}}</div>
+            <div *ngIf="s.city || s.state || s.zip"><span *ngIf="s.city">{{s.city}}<span
+              *ngIf="s.state || s.zip">, </span></span><span *ngIf="s.state">{{s.state}} </span><span
+              *ngIf="s.zip">{{s.zip}}</span></div>
+            <div *ngIf="s.country">{{s.country}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="viewService.getGridArea('SHIPPING_INFO') && ObjectHelper.isDefined(viewService.invoice.shippingInfo)"
+         [style.grid-area]="viewService.getGridArea('SHIPPING_INFO')" class="SHIPPING_INFO">
+      <div class="d-flex flex-column table">
+        <div class="d-flex flex-row tr">
+          <div class="th w-50"><strong>{{viewService.shippingInfoTemplate.shipMethodHeader}}</strong></div>
+          <div class="th w-50"><strong>{{viewService.shippingInfoTemplate.shipDateHeader}}</strong></div>
+          <div class="th w-50"><strong>{{viewService.shippingInfoTemplate.trackingNumberHeader}}</strong></div>
+        </div>
+        <div class="d-flex flex-row tr">
+          <div class="td w-50"><span>{{viewService.invoice.shippingInfo.shipMethod}}</span></div>
+          <div class="td w-50"><span>{{viewService.invoice.shippingInfo.shipDate}}</span></div>
+          <div class="td w-50"><span>{{viewService.invoice.shippingInfo.trackingNumber}}</span></div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngFor="let sait of viewService.saleAdditionalInfoTemplates">
+      <div class="SALE_ADDITIONAL" [style.grid-area]="viewService.getGridAreaForComponent(sait)">
+        <div [className]="sait.saleAdditionalInfoId">
+          <div
+            *ngIf="viewService.getSaleAdditionalInfoTemplate(sait.saleAdditionalInfoId) as saleAdditionalInfoTemplate"
+            class="d-flex">
+            <div class="table">
+              <div class="thead">
+                <div class="tr">
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.DUE_DATE)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.DUE_DATE)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.dueDateHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TERMS)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TERMS)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.termsHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SALES_REP)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SALES_REP)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.salesRepHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_DATE)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_DATE)"
+                    [style.grid-row]="1"
+                    class="th">
+                    <strong>{{saleAdditionalInfoTemplate.shipDateHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_METHOD)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_METHOD)"
+                    [style.grid-row]="1"
+                    class="th">
+                    <strong>{{saleAdditionalInfoTemplate.shipMethodHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TRACKING_NUMBER)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TRACKING_NUMBER)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.trackingNumberHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.FOB)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.FOB)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.fobHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.PO_NUMBER)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.PO_NUMBER)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.poNumberHeader}}</strong>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.OTHER)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.OTHER)"
+                    [style.grid-row]="1" class="th">
+                    <strong>{{saleAdditionalInfoTemplate.otherHeader}}</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="tbody">
+                <div class="tr">
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.DUE_DATE)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.DUE_DATE)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.dueDate}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TERMS)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TERMS)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.terms}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SALES_REP)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SALES_REP)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.salesRep}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_DATE)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_DATE)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.shipDate}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_METHOD)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.SHIP_METHOD)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.shipMethod}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TRACKING_NUMBER)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.TRACKING_NUMBER)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.trackingNumber}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.FOB)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.FOB)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.fob}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.PO_NUMBER)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.PO_NUMBER)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.poNumber}}</span>
+                  </div>
+                  <div
+                    [class.d-none]="!viewService.showColumnInAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.OTHER)"
+                    [style.grid-column]="viewService.getOrderInSaleAdditionalInfo(saleAdditionalInfoTemplate, viewService.SaleAdditionalInfoColumnsEnum.OTHER)"
+                    [style.grid-row]="2" class="td">
+                    <span>{{viewService.invoice.saleAdditionalInfo.other}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div *ngIf="viewService.getGridArea('ITEMS') && ObjectHelper.isDefined(viewService.itemTableLayout)"
+         [style.grid-area]="viewService.getGridArea('ITEMS')" class="ITEMS">
+      <div class="d-flex">
+        <div [style.grid-template-columns]="viewService.getInvoiceItemTableTemplateColumns()"
+             class="table w-100">
+          <div *ngIf="viewService.invoiceItems.length > 0" class="thead">
+            <div class="tr">
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemTableTemplate.lineNumHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemTableTemplate.itemHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemTableTemplate.skuHeader}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                [style.grid-row]="1"
+                class="th">
+                <strong>{{viewService.itemTableTemplate.serviceDateHeader}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                [style.grid-row]="1"
+                class="th">
+                <strong>{{viewService.itemTableTemplate.categoryClassHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemTableTemplate.other1Header}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemTableTemplate.other2Header}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemTableTemplate.descriptionHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                   [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemTableTemplate.quantityHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                   [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemTableTemplate.rateHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                   [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemTableTemplate.amountHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                   [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                   [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemTableTemplate.taxableHeader}}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="tbody">
+            <div *ngFor="let invoiceItem of viewService.invoiceItems; index as i;" class="tr">
+              <ng-container *ngIf="viewService.isItemOrGroup(invoiceItem); else description">
+                <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                     [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                     [style.grid-row]="i+2" class="td">
+                  <span>{{i + 1}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                     [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                     [style.grid-row]="i+2" class="td">
+                  <span [class.ml-4]="invoiceItem.isChild">{{invoiceItem.name}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                     [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                     [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.sku}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                  [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.serviceDate}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                  [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.categoryClass}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                  [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.other1}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                  [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.other2}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                  [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                  [style.grid-row]="i+2" class="td description-cell">
+                  <span [innerText]="invoiceItem.description"></span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                     [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                     [style.grid-row]="i+2" class="td">
+                  <span *ngIf="viewService.isItemOrGroup(invoiceItem)">{{invoiceItem.quantity}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                     [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                     [style.grid-row]="i+2" class="td"><span
+                  *ngIf="viewService.isItemOrGroup(invoiceItem)">{{invoiceItem.rate}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                  [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                  [style.grid-row]="i+2" class="td">
+                  <span *ngIf="viewService.isItemOrGroup(invoiceItem)">{{invoiceItem.amount}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemTable(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                     [style.grid-column]="viewService.getItemTableColumnOrder(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                     [style.grid-row]="i+2" class="td">
+                  <ng-container
+                    *ngIf="ObjectHelper.isDefined(invoiceItem.tax); else taxable">{{invoiceItem.tax}}</ng-container>
+                  <ng-template #taxable>
+                    <nb-icon *ngIf="invoiceItem.taxable"
+                             icon="checkmark-outline"></nb-icon>
+                  </ng-template>
+                </div>
+              </ng-container>
+              <ng-template #description>
+                <div
+                  [style.grid-column-end]="viewService.itemTableLayout.length + 1"
+                  [style.grid-column-start]="1" [style.grid-row]="i+2" class="td d-flex description-cell">
+                  <span class="ml-auto" [innerText]="invoiceItem.description"></span>
+                </div>
+              </ng-template>
+            </div>
+            <div class="tr">
+              <div [style.grid-column]="'1 / -1'"
+                   [style.grid-template-columns]="viewService.getInvoiceItemTableMemoTotalsColumns()"
+                   class="memo-totals-row">
+              <div class="td customer-memo"
+                style="white-space: pre-wrap;">
+                <div *ngIf="!viewService.itemTableTemplate.hideCustomerMemo">{{viewService.invoice.customerMemo}}</div>
+              </div>
+              <div class="TOTAL_TABLE">
+                <div #total_table class="d-flex flex-column">
+                  <div *ngIf="viewService.invoice.isAmountInclusive" class="d-flex flex-row">
+                    <div class="th w-100"><strong>Amounts are Tax Inclusive</strong></div>
+                  </div>
+                  <div #subTotal
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.SUBTOTAL)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-subtotal">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.SUBTOTAL)"
+                         class="td"><strong>Sub Total</strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.SUBTOTAL)"
+                         class="td">
+                      <span>{{viewService.invoice.currency}}{{viewService.invoice.subTotal | number : '1.2-2'}}</span>
+                    </div>
+                  </div>
+                  <div #txnTaxRates
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.TAX) && viewService.invoice.taxRates?.length"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-tax">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TAX)"
+                         class="td">
+                      <div *ngFor="let taxRate of viewService.invoice.taxRates">
+                        <strong>{{taxRate.name}} &#64; {{taxRate.percentage}}</strong>
+                      </div>
+                    </div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TAX)"
+                         class="td">
+                      <div *ngFor="let taxRate of viewService.invoice.taxRates">
+                        <span>{{viewService.invoice.currency}}{{taxRate.amount | number : '1.2-2'}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div #txnTax
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.TAX) && !viewService.invoice.taxRates?.length"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-tax">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TAX)"
+                         class="td"><strong>Tax<ng-container
+                      *ngIf="ObjectHelper.isDefined(viewService.invoice.taxPercentage)"> {{viewService.invoice.taxPercentage}}%</ng-container></strong>
+                    </div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TAX)"
+                         class="td"><span>{{viewService.invoice.currency}}{{viewService.invoice.taxAmount |number:'1.2-2'}}
+                          </span></div>
+                  </div>
+                  <div #discount
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.DISCOUNT)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-discount">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.DISCOUNT)"
+                         class="td"><strong>Discount
+                      <span *ngIf="viewService.invoice.discountPercentLabel">{{viewService.invoice.discountPercentLabel}}</span>
+                      <ng-container *ngIf="!viewService.invoice.discountPercentLabel && ObjectHelper.isDefined(viewService.invoice.discountExpDateFormatted)">
+                        <ng-container *ngIf="!viewService.invoice.isDiscountExpired">
+                          <span class="discount-expires">(expires {{viewService.invoice.discountExpDateFormatted}}
+                            )</span>
+                        </ng-container>
+                        <ng-container *ngIf="viewService.invoice.isDiscountExpired">
+                          <span class="discount-expired">(expired {{viewService.invoice.discountExpDateFormatted}}
+                            )</span>
+                        </ng-container>
+                      </ng-container>
+                    </strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.DISCOUNT)"
+                         class="td">
+                      <span>{{viewService.invoice.currency}}{{viewService.invoice.discount |number:'1.2-2'}}</span>
+                    </div>
+                  </div>
+                  <div #shippingCost *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.SHIPPING_COST)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-shipping">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.SHIPPING_COST)"
+                         class="td"><strong>Shipping Cost</strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.SHIPPING_COST)"
+                         class="td"><span>{{viewService.shippingCostFormatted}}</span></div>
+                  </div>
+                  <div #tips *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.TIP)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-tip">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TIP)"
+                         class="td"><strong>Tip</strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TIP)"
+                         class="td"><span>${{viewService.invoice.tip | number :
+                      '1.2-2'}}</span></div>
+                  </div>
+                  <div #total
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.TOTAL)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-total">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TOTAL)"
+                         class="td"><strong>Total</strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.TOTAL)"
+                         class="td">
+                      <span>{{viewService.totalFormatted}}</span>
+                    </div>
+                  </div>
+                  <div #amountReceived
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.APPLIED_AMOUNT)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-applied">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.APPLIED_AMOUNT)"
+                         class="td"><strong>Applied Amount</strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.APPLIED_AMOUNT)"
+                         class="td">
+                      <span>{{viewService.invoice.currency}}{{viewService.invoice.appliedAmount | number : '1.2-2'}}</span>
+                    </div>
+                  </div>
+                  <div #balance
+                       *ngIf="viewService.isTotalRowVisible(InvoiceItemsTableTotalsEnum.AMOUNT_DUE)"
+                       [style.grid-template-columns]="viewService.getInvoiceItemTableTotalsColumns()"
+                       class="totals-row tr t-amountdue">
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.AMOUNT_DUE)"
+                         class="td"><strong>Amount Due</strong></div>
+                    <div [style.background]="viewService.getTotalRowBackground(InvoiceItemsTableTotalsEnum.AMOUNT_DUE)"
+                         class="td">
+                      <span>{{viewService.amountDueFormatted}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="viewService.getGridArea('ITEMS_ROWS') && ObjectHelper.isDefined(viewService.itemsRowsTemplate)"
+         [style.grid-area]="viewService.getGridArea('ITEMS_ROWS')" class="ITEMS_ROWS">
+      <div class="d-flex">
+        <div [style.grid-template-columns]="viewService.getItemsRowsTemplateColumns()"
+             class="table w-100">
+          <div class="thead">
+            <div class="tr">
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemsRowsTemplate.lineNumHeader}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemsRowsTemplate.serviceDateHeader}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemsRowsTemplate.categoryClassHeader}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemsRowsTemplate.other1Header}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemsRowsTemplate.other2Header}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemsRowsTemplate.itemHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{viewService.itemsRowsTemplate.skuHeader}}</strong>
+              </div>
+              <div
+                [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemsRowsTemplate.descriptionHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                   [style.grid-row]="1" class="number-value th">
+                <strong>{{viewService.itemsRowsTemplate.quantityHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                   [style.grid-row]="1" class="number-value th">
+                <strong>{{viewService.itemsRowsTemplate.rateHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                   [style.grid-row]="1" class="number-value th">
+                <strong>{{viewService.itemsRowsTemplate.amountHeader}}</strong>
+              </div>
+              <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                   [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                   [style.grid-row]="1" class="th">
+                <strong>{{viewService.itemsRowsTemplate.taxableHeader}}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="tbody">
+            <div *ngFor="let invoiceItem of viewService.invoiceItems; index as i;" class="tr">
+              <ng-container *ngIf="viewService.isItemOrGroup(invoiceItem); else description">
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.LINE_NUM)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{i + 1}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SERVICE_DATE)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.serviceDate}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.CATEGORY_CLASS)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.categoryClass}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_1)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.other1}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.OTHER_2)"
+                  [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.other2}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                     [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.ITEM)"
+                     [style.grid-row]="i+2" class="td">
+                  <span [class.ml-4]="invoiceItem.isChild">{{invoiceItem.name}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                     [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.SKU)"
+                     [style.grid-row]="i+2" class="td">
+                  <span>{{invoiceItem.sku}}</span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.DESCRIPTION)"
+                  [style.grid-row]="i+2" class="td description-cell">
+                  <span [innerText]="invoiceItem.description"></span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                     [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.QTY)"
+                     [style.grid-row]="i+2" class="number-value td">
+                  <span *ngIf="viewService.isItemOrGroup(invoiceItem)">{{invoiceItem.quantity}}</span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                     [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.RATE)"
+                     [style.grid-row]="i+2" class="number-value td">
+                                    <span *ngIf="viewService.isItemOrGroup(invoiceItem)"><span
+                                      *ngIf="ObjectHelper.isDefined(invoiceItem.rate)">{{invoiceItem.rate}}</span></span>
+                </div>
+                <div
+                  [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                  [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.AMOUNT)"
+                  [style.grid-row]="i+2" class="number-value td">
+                                    <span *ngIf="viewService.isItemOrGroup(invoiceItem)"><span
+                                      *ngIf="ObjectHelper.isDefined(invoiceItem.amount)">{{invoiceItem.amount}}</span></span>
+                </div>
+                <div [class.d-none]="!viewService.showColumnInItemsRows(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                     [style.grid-column]="viewService.getItemsRowsColumnOrder(viewService.InvoiceItemsTableColumnsEnum.TAX)"
+                     [style.grid-row]="i+2" class="td">
+                  <nb-icon *ngIf="viewService.isItemOrGroup(invoiceItem) && invoiceItem.taxable"
+                           icon="checkmark-outline"></nb-icon>
+                </div>
+              </ng-container>
+              <ng-template #description>
+                <div
+                  [style.grid-column-end]="viewService.itemsRowsTemplate.itemTable.length + 1"
+                  [style.grid-column-start]="1" [style.grid-row]="i+2" class="td d-flex description-cell">
+                  <span class="ml-auto" [innerText]="invoiceItem.description"></span>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="viewService.getGridArea('TOTALS') && ObjectHelper.isDefined(viewService.totalsTemplate.totals) && viewService.totalsTemplate.totals.length >
+                  0" [style.grid-area]="viewService.getGridArea('TOTALS')" class="TOTALS">
+      <div class="d-flex">
+        <div class="table w-100">
+          <div class="tbody">
+            <ng-container *ngFor="let total of viewService.totalsTemplate.totals;">
+              <div *ngIf="TotalsViewService.getHeader(total, viewService.totalsTemplate, viewService.invoice) as header"
+                   class="tr">
+                <div [style.grid-column]="1" class="td">
+                  {{header}}
+                </div>
+                <div [style.grid-column]="2" class="number-value td">
+                  <strong>{{viewService.invoice.currency}}{{TotalsViewService.getValue(total, viewService.invoice) | number : '1.2-2'}}</strong>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="ObjectHelper.isDefined(viewService.invoice.customerMemo) && viewService.invoice.customerMemo != '' && viewService.getGridArea('CUSTOMER_MEMO')"
+      [style.grid-area]="viewService.getGridArea('CUSTOMER_MEMO')" class="CUSTOMER_MEMO">
+      <div class="d-flex flex-column table">
+        <div class="tr">
+          <div class="td">
+            <span>{{viewService.invoice.customerMemo}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div *ngFor="let customFieldsTemplate of viewService.customFields"
+           [className]="'CUSTOM_FIELDS ' + customFieldsTemplate.customFieldsId"
+           [style.grid-area]="viewService.getGridAreaForComponent(customFieldsTemplate)">
+        <div *ngIf="viewService.getCustomFieldsTemplate(customFieldsTemplate.customFieldsId) as customFieldsTemplate"
+             class="d-flex">
+          <div class="table w-100">
+            <div class="thead">
+              <div class="tr">
+                <div *ngFor="let col of customFieldsTemplate.customFields"
+                     [style.grid-column]="viewService.getOrderInCustomFields(customFieldsTemplate.customFields, col.id)"
+                     [style.grid-row]="1"
+                     class="th">
+                  <strong>{{col.name}}</strong>
+                </div>
+              </div>
+            </div>
+            <div class="tbody">
+              <div class="tr">
+                <div *ngFor="let col of customFieldsTemplate.customFields"
+                     [style.grid-column]="viewService.getOrderInCustomFields(customFieldsTemplate.customFields, col.id)"
+                     [style.grid-row]="2"
+                     class="td">
+                  <span>{{viewService.getCustomFieldStringValue(col.name)}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div *ngFor="let customerName of viewService.customerNames"
+         [className]="'CUSTOMER_NAME ' + customerName.customerNameId"
+         [style.grid-area]="viewService.getGridAreaForComponent(customerName)">
+      <div *ngIf="viewService.getCustomerNameTemplate(customerName.customerNameId) as customerNameTemplate"
+           class="d-flex">
+        <div class="table w-100">
+          <div class="thead">
+            <div class="tr">
+              <div [style.grid-column]="1"
+                   [style.grid-row]="1"
+                   class="th">
+                <strong>{{customerNameTemplate.customerNameHeader}}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="tbody">
+            <div class="tr">
+              <div [style.grid-column]="1"
+                   [style.grid-row]="2"
+                   class="td">
+                <span>{{viewService.invoice.customerName}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

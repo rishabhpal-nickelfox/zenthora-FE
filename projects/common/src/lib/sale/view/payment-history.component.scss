@@ -1,0 +1,62 @@
+@use '../../themes' as *;
+
+
+@include nb-install-component() {
+  table {
+    font-size: 1rem;
+    height: 100%;
+    word-wrap: break-word;
+    white-space: normal;
+    border: none;
+  }
+
+
+  th {
+    font-weight: 500;
+    background-color: nb-theme(table-row-even);
+  }
+
+  th, td {
+    padding: 0.4rem !important;
+  }
+
+  tr:nth-child(odd) {
+    background-color: nb-theme(table-row-odd);
+  }
+
+  tr:nth-child(even) {
+    background-color: nb-theme(table-row-even);
+  }
+
+  tr:nth-child(odd):hover {
+    background-color: nb-theme(table-row-hover);
+  }
+
+
+  tr:nth-child(even):hover {
+    background-color: nb-theme(table-row-hover);
+  }
+
+  tr.actual {
+    color: green;
+  }
+
+  tr.not-actual {
+    color: grey;
+  }
+
+  .payments-string {
+    cursor: pointer;
+    font-style: italic;
+    text-decoration: underline;
+  }
+
+
+  .payments-string:focus {
+    color: nb-theme(card-text-color-focus)
+  }
+
+  .payments-string:hover {
+    color: nb-theme(card-text-color-hover)
+  }
+}

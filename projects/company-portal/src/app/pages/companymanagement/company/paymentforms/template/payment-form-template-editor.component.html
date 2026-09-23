@@ -1,0 +1,96 @@
+<div>
+  <input id="imageFileInput" type="file" accept="image/*" style="display:none" (change)="onImageFileSelected($event)">
+  <div class="payment-form-template-editor__toolbar pb-2">
+    <button (click)="addText()" class="btn btn-sm btn-rectangle btn-secondary" type="button">Add Text</button>
+    <button (click)="addInput()" class="btn btn-sm btn-rectangle btn-secondary ml-2" type="button">Add Input</button>
+    <button (click)="addDate()" class="btn btn-sm btn-rectangle btn-secondary ml-2" type="button">Add Date</button>
+    <button (click)="addSelect()" class="btn btn-sm btn-rectangle btn-secondary ml-2" type="button">Add Select</button>
+    <button (click)="addTextarea()" class="btn btn-sm btn-rectangle btn-secondary ml-2" type="button">Add Textarea</button>
+    <button (click)="addLogo()" class="btn btn-sm btn-rectangle btn-secondary ml-2" type="button">Add Logo</button>
+    <button (click)="triggerImageFilePicker()" class="btn btn-sm btn-rectangle btn-secondary ml-2" type="button">Add Image</button>
+  </div>
+
+    <gridster [options]="options">
+      <gridster-item *ngFor="let item of layout; trackBy: trackById" [item]="item">
+      <div [id]="item.id">
+        <div class="payment-form-template-editor__action-btn">
+          <ng-container *ngIf="item.type !== PaymentFormControlType.LOGO && item.type !== PaymentFormControlType.IMAGE">
+            <button (click)="edit(item)" nbButton appearance="filled" shape="round"
+                    status="success" type="button"
+                    ngbPopover="Edit" triggers="mouseenter:mouseleave" placement="bottom" container="body">
+              <nb-icon icon="edit-2-outline"></nb-icon>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="(item.type === PaymentFormControlType.LOGO || item.type === PaymentFormControlType.IMAGE) && !isAtOriginalSize(item)">
+            <span [ngbPopover]="canRevertToOriginalSize(item) ? 'Return to original size' : 'Not enough space. Move the image to return it to its original size.'"
+                  triggers="mouseenter:mouseleave" placement="bottom" container="body">
+              <button (click)="revertToOriginalSize(item)"
+                      [disabled]="!canRevertToOriginalSize(item)"
+                      nbButton appearance="filled" shape="round"
+                      status="info" type="button">
+                <nb-icon icon="undo-outline"></nb-icon>
+              </button>
+            </span>
+          </ng-container>
+          <button (click)="remove(item)" nbButton appearance="filled" shape="round"
+                  status="warning" type="button"
+                  ngbPopover="Remove" triggers="mouseenter:mouseleave" placement="bottom" container="body">
+            <nb-icon icon="close-outline"></nb-icon>
+          </button>
+        </div>
+
+        <div [ngSwitch]="item.type" class="payment-form-template-editor__content">
+          <div *ngSwitchCase="PaymentFormControlType.LOGO" class="payment-form-template-editor__image-preview">
+            <img *ngIf="companyLogoUrl; else logoPlaceholder" [src]="companyLogoUrl"
+                 class="payment-form-template__image" alt="Company logo"
+                 [style.object-fit]="isAtOriginalSize(item) ? 'scale-down' : 'contain'">
+            <ng-template #logoPlaceholder>
+              <span class="text-muted">Company logo</span>
+            </ng-template>
+          </div>
+
+          <div *ngSwitchCase="PaymentFormControlType.IMAGE" class="payment-form-template-editor__image-preview">
+            <img *ngIf="item.value && item.imageContentType"
+                 [src]="'data:' + item.imageContentType + ';base64,' + item.value"
+                 class="payment-form-template__image" alt="Image"
+                 [style.object-fit]="isAtOriginalSize(item) ? 'scale-down' : 'contain'">
+          </div>
+
+          <app-rich-text-viewer *ngSwitchCase="PaymentFormControlType.TEXT" [value]="item.value"
+                                class="payment-form-template-editor__text-preview"></app-rich-text-viewer>
+
+          <app-extended-input *ngSwitchCase="PaymentFormControlType.INPUT"
+                              [labelText]="item.label"
+                              [required]="item.requirement"
+                              [verticalMode]="true">
+            <input [placeholder]="item.label" class="form-control qbo-form-control" type="text">
+          </app-extended-input>
+
+          <app-extended-input *ngSwitchCase="PaymentFormControlType.DATE"
+                              [labelText]="item.label"
+                              [required]="item.requirement"
+                              [verticalMode]="true">
+            <app-extended-datepicker [placeholder]="item.label"></app-extended-datepicker>
+          </app-extended-input>
+
+          <app-extended-input *ngSwitchCase="PaymentFormControlType.SELECT"
+                              [labelText]="item.label"
+                              [required]="item.requirement"
+                              [verticalMode]="true">
+            <nb-select class="qbo-form-control-select" placeholder="Select...">
+              <nb-option *ngFor="let option of item.options" [value]="option">{{option}}</nb-option>
+            </nb-select>
+          </app-extended-input>
+
+          <app-extended-input *ngSwitchCase="PaymentFormControlType.TEXTAREA"
+                              [labelText]="item.label"
+                              [required]="item.requirement"
+                              [verticalMode]="true">
+            <textarea [placeholder]="item.label" [rows]="item.textareaRows"
+                      class="form-control qbo-form-control payment-form-template__textarea"></textarea>
+          </app-extended-input>
+        </div>
+      </div>
+    </gridster-item>
+  </gridster>
+</div>

@@ -1,0 +1,210 @@
+<div class="d-flex flex-row pb-2">
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeColor1" [label]="'Scheme Color 1'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeColor2" [label]="'Scheme Color 2'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeColor3" [label]="'Scheme Color 3'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeColor4" [label]="'Scheme Color 4'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeColor5" [label]="'Scheme Color 5'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeBackgroundColor" [label]="'Background Color'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeFontColor" [label]="'Font Color'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeFontColor2" [label]="'Font Color 2'"></app-color-picker>
+  </div>
+  <div class="pr-3 d-flex">
+    <app-color-picker [(ngModel)]="themeBorderColor" [label]="'Border Color'"></app-color-picker>
+  </div>
+  <div class="ml-auto d-flex">
+    <a (click)="resetToDefaults()" href="#">
+      Reset to Defaults
+    </a>
+  </div>
+</div>
+
+<div class="company-theme-template d-flex flex-column">
+  <div class="d-flex flex-row zenthora-logo mb-5"
+       style="height: 60px">
+    <div class="pr-5 my-auto">
+      <img *ngIf="companyLogo" [src]="companyLogo" alt="company-logo">
+    </div>
+    <div class="d-flex ml-5 title-container align-items-center">
+      <span>{{companyName}} Customer Portal</span>
+    </div>
+  </div>
+  <div class="d-flex flex-row">
+
+    <ul class="nav flex-column mr-3">
+      <li *ngFor="let parentItem of menuItems" class="nav-item parent">
+        <ng-container [ngTemplateOutletContext]="{item: parentItem}" [ngTemplateOutlet]="menuTemplate"></ng-container>
+      </li>
+    </ul>
+
+    <div>
+
+      <div class="d-flex flex-row mb-2">
+        <button class="btn btn-xs btn-rectangle mx-2 btn-warning "
+                type="button">
+          <nb-icon icon="sync-outline"></nb-icon>
+          Test
+        </button>
+        <button class="btn btn-xs btn-rectangle mx-2 btn-success"
+                type="button">
+          <nb-icon icon="lock-outline"></nb-icon>
+          Submit
+        </button>
+        <button class="btn btn-xs btn-rectangle mx-2 btn-primary"
+                type="button">
+          <nb-icon icon="checkmark-outline"></nb-icon>
+          Save
+        </button>
+        <button class="btn btn-xs btn-rectangle mx-2 btn-danger"
+                type="button">
+          <nb-icon icon="minus-outline"></nb-icon>
+          Cancel
+        </button>
+        <button class="btn btn-xs btn-rectangle mx-2 btn-info"
+                type="button">
+
+          <nb-icon icon="plus-outline"></nb-icon>
+          Add
+        </button>
+
+      </div>
+      <nb-card>
+        <nb-card-body>
+          <div class="d-flex flex-column">
+            <div class="d-flex flex-row mx-2 my-4">
+              <div class="d-flex flex-column">
+                <div class="d-flex flex-row mb-1">
+                  <div class="pr-2 w-100">
+                    <label class="col-form-label">Input Example</label>
+                  </div>
+                  <div class="d-flex flex-column w-100">
+                    <input
+                      class="form-control qbo-form-control" maxlength="100"
+                      placeholder="Input Example" type="text">
+                  </div>
+                </div>
+
+
+                <div class="d-flex flex-row py-2 accept">
+                  <label class="checkbox-container">
+                    <input [value]="true" type="checkbox">
+                    <span class="checkmark"></span>
+                    <span [innerText]="'Check All'"
+                          class="checkbox-descr"></span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+            <div class="d-flex flex-row mx-2 my-4">
+              <app-table-component [filters]="filters" [headers]="headers" [objectOperatingService]="testService"
+                                   [rowTemplate]="rowtemplate">
+              </app-table-component>
+            </div>
+            <ng-template #rowtemplate let-rowData="rowData">
+              <tr class="clickable">
+                <td>
+                  <div>
+                    <span>{{rowData.transactionTimestamp}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span>{{rowData.docType}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span>{{rowData.docNumber}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span>{{rowData.source}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span> {{rowData.paymentMethod}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span>{{rowData.type}} {{rowData.last4}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span>{{rowData.amount}}</span>
+                  </div>
+                </td>
+                <td [ngClass]="rowData.success ? 'status-success': 'status-failed'">
+                  <div>
+                    <span>{{rowData.status}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <span>{{rowData.authCode}}</span>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </div>
+
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #menuTemplate let-item="item">
+  <ng-container *ngIf="!item.children" [ngTemplateOutletContext]="{item: item}"
+                [ngTemplateOutlet]="childMenuItemTemplate"></ng-container>
+  <ng-container *ngIf="item.children" [ngTemplateOutletContext]="{item: item}"
+                [ngTemplateOutlet]="parentMenuItemTemplate"></ng-container>
+</ng-template>
+
+<ng-template #parentMenuItemTemplate let-item="item">
+  <div [class.expanded]="true" [class.has-children]="item.children">
+    <div class="d-flex flex-row align-items-center item">
+      <a class="nav-link">
+        <nb-icon *ngIf="item.icon" [icon]="item.icon"></nb-icon>
+        {{item.title}}
+      </a>
+    </div>
+    <ul class="nav flex-column">
+      <li *ngFor="let childItem of item.children" class="nav-item child">
+        <ng-container [ngTemplateOutletContext]="{item: childItem}"
+                      [ngTemplateOutlet]="menuTemplate"></ng-container>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #childMenuItemTemplate let-item="item">
+  <div>
+    <div class="d-flex flex-row item align-items-center">
+      <a class="nav-link">
+        <nb-icon *ngIf="item.icon" [icon]="item.icon"></nb-icon>
+        {{item.title}}
+      </a>
+    </div>
+  </div>
+</ng-template>

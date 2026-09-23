@@ -1,0 +1,49 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+  <div class="form-group row">
+    <div class="col-md-4">
+      <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                            maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                            server: {}}"
+                          [hasError]="isFieldNotValid('name')"
+                          [inputErrors]="getForm().get('name').errors"
+                          [labelText]="'Api Token Name'"
+                          [required]=true
+                          [verticalMode]=true>
+        <input class="form-control qbo-form-control" formControlName="name" maxlength="100" placeholder="Name"
+               type="text">
+      </app-extended-input>
+    </div>
+  </div>
+
+  <div *ngIf="showToken" class="form-group row">
+    <div class="col-md-8">
+      <label class="col-form-label">Refresh Token</label>
+      <span (click)="copyRefreshToken()" (keyup.enter)="copyRefreshToken()" class="refresh-token d-block"
+            role="button" tabindex="0">
+        <nb-icon class="copy-icon" icon="copy-outline"></nb-icon>
+        {{apiToken.refreshToken}}
+      </span>
+    </div>
+  </div>
+
+  <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div>
+      <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked"
+              class="btn btn-sm btn-rectangle btn-success" nbSpinnerMessage="" nbSpinnerStatus="success"
+              type="submit">
+        <nb-icon icon="flash-outline"></nb-icon>
+        <span *ngIf="isCreateMode">Generate & Save</span>
+        <span *ngIf="!isCreateMode">Re-generate & Save</span>
+      </button>
+    </div>
+    <div class="px-2">
+      <button (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger" type="button">
+        <nb-icon icon="close-outline"></nb-icon>
+        <span *ngIf="showToken">Close</span><span *ngIf="!showToken">Cancel</span></button>
+    </div>
+  </div>
+</ng-template>

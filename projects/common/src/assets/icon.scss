@@ -1,0 +1,21 @@
+@use '../lib/themes' as *;
+
+a:not(.nav-link) > nb-icon,
+nb-icon[icon="toggle-left"],
+nb-icon[icon="toggle-right"] {
+  font-size: 1.5rem;
+}
+
+a:not(.nav-link) > nb-icon {
+  color: nb-theme(icon-default-color);
+}
+
+nb-icon[icon="toggle-left"],
+a:not(.nav-link) > nb-icon[icon="toggle-left"] {
+  color: nb-theme(toggle-off-color);
+}
+
+nb-icon[icon="toggle-right"],
+a:not(.nav-link) > nb-icon[icon="toggle-right"] {
+  color: nb-theme(toggle-on-color);
+}

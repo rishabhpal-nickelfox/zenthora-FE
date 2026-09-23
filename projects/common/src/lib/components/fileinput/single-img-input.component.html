@@ -1,0 +1,26 @@
+<div class="d-flex flex-row flex-wrap">
+    <div class="py-2" [hidden]="disabled">
+        <div class="d-flex flex-column">
+            <div>
+                <button class="btn btn-rectangle btn-secondary btn-xs" type="button" [disabled]="disabled" (click)="fileInput.click();">
+                    <nb-icon icon="upload-outline"></nb-icon>
+                    Upload
+                </button>
+            </div>
+            <span class="val-message" *ngIf="fileIsTooLarge">
+                Sorry, this file is more than {{maxFileSize}} bytes
+            </span>
+        </div>
+        <input type="file" class="form-control qbo-form-control ng-trim-ignore" id="fileInput" [disabled]="disabled" #fileInput style="visibility:hidden; display: none" accept="image/*" (change)="handleFileInput($event.target.files[0])" placeholder="Upload">
+    </div>
+    <ng-container *ngIf="file">
+        <div class="px-4">
+            <img #filePreviewImg id="filePreviewImg" [src]="filePreview" class="img-preview" [style.max-width]="maxWidth" [style.max-height]="maxHeight" alt="filePreview">
+        </div>
+        <div class="px-2" [hidden]="disabled">
+            <a (click)="removeFile()">
+                <nb-icon icon="close-outline"></nb-icon>
+            </a>
+        </div>
+    </ng-container>
+</div>

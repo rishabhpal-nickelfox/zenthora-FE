@@ -1,0 +1,30 @@
+<div [innerHTML]="styles"></div>
+<div [className]="id">
+  <div class="table w-100">
+    <div *ngIf="!hideHeader" class="thead">
+      <div class="tr">
+        <div [style.grid-column]="1" [style.grid-row]="1"
+             class="th"><strong>{{displayedHeader}}</strong></div>
+      </div>
+    </div>
+    <div class="tbody">
+      <div class="tr">
+        <div [style.grid-column]="1" [style.grid-row]="2" class="td">
+          <div *ngIf="isPresented(CompanyInfoRowsEnum.DISPLAY_NAME)">{{viewService.displayName}}</div>
+          <div *ngIf="isPresented(CompanyInfoRowsEnum.STREET)">{{viewService.street}}</div>
+          <div *ngIf="isAnyPresented([CompanyInfoRowsEnum.CITY, CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])">
+                    <span *ngIf="isPresented(CompanyInfoRowsEnum.CITY)">{{viewService.city}}
+                      <span
+                        *ngIf="isAnyPresented([CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])">, </span></span>
+            <span *ngIf="isPresented(CompanyInfoRowsEnum.STATE)">{{viewService.state}} </span>
+            <span *ngIf="isPresented(CompanyInfoRowsEnum.ZIP)">{{viewService.zip}}</span>
+          </div>
+          <div *ngIf="isPresented(CompanyInfoRowsEnum.COUNTRY)">{{viewService.country}}</div>
+          <div *ngIf="isPresented(CompanyInfoRowsEnum.EMAIL)">{{viewService.email}}</div>
+          <div *ngIf="isPresented(CompanyInfoRowsEnum.PHONE)">{{viewService.formattedPhone}}</div>
+          <div *ngIf="isPresented(CompanyInfoRowsEnum.WEB_URL)">{{viewService.website}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

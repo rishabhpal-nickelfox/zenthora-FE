@@ -1,0 +1,161 @@
+@use '../themes' as *;
+
+
+@include nb-install-component() {
+  @media (max-width: 767.98px) {
+    .buttons-panel ::ng-deep .btn:has(nb-icon) {
+      font-size: 0;
+      padding: 0.5rem 0.75rem;
+
+      nb-icon {
+        margin: 0;
+      }
+    }
+
+    .per-page-suffix {
+      display: none;
+    }
+  }
+
+  table {
+    word-wrap: break-word;
+    white-space: normal;
+    border: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+  }
+
+  table.table-page {
+    box-shadow: nb-theme(card-body-shadow-2);
+  }
+
+  table, th, td {
+    font-size: 1rem;
+    height: fit-content;
+  }
+
+  th > div, td > div {
+    width: 100%;
+    height: 100%;
+
+    display: inline-block;
+    border-right: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+    padding: 0.5rem;
+  }
+
+  tr > th:last-of-type > div, tr > td:last-of-type > div {
+    border: none;
+  }
+
+  th {
+    font-weight: 500;
+    background-color: nb-theme(table-row-even);
+  }
+
+  th, td {
+    padding: 0.4rem 0 !important;
+  }
+
+  td {
+    border-bottom: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+  }
+  tr:nth-child(odd) {
+    background-color: nb-theme(table-row-odd);
+  }
+
+  tr:nth-child(even) {
+    background-color: nb-theme(table-row-even);
+  }
+
+  tr:nth-child(odd):hover {
+    background-color: nb-theme(table-row-hover);
+  }
+
+
+  tr:nth-child(even):hover {
+    background-color: nb-theme(table-row-hover);
+  }
+
+  .collapsed div > *:not(.collapse-btn) {
+    display: none;
+
+  }
+
+  td.collapsed {
+    min-width: 0 !important;
+  }
+
+  .collapse-btn {
+    text-decoration: none;
+  }
+
+  .sort-btn {
+    color: nb-theme(color-success);
+    font-weight: 700;
+  }
+
+  .sticky {
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 1;
+    border-bottom: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+    font-size: 1rem;
+  }
+
+  .sticky.table-header {
+    top: 0;
+  }
+
+  .sticky.table-filter {
+    top: 3rem;
+  }
+
+  th.sticky {
+    background-color: nb-theme(table-row-even);
+  }
+
+  th.sticky:after,
+  th.sticky:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
+
+  th.table-filter.sticky:before {
+    top: -1px;
+    border-top: nb-theme(table-border-width) solid nb-theme(table-separator-color)
+  }
+
+  th.table-filter.sticky:after {
+    bottom: -1px;
+    border-bottom: nb-theme(table-border-width) solid nb-theme(table-separator-color)
+  }
+
+  tr.full-height {
+    height: 100%
+  }
+
+  .full-height tr {
+    box-shadow: nb-theme(sidebar-shadow);
+  }
+
+  .full-height > th > div {
+    width: 100%;
+    height: 100%;
+  }
+
+  .no-data-found {
+    width: 100%;
+    background-color: transparent;
+    color: nb-theme(error-color);
+    padding: 2rem;
+    font-style: italic;
+  }
+
+  select.qbo-form-control.page-size {
+    width: auto;
+    color: nb-theme(form-control-border-color-focus);
+    border-color: nb-theme(form-control-border-color-focus);
+    background-color: transparent;
+    cursor: pointer;
+  }
+}

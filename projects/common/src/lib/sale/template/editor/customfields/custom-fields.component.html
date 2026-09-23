@@ -1,0 +1,23 @@
+<div [innerHTML]="styles"></div>
+<div *ngIf="customFields && customFields.length > 0; else emptyCustomFields" [className]="id">
+  <div class="table w-100">
+    <div class="thead">
+      <div class="tr">
+        <div *ngFor="let customField of customFields" [style.grid-column]="getOrder(customField.id)"
+             [style.grid-row]="1" class="th">
+          <strong>{{customField.name}}</strong></div>
+      </div>
+    </div>
+    <div class="tbody">
+      <div class="tr">
+        <div *ngFor="let customField of customFields; let i = index;" [style.grid-column]="getOrder(customField.id)"
+             [style.grid-row]="2" class="td">
+          <div><span>Example Value {{customField.name}}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #emptyCustomFields>
+  <span class="val-message">Custom Fields Are Not Configured</span>
+</ng-template>

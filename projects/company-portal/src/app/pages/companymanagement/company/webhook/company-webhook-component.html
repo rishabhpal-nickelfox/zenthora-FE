@@ -1,0 +1,206 @@
+<div [formGroup]="getForm()">
+  <div *ngIf="getForm().contains('oAuth10Settings')" [formGroup]="_oauth10Group">
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10WebhookUrl"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.OAUTH_10_WEBHOOK_URL" [placeholder]="Labels.OAuth10WebhookUrl"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="webhookUrl"
+                 type="text">
+        </app-extended-input>
+      </div>
+      <div class="d-flex align-self-end pb-1">
+        <button (click)="testWebhookConfiguration();" [disabled]="testWebhookConfigurationLocked"
+                [nbSpinner]="isTestWebhookConfigurationInProgress"
+                class="btn btn-sm btn-rectangle btn-warning" type="button">
+          <nb-icon icon="sync-outline"></nb-icon>
+          {{Labels.Test}}
+        </button>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10SignatureMethod"
+                            [required]=true
+                            [verticalMode]=true>
+          <select class="form-control qbo-form-control" formControlErrorMessage formControlName="signatureMethod">
+            <option [ngValue]="null">Select...</option>
+            <option *ngFor="let option of enumKeys(OAuth10SignatureMethodEnum)" [ngValue]="option">
+              {{OAuth10SignatureMethodEnumValue.get(option)}}
+            </option>
+          </select>
+        </app-extended-input>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10ConsumerKey"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.OAUTH_10_CONSUMER_KEY" [placeholder]="Labels.OAuth10ConsumerKey"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="consumerKey"
+                 type="text">
+        </app-extended-input>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10ConsumerSecret"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.OAUTH_10_CONSUMER_SECRET" [placeholder]="Labels.OAuth10ConsumerSecret"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="consumerSecret"
+                 type="text">
+        </app-extended-input>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10AccessToken"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.OAUTH_10_ACCESS_TOKEN" [placeholder]="Labels.OAuth10AccessToken"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="accessToken"
+                 type="text">
+        </app-extended-input>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10TokenSecret"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.OAUTH_10_WEBHOOK_URL" [placeholder]="Labels.OAuth10TokenSecret"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="tokenSecret"
+                 type="text">
+        </app-extended-input>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.OAuth10Realm"
+                            [required]=false
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.OAUTH_10_REALM" [placeholder]="Labels.OAuth10Realm"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="realm"
+                 type="text">
+        </app-extended-input>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="getForm().contains('hmacSha256Settings')" [formGroup]="_hmacSha256Group">
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.HmacSha256WebhookUrl"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.HMAC_SHA256_WEBHOOK_URL" [placeholder]="Labels.HmacSha256WebhookUrl"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="webhookUrl"
+                 type="text">
+        </app-extended-input>
+      </div>
+      <div class="d-flex align-self-end pb-1">
+        <button (click)="testWebhookConfiguration();" [disabled]="testWebhookConfigurationLocked"
+                [nbSpinner]="isTestWebhookConfigurationInProgress"
+                class="btn btn-sm btn-rectangle btn-warning" type="button">
+          <nb-icon icon="sync-outline"></nb-icon>
+          {{Labels.Test}}
+        </button>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <app-extended-input [labelText]="Labels.HmacSha256Secret"
+                            [required]=true
+                            [verticalMode]=true>
+          <input [maxlength]="MAX_LENGTH.HMAC_SHA256_SECRET" [placeholder]="Labels.HmacSha256Secret"
+                 class="form-control qbo-form-control"
+                 formControlErrorMessage
+                 formControlName="secret"
+                 type="text">
+        </app-extended-input>
+      </div>
+    </div>
+  </div>
+  <hr/>
+  <div *ngIf="showSuppressWebhookEvents" class="d-flex flex-column">
+    <label class="col-form-label">{{Labels.SuppressWebhookHeader}}</label>
+    <div class="webhook-hint mb-4">
+      <span>{{Labels.SuppressWebhookHint}}</span>
+    </div>
+    <div *ngIf="_suppressedWebhookSaleEventControls" class="pb-1">
+      <div class="pb-1">{{Labels.SaleWebhookEvents}}</div>
+      <div class="ml-5" formArrayName="suppressedWebhookSaleEventControls">
+        <ng-container *ngFor="let saleWebhookControl of _suppressedWebhookSaleEventControls.controls; let i = index">
+          <div class="d-flex flex-row">
+            <label class="checkbox-container">
+              <input [formControl]="saleWebhookControl" type="checkbox">
+              <span class="checkmark"></span>
+              <span [innerText]="getWebhookEventName(saleWebhookControl)" class="checkbox-descr"></span>
+            </label>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+      <div *ngIf="_suppressedWebhookPaymentEventControls" class="pb-1">
+        <div class="pb-1">{{Labels.PaymentWebhookEvents}}</div>
+        <div class="ml-5" formArrayName="suppressedWebhookPaymentEventControls">
+          <ng-container
+            *ngFor="let paymentWebhookControl of _suppressedWebhookPaymentEventControls.controls; let i = index">
+            <div class="d-flex flex-row">
+              <label class="checkbox-container">
+                <input [formControl]="paymentWebhookControl" type="checkbox">
+                <span class="checkmark"></span>
+                <span [innerText]="getWebhookEventName(paymentWebhookControl)" class="checkbox-descr"></span>
+              </label>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div *ngIf="_suppressedWebhookPaymentDataEventControls" class="pb-1">
+        <div class="pb-1">{{Labels.PaymentMethodWebhookEvents}}</div>
+        <div class="ml-5" formArrayName="suppressedWebhookPaymentDataEventControls">
+          <ng-container
+            *ngFor="let paymentDataWebhookControl of _suppressedWebhookPaymentDataEventControls.controls; let i = index">
+            <div class="d-flex flex-row">
+              <label class="checkbox-container">
+                <input [formControl]="paymentDataWebhookControl" type="checkbox">
+                <span class="checkmark"></span>
+                <span [innerText]="getWebhookEventName(paymentDataWebhookControl)" class="checkbox-descr"></span>
+              </label>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div *ngIf="_suppressedWebhookCustomerEventControls">
+        <div class="pb-1">{{Labels.CustomerWebhookEvents}}</div>
+        <div class="ml-5" formArrayName="suppressedWebhookCustomerEventControls">
+          <ng-container
+            *ngFor="let customerWebhookControl of _suppressedWebhookCustomerEventControls.controls; let i = index">
+            <div class="d-flex flex-row">
+              <label class="checkbox-container">
+                <input [formControl]="customerWebhookControl" type="checkbox">
+                <span class="checkmark"></span>
+                <span [innerText]="getWebhookEventName(customerWebhookControl)" class="checkbox-descr"></span>
+              </label>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+  </div>
+</div>

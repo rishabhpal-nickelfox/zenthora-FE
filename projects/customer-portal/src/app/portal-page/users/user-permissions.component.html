@@ -1,0 +1,25 @@
+<ng-container [formGroup]="getForm()">
+  <div [class.required]="isInvite">
+  <label class="col-form-label">{{Labels.Permissions}}</label>
+    <div class="d-flex flex-row py-2 accept">
+      <label class="checkbox-container">
+        <input [formControl]="_checkAllPermissions" type="checkbox">
+        <span class="checkmark"></span>
+        <span [innerText]="_checkAllPermissions.value? Labels.UnCheckAll: Labels.CheckAll"
+              class="checkbox-descr"></span>
+      </label>
+    </div>
+    <ng-container formArrayName="permissions">
+      <div *ngFor="let permissionControl of _permissions.controls; let i = index" class="pl-4">
+        <div class="d-flex flex-row" [class.pl-4]="isChildPermission(i)">
+          <label class="checkbox-container">
+            <input [formControl]="permissionControl" type="checkbox">
+            <span class="checkmark"></span>
+            <span [innerText]="getPermissionName(i)" class="checkbox-descr"></span>
+          </label>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+

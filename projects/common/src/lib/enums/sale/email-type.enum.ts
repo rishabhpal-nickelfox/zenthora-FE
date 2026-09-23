@@ -1,0 +1,39 @@
+export enum EmailTypeEnum {
+  EMAIL = 'EMAIL',
+  SALE = 'SALE',
+  CREATE_MULTIPLE_SALES = 'CREATE_MULTIPLE_SALES',
+  SALE_RECEIPT = 'SALE_RECEIPT',
+  MERCHANT_PAYMENT_NOTIFICATION = 'MERCHANT_PAYMENT_NOTIFICATION',
+  PAYMENT_FORM_SUBMISSION_NOTIFICATION = 'PAYMENT_FORM_SUBMISSION_NOTIFICATION',
+  PAYMENT_FORM_RECEIPT = 'PAYMENT_FORM_RECEIPT',
+
+  CREATE_USER = 'CREATE_USER',
+  RESET_USER_PASSWORD = 'RESET_USER_PASSWORD',
+
+  INVITE_USER_TO_COMPANY = 'INVITE_USER_TO_COMPANY',
+
+  CUSTOMER_REGISTRATION = 'CUSTOMER_REGISTRATION',
+  CUSTOMER_REGISTRATION_CONFIRMATION = 'CUSTOMER_REGISTRATION_CONFIRMATION',
+  INVITE_CUSTOMER_TO_COMPANY = 'INVITE_CUSTOMER_TO_COMPANY',
+  CUSTOMER_RESET_PASSWORD = 'CUSTOMER_RESET_PASSWORD'
+}
+
+export const EmailTypeEnumValue = new Map<string, string>([
+  [EmailTypeEnum.EMAIL, 'Email Via API'],
+  [EmailTypeEnum.SALE, 'Sale'],
+  [EmailTypeEnum.CREATE_MULTIPLE_SALES, 'Create Multiple Sales'],
+  [EmailTypeEnum.SALE_RECEIPT, 'Sale Receipt'],
+  [EmailTypeEnum.MERCHANT_PAYMENT_NOTIFICATION, 'Merchant Payment Notification'],
+  [EmailTypeEnum.PAYMENT_FORM_SUBMISSION_NOTIFICATION, 'Payment Form Submission Notification'],
+  [EmailTypeEnum.PAYMENT_FORM_RECEIPT, 'Payment Form Receipt'],
+
+  [EmailTypeEnum.CREATE_USER, 'Company User Creation'],
+  [EmailTypeEnum.RESET_USER_PASSWORD, 'Company Password Reset'],
+
+  [EmailTypeEnum.INVITE_USER_TO_COMPANY, 'Company User Invitation'],
+
+  [EmailTypeEnum.CUSTOMER_REGISTRATION, 'Customer Registration'],
+  [EmailTypeEnum.CUSTOMER_REGISTRATION_CONFIRMATION, 'Customer Email Confirmation'],
+  [EmailTypeEnum.INVITE_CUSTOMER_TO_COMPANY, 'Customer Invitation'],
+  [EmailTypeEnum.CUSTOMER_RESET_PASSWORD, 'Customer Password Reset']
+]);

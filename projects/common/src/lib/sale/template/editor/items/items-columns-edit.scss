@@ -1,0 +1,166 @@
+@use "../../../../themes" as *;
+
+@include nb-install-component() {
+  * {
+    font-size: 14pt;
+  }
+
+  .columns-row,
+  .column {
+    flex: 0 0 auto;
+  }
+
+  .action-btn {
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+
+  .column:hover .action-btn {
+    opacity: 1;
+  }
+
+  .action-btn > * {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .resize-handle {
+    position: absolute;
+    top: 0;
+    right: -8px;
+    width: 16px;
+    height: 100%;
+    cursor: ew-resize;
+    z-index: 110;
+  }
+
+  .toolbar,
+  .toolbar .clickable span {
+    font-size: 11pt;
+  }
+
+  .table {
+    display: grid;
+    border-collapse: collapse;
+    flex: 1;
+    word-wrap: break-word;
+    white-space: normal;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .thead,
+  .tbody,
+  .tr {
+    display: contents;
+  }
+
+  .th,
+  .td {
+    height: 100%;
+  }
+
+  .th {
+    font-weight: 500;
+    padding: 0.2rem !important;
+  }
+
+  .td {
+    padding: 0.4rem !important;
+  }
+
+  .columns-row .table {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: max-content minmax(0, 1fr);
+  }
+
+  .column:not(:first-child) .table {
+    border-left: none !important;
+  }
+
+  .columns-probe {
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .columns-row,
+  .columns-probe {
+    font-size: var(--previewFontSize, initial);
+    line-height: var(--previewLineHeight, 1.5);
+  }
+
+  .columns-row * {
+    font-size: inherit;
+  }
+
+  ::ng-deep .columns-probe * {
+    font-size: var(--previewFontSize, initial);
+    line-height: var(--previewLineHeight, 1.5);
+  }
+
+  .grid-wrap {
+    overflow: visible;
+  }
+
+  .columns-row .th {
+    padding: 0 !important;
+  }
+
+  .columns-row .th app-extended-input {
+    display: block;
+    min-width: 0;
+  }
+
+  .columns-row .th .qbo-form-control {
+    font: inherit;
+    font-size: var(--previewFontSize, initial);
+    font-weight: 500;
+    line-height: var(--previewLineHeight, 1.5);
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 0.2rem;
+    height: auto;
+    min-height: 0;
+    margin: 0 !important;
+    background: transparent;
+    border: none;
+    box-shadow: inset 0 0 0 1px nb-theme(form-control-border-color);
+  }
+
+  .columns-row .th .qbo-form-control:hover {
+    box-shadow: inset 0 0 0 1px nb-theme(form-control-border-color), nb-theme(form-control-border-shadow-hover);
+  }
+
+  .columns-row .th .qbo-form-control:focus {
+    box-shadow: inset 0 0 0 1px nb-theme(form-control-border-color-focus);
+    outline: none;
+  }
+
+  .columns-row .th .header-input {
+    resize: none;
+    overflow: hidden;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .columns-row .tbody .td {
+    display: flex;
+  }
+
+  .columns-row .tbody .td > * {
+    margin-top: auto;
+    margin-bottom: auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .modal-body {
+    overflow: visible;
+  }
+
+}

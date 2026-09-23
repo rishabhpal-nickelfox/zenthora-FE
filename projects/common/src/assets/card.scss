@@ -1,0 +1,67 @@
+@use '../lib/themes' as *;
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  color: nb-theme(color-heading);
+}
+
+nb-card h1,
+nb-card h2,
+nb-card h3,
+nb-card h4,
+nb-card h5,
+nb-card h6,
+nb-card .h1,
+nb-card .h2,
+nb-card .h3,
+nb-card .h4,
+nb-card .h5,
+nb-card .h6,
+nb-card nb-card-body h1,
+nb-card nb-card-body h2,
+nb-card nb-card-body h3,
+nb-card nb-card-body h4,
+nb-card nb-card-body h5,
+nb-card nb-card-body h6 {
+  color: nb-theme(color-heading);
+}
+
+nb-card {
+  color: nb-theme(card-text-color);
+  background: nb-theme(card-background-color);
+  border: none;
+  box-shadow: none;
+}
+
+nb-card nb-card-header {
+  background: nb-theme(card-header-background-color);
+  border: nb-theme(card-header-border);
+  box-shadow: none;
+  padding: 0;
+}
+
+.header-label,
+nb-card nb-card-header .header-label {
+  display: inline-flex;
+  align-items: center;
+  background: nb-theme(header-label-background);
+  padding: 1.5rem;
+  color: nb-theme(header-label-color);
+  font-weight: nb-theme(header-label-font-weight);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+nb-card nb-card-body {
+  background: nb-theme(card-body-background-color);
+  box-shadow: nb-theme(card-body-shadow-1);
+  border: nb-theme(card-body-border);
+  padding: nb-theme(card-body-padding);
+  margin: nb-theme(card-body-margin);
+  outline: none;
+}
+
+nb-card nb-card-footer {
+  border: nb-theme(nb-card-footer-border);
+  background: nb-theme(card-footer-background-color);
+  box-shadow: none;
+}

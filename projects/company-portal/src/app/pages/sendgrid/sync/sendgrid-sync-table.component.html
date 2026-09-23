@@ -1,0 +1,57 @@
+<app-table-component #table [headers]="headers" [filters]="filters"
+                     [objectOperatingService]="service"
+                     [rowTemplate]="rowtemplate" [buttonsPanelTemplate]="buttonTemplate"></app-table-component>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr>
+    <td>
+      <div>
+        <span>{{rowData.date}}</span>
+      </div>
+    </td>
+    <td class="verified">
+      <div>
+        <span>{{rowData.verified}}</span>
+      </div>
+    </td>
+    <td class="updated">
+      <div>
+        <span>{{rowData.updated}}</span>
+      </div>
+    </td>
+    <td class="details">
+      <div>
+        <ng-container *ngIf="rowData.sgSyncAuditDetails">
+          <div *ngFor="let sgSyncAuditDetail of rowData.sgSyncAuditDetails" class="d-flex flex-column pb-3">
+            <div>
+              <a *ngIf="sgSyncAuditDetail.emailId" (click)="goToEmail(sgSyncAuditDetail.emailId)">
+                <span ngbPopover="Go to Email" placement="bottom" container="body"
+                      triggers="mouseenter:mouseleave">
+                  Email #{{sgSyncAuditDetail.emailId}}<br/>
+                </span>
+              </a>
+              <ng-container *ngFor="let sale of sgSyncAuditDetail.sales">
+                <a (click)="goToSale(sale.saleId)" *ngIf="sale.saleId">
+                <span container="body" ngbPopover="Go to Sale" placement="bottom"
+                      triggers="mouseenter:mouseleave">
+                  {{DocTypeEnumValue.get(sale.docType)}} #{{sale.saleId}}<br/>
+                </span>
+                </a>
+              </ng-container>
+            </div>
+            <div>Email Address ({{EmailAddressTypeEnumValue.get(sgSyncAuditDetail.emailType)}}): {{sgSyncAuditDetail.emailAddress}}</div>
+            <div>
+              <code>{{sgSyncAuditDetail.exception}}&nbsp;:&nbsp;{{sgSyncAuditDetail.responseBody}}</code>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+<ng-template #buttonTemplate>
+  <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success" (click)="table.refresh()">
+    <nb-icon icon="refresh-outline"></nb-icon>
+    Refresh
+  </button>
+</ng-template>

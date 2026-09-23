@@ -1,0 +1,45 @@
+<app-rolemanage-createeditrole-component *ngIf="showCreateEditForm"
+                                         (saveEvent)="onRoleSaved($event)"
+                                         (cancelEvent)="onRoleCancel()"></app-rolemanage-createeditrole-component>
+
+<div [hidden]="showCreateEditForm">
+  <app-table-component #table
+                       [headers]="headers"
+                       [filters]="filters"
+                       [objectOperatingService]="service"
+                       [buttonsPanelTemplate]="buttonPanelTemplate"
+                       [rowTemplate]="rowtemplate"></app-table-component>
+</div>
+
+<ng-template #buttonPanelTemplate>
+  <button ngbPopover="Create New" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-primary" (click)="onCreate()">
+    <nb-icon icon="plus-outline"></nb-icon>
+    Create New
+  </button>
+  <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success ml-2" (click)="table.refresh()">
+    <nb-icon icon="refresh-outline"></nb-icon>
+    Refresh
+  </button>
+</ng-template>
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" class="clickable">
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.name}}</span>
+      </div>
+    </td>
+    <td (click)="$event.cancelBubble=true;">
+      <div>
+        <a (click)="onDelete(rowData)" class="qfiscal-icon px-1" *ngIf="!rowData.admin">
+          <i class="far fa-trash-alt" ngbPopover="Delete" triggers="mouseenter:mouseleave"></i></a>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+

@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{PaymentFormControlTypeLabel.get(item.type)}}</h4>
+  <button (click)="close()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+  <div class="modal-body">
+    <ng-container *ngIf="item.type === PaymentFormControlType.TEXT">
+      <app-rich-text-editor [options]="richTextEditorOptions" formControlName="value" formControlErrorMessage></app-rich-text-editor>
+    </ng-container>
+
+    <ng-container *ngIf="item.type !== PaymentFormControlType.TEXT">
+      <div class="form-group">
+        <app-extended-input [labelText]="'Label'" [required]="true" [verticalMode]="true">
+          <input class="form-control qbo-form-control" formControlErrorMessage formControlName="label"
+                 maxlength="100" placeholder="Label" type="text">
+        </app-extended-input>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-container">
+          <input formControlName="requirement" type="checkbox">
+          <span class="checkmark"></span>
+          <span class="checkbox-descr">Required</span>
+        </label>
+      </div>
+
+      <div *ngIf="isSelect()" class="form-group" formArrayName="options" formControlErrorContainer formControlErrorMessage>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <label class="mb-0">Options</label>
+          <button (click)="addOption()" class="btn btn-xs btn-rectangle btn-secondary" type="button">Add</button>
+        </div>
+
+        <div *ngFor="let optionControl of optionsControl.controls; let i = index" class="d-flex align-items-start mb-2">
+          <div class="payment-form-template-item-edit__option-input-wrapper mr-2">
+            <input [formControlName]="i" class="form-control qbo-form-control"
+                   formControlErrorMessage maxlength="100" [placeholder]="optionPlaceholder" type="text">
+          </div>
+          <button (click)="removeOption(i)" aria-label="Delete" class="payment-form-template-item-edit__option-remove-btn" type="button">
+            <nb-icon icon="close-outline"></nb-icon>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="modal-footer">
+    <button [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary" type="submit">
+      <nb-icon icon="checkmark-outline"></nb-icon>
+      Save
+    </button>
+    <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger" type="button">
+      <nb-icon icon="minus-outline"></nb-icon>
+      Cancel
+    </button>
+  </div>
+</form>

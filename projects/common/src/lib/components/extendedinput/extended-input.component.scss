@@ -1,0 +1,68 @@
+@use '../../themes' as *;
+
+.extended-input {
+  display: flex;
+  margin-bottom: 0.25rem;
+
+  &--vertical {
+    flex-direction: column;
+  }
+
+  &--horizontal {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &--required {
+    .extended-input__label::after {
+      content: '*';
+      margin-left: 5px;
+      color: nb-theme(error-color);
+    }
+  }
+
+  &--error {
+    .extended-input__label {
+      color: nb-theme(error-color);
+    }
+
+    input,
+    textarea,
+    select,
+    app-extended-datepicker {
+      border-color: nb-theme(error-color) !important;
+    }
+
+    nb-select .select-button {
+      border-color: nb-theme(error-color) !important;
+    }
+  }
+
+  &__label-container {
+    white-space: nowrap;
+
+    &--vertical {
+      padding-bottom: 0.25rem;
+    }
+
+    &--horizontal {
+      padding-right: 0.5rem;
+    }
+  }
+
+  &__label {
+    margin-bottom: 0;
+    line-height: 1.1;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__error-message {
+    padding: 0.25rem 0;
+    color: nb-theme(error-color);
+  }
+}

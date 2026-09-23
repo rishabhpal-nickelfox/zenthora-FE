@@ -1,0 +1,46 @@
+<div [innerHTML]="styles" class="template-styles"></div>
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.LINE)}}</h4>
+    <button (click)="close()" aria-label="Close" class="close" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+            <div class="d-flex flex-row toolbar pb-4 pt-2 my-4">
+                <div class="d-flex flex-row pb-2">
+                    <div class="pr-3 d-flex">
+                        <app-extended-input>
+                            <app-color-picker [formControl]="_color" [label]="'Color'"
+                                              formControlErrorMessage></app-color-picker>
+                        </app-extended-input>
+                    </div>
+                    <div class="pr-3 d-flex">
+                        <app-extended-input>
+                            <app-extended-number-input [decimalMax]="0" [formControl]="_width" [integerLimit]="2"
+                                                       [suffix]="'px'"
+                                                       formControlErrorMessage>
+                            </app-extended-number-input>
+                        </app-extended-input>
+                    </div>
+                    <div class="pr-3 d-flex">
+                        <select class="form-control qbo-form-control" [formControl]="_style" formControlErrorMessage>
+                            <option *ngFor="let style of enumKeys(InvoiceEmailPaymentLineStyleEnum)" [value]="style">
+                                {{InvoiceEmailPaymentLineStyleEnumValue.get(style)}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="line">
+            </div>
+</div>
+<div class="modal-footer">
+    <button (click)="saveAndClose()" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        Save
+    </button>
+    <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+    </button>
+</div>

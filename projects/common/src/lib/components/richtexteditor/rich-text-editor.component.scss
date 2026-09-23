@@ -1,0 +1,63 @@
+@use "../../themes" as *;
+
+@include nb-install-component() {
+  :host {
+    display: block;
+    width: 100%;
+  }
+
+  .quill-custom-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-bottom: none;
+  }
+
+  @for $i from 6 through 32 {
+    ::ng-deep .ql-size-#{$i}px,
+    ::ng-deep .ql-size-#{$i}px * {
+      font-size: #{$i}pt !important;
+    }
+  }
+
+  nb-select-label {
+    font-weight: normal;
+  }
+
+  .rich-text-editor {
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  ::ng-deep quill-editor,
+  ::ng-deep .ql-container,
+  ::ng-deep .ql-editor {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  .placeholder {
+    flex: 0 0 auto;
+    width: auto;
+    background: transparent;
+    border: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+    border-radius: 0;
+    color: inherit;
+    font-size: 11pt;
+    font-weight: normal;
+    padding: 0.35rem 0.6rem;
+    text-transform: none;
+    cursor: pointer;
+  }
+
+  .placeholder:hover,
+  .placeholder:focus {
+    background: nb-theme(table-row-odd);
+    border-color: nb-theme(table-separator-color);
+    color: inherit;
+    box-shadow: none;
+  }
+}

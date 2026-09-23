@@ -1,0 +1,14 @@
+<div [innerHTML]="styles"></div>
+
+<div class="table w-100">
+    <div class="tbody">
+        <div *ngFor="let total of orderedTotals;" class="tr">
+                <div class="td" [style.grid-column]="1" >
+                    {{TotalsViewService.getHeader(total, totalsTemplateModel, InvoiceItemsDataService.templateData)}}
+                </div>
+                <div class="number-value td" [style.grid-column]="2" >
+                    <strong>${{TotalsViewService.getValue(total, InvoiceItemsDataService.templateData) | number : '1.2-2'}}</strong>
+                </div>
+        </div>
+    </div>
+</div>

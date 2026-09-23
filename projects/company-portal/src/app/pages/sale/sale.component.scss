@@ -1,0 +1,50 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+
+  tr.archived {
+    background-color: var(--disabled);
+  }
+
+  td.expand {
+    width: 10px;
+  }
+
+  td.id:not(.collapsed) {
+    min-width: 75px
+  }
+
+
+  td.platform-id:not(.collapsed) {
+    width: 75px;
+    min-width: 75px
+  }
+
+  td.company-id:not(.collapsed) {
+    width: 75px;
+    min-width: 75px
+  }
+
+  td.vault-company-id:not(.collapsed) {
+    width: 75px;
+    min-width: 75px
+  }
+
+  td.payment-status:not(.collapsed) {
+    min-width: 110px
+  }
+
+  td.email-status:not(.collapsed) {
+    min-width: 120px
+  }
+
+  tr > td > div.expanded-email-status-row {
+    margin-left: 10px;
+    width: 100%;
+    padding: 5px 10px;
+  }
+
+  nb-icon.view-sale {
+    color: nb-theme(color-primary);
+  }
+}

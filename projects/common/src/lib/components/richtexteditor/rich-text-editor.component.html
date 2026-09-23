@@ -1,0 +1,91 @@
+<div class="rich-text-editor">
+  <div class="quill-custom-toolbar">
+    <ng-container *ngIf="options.selectFontSize">
+      <nb-select
+        (selectedChange)="applyFontSize($event)"
+        [(selected)]="selectedFontSize"
+        class="qbo-form-control-select"
+        size="small">
+        <nb-select-label>
+          Font size: {{selectedFontSize.label}}
+        </nb-select-label>
+        <nb-option *ngFor="let size of fontSizes" [value]="size">
+          {{ size.label }}
+        </nb-option>
+      </nb-select>
+    </ng-container>
+    <ng-container *ngIf="options.selectFontColor">
+      <app-color-picker (ngModelChange)="applyFontColor($event)" [label]="'Font Color'"
+                        [ngModel]="selectedColor"></app-color-picker>
+    </ng-container>
+    <ng-container *ngIf="options.selectBackgroundColor">
+      <app-color-picker
+        (ngModelChange)="applyBackgroundColor($event)"
+        [label]="'Background Color'"
+        [ngModel]="selectedBackgroundColor">
+      </app-color-picker>
+    </ng-container>
+    <ng-container *ngIf="options.selectFontStyle">
+      <button (click)="format('bold')" class="btn btn-xs btn-rectangle btn-outline-secondary" type="button">B</button>
+      <button (click)="format('italic')" class="btn btn-xs btn-rectangle btn-outline-secondary" type="button"><i>I</i>
+      </button>
+      <button (click)="format('underline')" class="btn btn-xs btn-rectangle btn-outline-secondary" type="button">
+        <u>U</u>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="options.selectListStyle">
+      <button (click)="toggleList('bullet')" class="btn btn-xs btn-rectangle btn-outline-secondary" type="button">
+        <i class="fa fa-list-ul"></i>
+      </button>
+
+      <button (click)="toggleList('ordered')" class="btn btn-xs btn-rectangle btn-outline-secondary" type="button">
+        <i class="fa fa-list-ol"></i>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="options.selectAlignment">
+      <button
+        (click)="applyAlignment('left')"
+        [class.active]="isAlignmentSelected('left')"
+        class="btn btn-xs btn-rectangle btn-outline-secondary"
+        title="Align left"
+        type="button">
+        <i class="fa fa-align-left"></i>
+      </button>
+      <button
+        (click)="applyAlignment('center')"
+        [class.active]="isAlignmentSelected('center')"
+        class="btn btn-xs btn-rectangle btn-outline-secondary"
+        title="Align center"
+        type="button">
+        <i class="fa fa-align-center"></i>
+      </button>
+      <button
+        (click)="applyAlignment('right')"
+        [class.active]="isAlignmentSelected('right')"
+        class="btn btn-xs btn-rectangle btn-outline-secondary"
+        title="Align right"
+        type="button">
+        <i class="fa fa-align-right"></i>
+      </button>
+    </ng-container>
+    <button (click)="removeFormat()" class="btn btn-xs btn-rectangle btn-outline-secondary" type="button">×</button>
+  </div>
+  <div class="d-flex flex-wrap placeholder-container">
+    <button
+      (click)="insertPlaceholder(entry.key)"
+      *ngFor="let entry of placeholders | keyvalue"
+      class="btn btn-xs btn-rectangle btn-secondary placeholder m-1"
+      type="button">
+      {{ entry.value }}
+    </button>
+  </div>
+
+
+  <quill-editor
+    (ngModelChange)="onValueChange($event)"
+    (onEditorCreated)="onEditorCreated($event)"
+    [modules]="modules"
+    [ngModel]="value"
+    [styles]="{ height: '200px' }"
+  ></quill-editor>
+</div>

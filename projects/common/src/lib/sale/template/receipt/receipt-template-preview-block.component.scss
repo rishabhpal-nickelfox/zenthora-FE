@@ -1,0 +1,52 @@
+@use "../../../themes" as *;
+
+@include nb-install-component() {
+  .editable-row {
+    align-items: flex-start;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .editable-row--center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .receipt-company-info {
+    text-align: center;
+  }
+
+  .receipt-company-info .editable-row {
+    position: relative;
+  }
+
+  .receipt-company-info .editable-row > :first-child {
+    text-align: center;
+  }
+
+  .receipt-company-info .remove-btn {
+    margin-right: 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .logo-placeholder {
+    align-items: center;
+    border: 1px solid nb-theme(separator);
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    text-align: center;
+    width: 100px;
+  }
+
+  .remove-btn {
+    color: var(--color-danger);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+  }
+}

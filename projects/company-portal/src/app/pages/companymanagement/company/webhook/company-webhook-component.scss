@@ -1,0 +1,9 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+  .webhook-hint{
+    color: nb-theme(error-color);
+    font-style: italic;
+    font-weight: bold;
+  }
+}

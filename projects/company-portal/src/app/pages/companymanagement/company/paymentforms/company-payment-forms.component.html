@@ -1,0 +1,72 @@
+<app-company-payment-form-create-edit (cancelEvent)="onEditCancel()"
+                                      (saveEvent)="onPaymentFormSaved($event)"
+                                      *ngIf="showCreateEditForm"></app-company-payment-form-create-edit>
+
+<div [hidden]="showCreateEditForm">
+  <app-company-payment-forms-table #table
+                                   [buttonsPanelTemplate]="buttonPanelTemplate"
+                                   [filters]="filters"
+                                   [headers]="headers"
+                                   [objectOperatingService]="service"
+                                   [rowTemplate]="rowtemplate"></app-company-payment-forms-table>
+</div>
+
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <div *ngIf="!table.loading && !table.paymentFormsCompanyId" class="val-message pb-2">
+        {{Labels.PaymentFormsCompanyIdRequired}}
+      </div>
+      <div *ngIf="!table.loading && !table.paymentFormsUrl" class="val-message pb-2">
+        {{Labels.PaymentFormsUrlRequired}}
+      </div>
+      <button [ngbPopover]="Labels.CreateNew" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="onCreate()" *ngIf="canCreate"
+              class="btn btn-sm btn-rectangle btn-primary" type="button">
+        <nb-icon icon="plus-outline"></nb-icon>
+        {{Labels.CreateNew}}
+      </button>
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" [class.ml-2]="canCreate"
+              class="btn btn-sm btn-rectangle btn-success" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+    </div>
+    <label class="checkbox-container">
+      <input [ngModel]="showInactive" (ngModelChange)="onShowInactive()" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">{{Labels.ShowInactive}}</span>
+    </label>
+  </div>
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" class="clickable">
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.name}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.paymentFormCode}}</span>
+      </div>
+    </td>
+    <td (click)="$event.cancelBubble=true;">
+      <div class="d-flex flex-row">
+        <a (click)="onActivateDeactivate(rowData, false)" class="px-1 qfiscal-icon" *ngIf="!rowData.disabled">
+          <nb-icon [ngbPopover]="Labels.DeactivateHint" class="enabled" container="body" icon="toggle-right"
+                   placement="bottom" triggers="mouseenter:mouseleave"></nb-icon>
+        </a>
+        <a (click)="onActivateDeactivate(rowData, true)" class="px-1 qfiscal-icon" *ngIf="rowData.disabled">
+          <nb-icon [ngbPopover]="Labels.ActivateHint" class="disabled" container="body" icon="toggle-left"
+                   placement="bottom" triggers="mouseenter:mouseleave"></nb-icon>
+        </a>
+      </div>
+    </td>
+  </tr>
+</ng-template>

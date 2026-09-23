@@ -1,0 +1,31 @@
+<div class="auth">
+  <div class="auth-content">
+    <div class="logo-container">
+      <h1>Customer</h1>
+      <img alt="logo" class="zenthora-logo" src="/assets/zenthoralogo/logo.png">
+    </div>
+    <div>
+      <div class="d-flex flex-column login-container">
+        <app-login #loginComponent (forgotPasswordEvent)="onForgotPassword()" (loginEvent)="onLogin($event)"
+                   [hidden]="mode != CustomerAuthPageMode.SIGN_IN"></app-login>
+        <app-forgot-password #forgotPasswordComponent [hidden]="mode != CustomerAuthPageMode.FORGOT_PASSWORD"
+                             (sendNewPassword)="onSendNewPassword($event)"
+                             (cancelEvent)="backToSignIn()"></app-forgot-password>
+        <app-change-password-login #changePasswordComponent
+                                   [hidden]="mode != CustomerAuthPageMode.CHANGE_PASSWORD"
+                                   (changePassword)="onChangePassword($event)"
+                                   (cancelEvent)="backToSignIn()"></app-change-password-login>
+        <app-customer-company-select #companySelectComponent
+                                     (selectCompany)="onSelectCompany($event)"
+                                     [hidden]="mode != CustomerAuthPageMode.SELECT_COMPANY"
+                                     (cancelEvent)="backToSignIn()"></app-customer-company-select>
+        <app-under-maintenance #underMaintenanceComponent
+                               [hidden]="mode != CustomerAuthPageMode.UNDER_MAINTENANCE"></app-under-maintenance>
+
+        <app-recaptcha-terms *ngIf="mode == CustomerAuthPageMode.SIGN_IN || mode == CustomerAuthPageMode.REGISTER
+|| mode == CustomerAuthPageMode.FORGOT_PASSWORD || mode == CustomerAuthPageMode.UNDER_MAINTENANCE"
+                             [light]="true" class="mt-5"></app-recaptcha-terms>
+      </div>
+    </div>
+  </div>
+</div>

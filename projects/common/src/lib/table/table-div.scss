@@ -1,0 +1,47 @@
+@use "../themes" as *;
+
+
+@include nb-install-component() {
+  .divTable {
+    display: table;
+    width: 100%;
+  }
+  .divTableRow {
+    display: table-row;
+  }
+  .divTableCell, .divTableHead {
+    border: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+    display: table-cell;
+    padding: 3px 10px;
+  }
+  .divTableHeading {
+    background-color: nb-theme(table-row-even);
+    display: table-header-group;
+    font-weight: 500;
+  }
+  .divTableFoot {
+    background-color: nb-theme(table-row-even);
+    display: table-footer-group;
+    font-weight: bold;
+  }
+  .divTableBody {
+    display: table-row-group;
+  }
+
+  .divTableRow:nth-child(odd) {
+    background-color: nb-theme(table-row-odd);
+  }
+
+  .divTableRow:nth-child(even) {
+    background-color: nb-theme(table-row-even);
+  }
+
+  .divTableRow:nth-child(odd):hover {
+    background-color: nb-theme(table-row-hover);
+  }
+
+
+  .divTableRow:nth-child(even):hover {
+    background-color: nb-theme(table-row-hover);
+  }
+}

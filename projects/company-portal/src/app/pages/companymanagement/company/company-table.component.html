@@ -1,0 +1,103 @@
+<app-companymanage-createeditentity #entityCreateEditComponent (saveEvent)="onEntitySaved($event)"
+                                    (cancelEvent)="onEntityEditCancel($event)"
+                                    *ngIf="showCreateEditForm"></app-companymanage-createeditentity>
+<div [hidden]="showCreateEditForm">
+  <app-table-component #table
+                       [headers]="headers"
+                       [filters]="filters"
+                       [objectOperatingService]="service"
+                       [buttonsPanelTemplate]="buttonPanelTemplate"
+                       [rowTemplate]="rowtemplate"></app-table-component>
+</div>
+
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button [ngbPopover]="Labels.Create" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-primary" (click)="onCreate()">
+        <nb-icon icon="plus-outline"></nb-icon>
+        {{Labels.Create}}
+      </button>
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success ml-2" (click)="table.refresh()">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+    </div>
+    <label class="checkbox-container">
+      <input [ngModel] = "hideInactive" (ngModelChange)="onHideInactive()" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">{{Labels.HideInactive}}</span>
+    </label>
+    <label class="checkbox-container">
+      <input [ngModel] = "hideTrustedPlatforms" (ngModelChange)="onHideTrustedPlatforms()" type="checkbox">
+      <span class="checkmark"></span>
+      <span class="checkbox-descr">{{Labels.HideTrusted}}</span>
+    </label>
+
+  </div>
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" class="clickable">
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.vault.companyId}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.platformId}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.platformName}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.legalName}} <strong *ngIf="rowData.disabled">{{Labels.CompanyDisabled}}</strong></span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <div *ngFor="let admin of rowData.admins">
+          <span>{{admin.email}}</span>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.activeUsers}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.activeTokens}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.externalId}}</span>
+      </div>
+    </td>
+    <td (click)="$event.cancelBubble=true;">
+      <div class="d-flex flex-row">
+        <ng-container *ngIf="showDisableEnable(rowData)">
+          <a (click)="onShowDisableDialog(rowData)" class="px-1 qfiscal-icon" *ngIf="!rowData.disabled">
+            <nb-icon icon="toggle-right" class="enabled" [ngbPopover]="Labels.Disable" placement="bottom" container="body"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+          <a (click)="onShowEnableDialog(rowData)" class="px-1 qfiscal-icon" *ngIf="rowData.disabled">
+            <nb-icon icon="toggle-left" class="disabled" [ngbPopover]="Labels.Enable" placement="bottom" container="body"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+        </ng-container>
+      </div>
+    </td>
+  </tr>
+</ng-template>

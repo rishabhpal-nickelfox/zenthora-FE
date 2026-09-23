@@ -1,0 +1,71 @@
+<nb-card>
+  <nb-card-header>
+    <div class="d-flex flex-row">
+      <div class="d-flex flex-row ml-auto sticky-right">
+        <div class="header-label">API Tokens</div>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div [hidden]="!showCreateEditForm" class="mb-5">
+      <app-company-settings-api-token-create-edit #apiTokenCreateEditComponent (cancelEvent)="onEditCancel($event)"
+                                                  (saveEvent)="onApiTokenSaved($event)"></app-company-settings-api-token-create-edit>
+
+      <hr/>
+    </div>
+    <app-company-settings-api-token-table #table
+                                          [buttonsPanelTemplate]="buttonPanelTemplate"
+                                          [filters]="filters"
+                                          [headers]="headers"
+                                          [objectOperatingService]="service"
+                                          [rowTemplate]="rowtemplate"></app-company-settings-api-token-table>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #buttonPanelTemplate>
+  <button ngbPopover="Create New" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="onCreate()" *ngIf="showCreateButton" class="btn btn-sm btn-rectangle btn-primary" type="button">
+    <nb-icon icon="plus-outline"></nb-icon>
+    Create New
+  </button>
+  <div *ngIf="tokenLimitExceeded">
+    <span class="val-message">Token Limit ({{table.tokenLimit}}) exceeded.</span>
+  </div>
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr (click)="onEdit(rowData)" [class.clickable]="isActive(rowData)">
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.name}}</span>
+      </div>
+    </td>
+    <td class="last-use">
+      <div>
+        <span>{{rowData.lastUse}}</span>
+      </div>
+    </td>
+    <td (click)="$event.cancelBubble=true;">
+      <div class="d-flex flex-row">
+        <ng-container *ngIf="isActive(rowData)">
+          <a (click)="onShowRevokeDialog(rowData)" class="px-1">
+            <nb-icon [ngbPopover]="'Revoke'" class="enabled" container="body" icon="toggle-right"
+                     placement="right"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="!isActive(rowData)">
+          <a class="px-1 revoked">
+            <nb-icon [ngbPopover]="'Revoked'" class="disabled" container="body" icon="toggle-left"
+                     placement="right"
+                     triggers="mouseenter:mouseleave"></nb-icon>
+          </a>
+        </ng-container>
+      </div>
+    </td>
+  </tr>
+</ng-template>

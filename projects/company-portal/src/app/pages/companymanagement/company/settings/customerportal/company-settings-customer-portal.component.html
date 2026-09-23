@@ -1,0 +1,40 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+      nbSpinnerStatus="success" novalidate>
+  <nb-card [nbSpinner]="!isDefined(settings)" nbSpinnerStatus="success">
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row mr-auto sticky-left">
+          <div class="align-self-center">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row ml-auto sticky-right customer-portal-header">
+          <div class="header-label">Customer Portal</div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [errorDefs]="{server: {}}"
+                              [hasError]="isFieldNotValid('favicon')"
+                              [inputErrors]="getForm().get('favicon').errors"
+                              [labelText]="'Favicon'"
+                              [verticalMode]=true>
+            <app-single-img-input [formControl]="getForm().controls.favicon"></app-single-img-input>
+          </app-extended-input>
+        </div>
+      </div>
+
+      <app-company-theme-settings #companyThemeSettingsComponent
+                                  [companyInfo]="settings"></app-company-theme-settings>
+    </nb-card-body>
+  </nb-card>
+</form>
+
+<ng-template #submitButtons>
+  <button [disabled]="!isSubmitEnabled()" class="btn btn-sm btn-rectangle btn-primary ml-1" type="submit">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+</ng-template>

@@ -1,0 +1,30 @@
+<div
+  class="extended-input"
+  [class.extended-input--required]="required"
+  [class.extended-input--vertical]="verticalMode"
+  [class.extended-input--horizontal]="!verticalMode"
+  [class.extended-input--error]="hasError">
+  <div
+    *ngIf="labelText"
+    class="extended-input__label-container"
+    [class.extended-input__label-container--vertical]="verticalMode"
+    [class.extended-input__label-container--horizontal]="!verticalMode"
+    [class]="labelContainerClass">
+    <label
+      class="extended-input__label col-form-label"
+      [ngClass]="labelClass">
+      {{ labelText }}
+    </label>
+  </div>
+
+  <div class="extended-input__content">
+    <ng-content></ng-content>
+
+    <ng-container *ngFor="let errorKey of errorKeys">
+      <span class="extended-input__error-message"
+        *ngIf="getErrorMsg(errorKey) as message">
+        {{ message }}
+      </span>
+    </ng-container>
+  </div>
+</div>

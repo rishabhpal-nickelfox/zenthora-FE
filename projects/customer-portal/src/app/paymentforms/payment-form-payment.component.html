@@ -1,0 +1,148 @@
+<div class="payment-form-page">
+  <div class="payment-form-column d-flex justify-content-center">
+    <div class="payment-form__scroll-wrapper">
+      <nb-card *ngIf="paymentResult">
+        <nb-card-body>
+          <app-customer-payment-result
+            [approvalId]="paymentResult.approvalId"
+            [authorizationId]="paymentResult.authorizationId"
+            [currency]="currency"
+            [paymentAmount]="paymentResult.paymentAmount"
+            [surchargeLabel]="Labels.ConvenienceFee"
+            [surchargeAmount]="paymentResult.surchargeAmount"
+            [totalIncludingSurcharge]="paymentResult.totalIncludingSurcharge">
+          </app-customer-payment-result>
+        </nb-card-body>
+      </nb-card>
+
+      <form (ngSubmit)="saveAndClose()" [formGroup]="getForm()" [nbSpinner]="submitLocked || loading" nbSpinnerMessage=""
+           nbSpinnerStatus="success">
+        <nb-card>
+          <nb-card-body>
+            <div class="payment-form__info">
+              <div *ngIf="template.length" class="payment-form__template-grid">
+                <ng-container *ngFor="let item of template">
+                  <div [style.grid-column]="getGridColumn(item)" [style.grid-row]="getGridRow(item)"
+                       class="payment-form__template-grid-item">
+                    <div *ngIf="item.type === PaymentFormControlType.LOGO" class="payment-form__logo"
+                         [style.--logo-rows]="item.rows">
+                      <img *ngIf="logoPreview" [src]="logoPreview" class="payment-form-template__image"
+                           [style.object-fit]="isAtOriginalSize(item) ? 'scale-down' : 'contain'"/>
+                    </div>
+
+                    <div *ngIf="item.type === PaymentFormControlType.IMAGE && item.value && item.imageContentType"
+                         class="payment-form__logo" [style.--logo-rows]="item.rows">
+                      <img [src]="'data:' + item.imageContentType + ';base64,' + item.value"
+                           class="payment-form-template__image"
+                           [style.object-fit]="isAtOriginalSize(item) ? 'scale-down' : 'contain'"/>
+                    </div>
+
+                    <app-rich-text-viewer *ngIf="item.type === PaymentFormControlType.TEXT"
+                                          [value]="item.value"></app-rich-text-viewer>
+
+                    <app-extended-input *ngIf="item.type === PaymentFormControlType.INPUT"
+                                        [labelText]="item.label"
+                                        [required]="item.requirement"
+                                        [verticalMode]="true">
+                      <input [formControl]="getTemplateControl(item.id)" [placeholder]="item.label"
+                             class="form-control qbo-form-control" formControlErrorMessage type="text">
+                    </app-extended-input>
+
+                    <app-extended-input *ngIf="item.type === PaymentFormControlType.DATE"
+                                        [labelText]="item.label"
+                                        [required]="item.requirement"
+                                        [verticalMode]="true">
+                      <app-extended-datepicker [formControl]="getTemplateControl(item.id)"
+                                               [placeholder]="item.label"
+                                               formControlErrorMessage>
+                      </app-extended-datepicker>
+                    </app-extended-input>
+
+                    <app-extended-input *ngIf="item.type === PaymentFormControlType.SELECT"
+                                        [labelText]="item.label"
+                                        [required]="item.requirement"
+                                        [verticalMode]="true">
+                      <nb-select [formControl]="getTemplateControl(item.id)"
+                                 [placeholder]="Labels.SelectPlaceholder"
+                                 formControlErrorMessage>
+                        <nb-option *ngFor="let option of item.options" [value]="option">{{option}}</nb-option>
+                      </nb-select>
+                    </app-extended-input>
+
+                    <app-extended-input *ngIf="item.type === PaymentFormControlType.TEXTAREA"
+                                        [labelText]="item.label"
+                                        [required]="item.requirement"
+                                        [verticalMode]="true">
+                      <textarea [formControl]="getTemplateControl(item.id)" [placeholder]="item.label"
+                                [rows]="item.textareaRows"
+                                class="form-control qbo-form-control payment-form-template__textarea"
+                                formControlErrorMessage></textarea>
+                    </app-extended-input>
+                  </div>
+                </ng-container>
+              </div>
+
+              <hr *ngIf="template.length"/>
+
+              <div class="row">
+                <div class="d-flex flex-column col-xl-3 col-md-4" id="paymentAmount">
+                  <app-extended-input [labelText]="Labels.PaymentAmount"
+                                      [required]="true" [verticalMode]="true">
+                    <app-extended-number-input [decimalMax]="2" [decimalMin]="2" [formControl]="_paymentAmount"
+                                               [integerLimit]="11" [placeholder]="Labels.PaymentAmount"
+                                               [prefix]="currency"
+                                               formControlErrorMessage>
+                    </app-extended-number-input>
+                  </app-extended-input>
+                </div>
+              </div>
+
+              <ng-container *ngIf="ObjectHelper.isDefined(surchargeAmount)">
+                <app-extended-input [labelText]="Labels.ConvenienceFeePercent(paymentForm?.companyInfo?.surchargePercent)" [verticalMode]="false">
+                  <div class="my-auto">
+                    {{currency}}{{surchargeAmount |number:'1.2-2'}}
+                  </div>
+                </app-extended-input>
+                <app-extended-input [labelText]="Labels.Total" [verticalMode]="false">
+                  <div class="my-auto">
+                    {{currency}}{{totalIncludingSurcharge |number:'1.2-2'}}
+                  </div>
+                </app-extended-input>
+              </ng-container>
+
+              <hr/>
+
+              <app-credit-card-info-component *ngIf="creditCardAvailable"
+                                              [formControl]="_creditCard"
+                                              [requiredEmail]="true"></app-credit-card-info-component>
+              <div *ngIf="!creditCardAvailable" class="val-message pb-2">
+                {{Labels.CreditCardPaymentMethodIsNotAvailable(legalName)}}
+              </div>
+
+              <hr/>
+
+              <div *ngIf="creditCardAvailable" class="d-flex flex-column">
+                <div [innerHTML]="sanitizedAuthorizationMessage"
+                     class="mx-auto payment-form__authorization-message my-3">
+                </div>
+                <button [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-danger mx-auto"
+                        type="submit">
+                  <nb-icon icon="lock-outline"></nb-icon>
+                  {{Labels.ProcessPayment}}
+                </button>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </form>
+    </div>
+  </div>
+  <div class="payment-form-footer">
+    <div class="d-flex flex-column justify-content-center">
+      <app-recaptcha-terms *ngIf="settingsProvider.isRecaptchaEnabled()" class="mt-2"></app-recaptcha-terms>
+      <div class="d-flex justify-content-center mt-2">
+        <span class="text-hint">{{settingsProvider.copyrightMessage}}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div *ngFor="let detail of details">
+  <div *ngIf="detail.fieldName">
+    <span><strong>{{getFieldLabel(detail.fieldName)}}: </strong>
+      <span *ngIf="detail.oldValue !== undefined && detail.oldValue != null">{{formatValue(detail.oldValue)}} => </span>{{formatValue(detail.newValue)}}</span>
+  </div>
+  <div *ngIf="detail.collectionName">
+    <div *ngIf="detail.added && detail.added.length > 0">
+      <strong>{{getFieldLabel(detail.collectionName)}} added:</strong>
+      <span *ngFor="let added of detail.added">{{added}}; </span>
+    </div>
+    <div *ngIf="detail.removed && detail.removed.length > 0">
+      <strong>{{getFieldLabel(detail.collectionName)}} removed:</strong>
+      <span *ngFor="let removed of detail.removed">{{removed}}; </span>
+    </div>
+  </div>
+</div>

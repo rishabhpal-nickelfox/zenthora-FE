@@ -1,0 +1,226 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+      nbSpinnerStatus="success" novalidate>
+  <nb-card [nbSpinner]="!isDefined(settings)" nbSpinnerStatus="success">
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row mr-auto sticky-left">
+          <div class="align-self-center">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row ml-auto sticky-right">
+          <div class="header-label">General Settings</div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                            maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                            server: {}}"
+                              [hasError]="isFieldNotValid('legalName')"
+                              [inputErrors]="getForm().get('legalName').errors"
+                              [labelText]="'Legal Name'"
+                              [required]=true
+                              [verticalMode]=true>
+            <input class="form-control qbo-form-control" formControlName="legalName" maxlength="100"
+                   placeholder="Legal Name"
+                   type="text">
+          </app-extended-input>
+        </div>
+
+        <div class="col-md-6">
+          <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                            maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                            server: {}}"
+                              [hasError]="isFieldNotValid('displayName')"
+                              [inputErrors]="getForm().get('displayName').errors"
+                              [labelText]="'Display Name'"
+                              [required]=true
+                              [verticalMode]=true>
+            <input class="form-control qbo-form-control" formControlName="displayName" maxlength="100"
+                   placeholder="Display Name"
+                   type="text">
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-6">
+          <app-extended-input [errorDefs]="{server: {}}"
+                              [hasError]="isFieldNotValid('logo')"
+                              [inputErrors]="getForm().get('logo').errors"
+                              [labelText]="'Logo'"
+                              [verticalMode]=true>
+            <app-single-img-input [formControl]="getForm().controls.logo"></app-single-img-input>
+          </app-extended-input>
+        </div>
+      </div>
+
+      <div formGroupName="address">
+        <div class="row">
+          <div class="col-md-8">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                              pattern: { template: errorService.validationService.STARTS_WITH_DIGIT},
+                                              maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                              server: {}}"
+                                [hasError]="isFieldNotValid('address.street')"
+                                [inputErrors]="getForm().get('address.street').errors"
+                                [labelText]="'Street'"
+                                [required]=true
+                                [verticalMode]=true>
+              <input class="form-control qbo-form-control" formControlName="street"
+                     maxlength="100" placeholder="Street"
+                     type="text">
+            </app-extended-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                              maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                              server: {}}"
+                                [hasError]="isFieldNotValid('address.city')"
+                                [inputErrors]="getForm().get('address.city').errors"
+                                [labelText]="'City'"
+                                [required]=true
+                                [verticalMode]=true>
+              <input class="form-control qbo-form-control" formControlName="city"
+                     maxlength="100" placeholder="City"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="col-md-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                              server: {}}"
+                                [hasError]="isFieldNotValid('address.state')"
+                                [inputErrors]="getForm().get('address.state').errors"
+                                [labelText]="'State'"
+                                [required]=true
+                                [verticalMode]=true>
+              <select class="form-control qbo-form-control" formControlErrorMessage
+                      formControlName="state">
+                <option *ngIf="!isDefined(getForm().get('address.state').value)"
+                        [ngValue]="null">Select...
+                </option>
+                <ng-container [ngSwitch]="getForm().get('address.country').value">
+                  <ng-container *ngSwitchCase=CountryISOEnum.US>
+                    <ng-container [ngTemplateOutlet]="usStates"></ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase=CountryISOEnum.CA>
+                    <ng-container [ngTemplateOutlet]="caStates"></ng-container>
+                  </ng-container>
+                </ng-container>
+                <ng-template #usStates>
+                  <option *ngFor="let option of enumKeys(USStateEnum)" [ngValue]="option">
+                    {{USStateEnumValue.get(option)}}
+                  </option>
+                </ng-template>
+                <ng-template #caStates>
+                  <option *ngFor="let option of enumKeys(CAStateEnum)" [ngValue]="option">
+                    {{CAStateEnumValue.get(option)}}
+                  </option>
+                </ng-template>
+              </select>
+            </app-extended-input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                              pattern: { template: errorService.validationService.ZIP},
+                                              server: {}}"
+                                [hasError]="isFieldNotValid('address.zip')"
+                                [inputErrors]="getForm().get('address.zip').errors"
+                                [labelText]="'Zip'"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [textMask]="zipMask" class="form-control qbo-form-control ng-trim-ignore"
+                     formControlName="zip"
+                     placeholder="Zip"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="col-lg-2 col-sm-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                              server: {}}"
+                                [hasError]="isFieldNotValid('address.country')"
+                                [inputErrors]="getForm().get('address.country').errors"
+                                [labelText]="'Country'"
+                                [required]=true
+                                [verticalMode]=true>
+              <select class="form-control qbo-form-control" formControlErrorMessage
+                      formControlName="country">
+                <option *ngIf="!isDefined(getForm().get('address.country').value)" [ngValue]="null">Select...</option>
+                <option *ngFor="let option of CountryISOShort" [ngValue]="option">
+                  {{CountryISO.findByCode(option).name}}
+                </option>
+              </select>
+
+            </app-extended-input>
+          </div>
+        </div>
+      </div>
+
+      <div formGroupName="contactInfo">
+        <div class="form-group row">
+          <div class="col-md-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                            pattern: { template: errorService.validationService.EMAIL},
+                                            maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                            server: {}}"
+                                [hasError]="isFieldNotValid('contactInfo.email')"
+                                [inputErrors]="getForm().get('contactInfo.email').errors"
+                                [labelText]="'Email'"
+                                [required]=true
+                                [verticalMode]=true>
+              <input class="form-control qbo-form-control" formControlName="email"
+                     maxlength="100" placeholder="Email"
+                     type="text">
+            </app-extended-input>
+          </div>
+          <div class="col-md-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                            pattern: { template: errorService.validationService.PHONE},
+                                            server: {}}"
+                                [hasError]="isFieldNotValid('contactInfo.phone')"
+                                [inputErrors]="getForm().get('contactInfo.phone').errors"
+                                [labelText]="'Phone'"
+                                [required]=true
+                                [verticalMode]=true>
+              <input class="form-control qbo-form-control ng-trim-ignore" formControlName="phone"
+                     placeholder="Phone"
+                     type="text">
+            </app-extended-input>
+          </div>
+
+          <div class="col-md-4">
+            <app-extended-input [errorDefs]="{required: { template: errorService.validationService.REQUIRED},
+                                            maxlength: { template: errorService.validationService.MAXLENGTH(100)},
+                                            pattern: { template: errorService.validationService.PATTERN},
+                                            server: {}}"
+                                [hasError]="isFieldNotValid('contactInfo.website')"
+                                [inputErrors]="getForm().get('contactInfo.website').errors"
+                                [labelText]="'Website'"
+                                [required]=true
+                                [verticalMode]=true>
+              <input [textMask]="{mask: MASK.HTTPS_URL, guide: false}"
+                     class="form-control ng-trim-ignore qbo-form-control" formControlName="website"
+                     maxlength="1000" placeholder="https://" type="text">
+            </app-extended-input>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</form>
+
+
+<ng-template #submitButtons>
+  <button [disabled]="!isSubmitEnabled()" class="btn btn-sm btn-rectangle btn-primary ml-1" type="submit">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+</ng-template>

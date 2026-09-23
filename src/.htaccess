@@ -1,0 +1,13 @@
+RewriteEngine On
+    # if not https - redirect to https
+    # for some reason, it does not work
+    # RewriteCond %{HTTP_X_FORWARDED_PROTO} !https
+    # RewriteRule ^ https://%{HTTP_X_ORIGINAL_HOST}%{HTTP_X_ORIGINAL_URL} [L,R=301,NE]
+
+    # If an existing asset or directory is requested go to it as it is
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+    RewriteRule ^ - [L]
+    
+    # If the requested resource doesn't exist, use index.html
+    RewriteRule ^ /index.html

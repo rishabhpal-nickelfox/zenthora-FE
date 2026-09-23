@@ -1,0 +1,67 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.TOTALS)}}</h4>
+    <button (click)="close()" aria-label="Close" class="close" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="d-flex flex-column toolbar pb-4 pt-2 my-4">
+          <div [innerHTML]="styles" class="template-styles"></div>
+        <div class="d-flex flex-row pb-2">
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_fontColor" [label]="'Font Color'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_colorOdd" [label]="'Odd Line'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_colorEven" [label]="'Even Line'"></app-color-picker>
+            </div>
+            <div class="pr-3 d-flex">
+                <app-color-picker [formControl]="_borderColor" [includeNone]="true"
+                                  [label]="'Border Color'"></app-color-picker>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="d-flex flex-row toolbar py-4 my-4">
+        <div *ngFor="let key of enumKeys(InvoiceItemsTableTotalsEnum)" class="clickable">
+            <span (click)="addTotalRow(key)" *ngIf="canAddTotalRow(key)" class="p-3 mr-3" container="body"
+                  ngbPopover="Click to Add"
+                  placement="bottom" triggers="mouseenter:mouseleave">
+                {{InvoiceItemsTableTotalsEnumValue.get(key)}}</span>
+        </div>
+    </div>
+    <div class="table w-100">
+        <div class="tbody">
+            <div *ngFor="let total of orderedTotals;" class="tr">
+                <div class="td" [style.grid-column]="1" >
+                    <app-extended-input>
+                        <input [formControl]="getFormControl(total)" [maxlength]="MAX_LENGTH.HEADER"
+                               [placeholder]="Labels.Header"
+                               class="form-control qbo-form-control my-3"
+                               formControlErrorMessage
+                               type="text">
+                    </app-extended-input>
+                </div>
+                <div class="td" [style.grid-column]="2" >
+                    ${{TotalsViewService.getValue(total, InvoiceItemsDataService.templateData) | number : '1.2-2'}}
+                    <nb-icon (click)="deleteTotalRow(total)"
+                             class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+                             triggers="mouseenter:mouseleave"></nb-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button (click)="saveAndClose()" class="btn btn-xs btn-rectangle btn-primary" [disabled]="!isSubmitEnabled()">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        Save
+    </button>
+    <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+    </button>
+</div>

@@ -1,0 +1,308 @@
+<ng-container [formGroup]="getForm()">
+  <div class="credit-card-container w-100">
+    <div [class.pt-4]="showCopyFromRow" class="d-flex flex-column item">
+      <div class="w-100">
+        <app-extended-input [labelText]="Labels.CardNumber" [required]="true" [verticalMode]="true">
+          <div class="d-flex flex-row">
+            <div class="w-100">
+              <input [formControl]="_number" [maxlength]="MAX_LENGTH.NUMBER"
+                     [ngClass]="{'label-style': _number.disabled,
+                                 'form-control qbo-form-control':  _number.enabled}"
+                     [placeholder]="Labels.CardNumber"
+                     [textMask]="{mask: creditCardMask, guide: false}"
+                     autocomplete="cc-number"
+
+                     class="ng-trim-ignore card-number"
+                     formControlErrorMessage
+                     type="text">
+            </div>
+            <div *ngIf="creditCardLogoURL" class="px-2">
+              <img alt="credit-card-logo" height="35" src="{{'assets/creditcardlogo/'+creditCardLogoURL}}"/>
+            </div>
+          </div>
+        </app-extended-input>
+      </div>
+      <div class="w-100">
+        <app-extended-input [labelText]="Labels.Holder"
+                            [required]="true"
+                            [verticalMode]="true">
+          <input [formControl]="_holder" [maxlength]="MAX_LENGTH.HOLDER"
+                 [ngClass]="{'label-style': _holder.disabled,
+                                       'form-control qbo-form-control':  _holder.enabled}"
+                 [placeholder]="_holder.enabled? Labels.Holder: ''"
+                 [textMask]="{mask: holderMask, guide: false}"
+                 autocomplete="cc-name" class="ng-trim-ignore" formControlErrorMessage
+                 type="text">
+        </app-extended-input>
+      </div>
+      <div class="w-100">
+        <app-extended-input [labelText]="Labels.ExpiryDate"
+                            [required]="true"
+                            [verticalMode]="true">
+          <div class="d-flex flex-row">
+            <div>
+              <input [formControl]="_date" [ngClass]="{'label-style': _date.disabled,
+                                         'form-control qbo-form-control':  _date.enabled}"
+                     [placeholder]="_date.enabled? Labels.ExpiryDate: ''"
+                     [textMask]="{mask: MM_YYYY, guide: true}"
+                     autocomplete="cc-exp"
+                     class="ng-trim-ignore align-self-start date"
+                     formControlErrorMessage
+                     type="text">
+            </div>
+            <div *ngIf="isCCExpired()" class="pl-1 expired d-flex flex-row align-items-center">
+              <nb-icon icon="alert-triangle-outline"></nb-icon>
+              <span>{{Labels.Expired}}</span>
+            </div>
+          </div>
+        </app-extended-input>
+
+      </div>
+      <div *ngIf="viewService.showCvv">
+        <app-extended-input [labelText]="Labels.CVV"
+                            [required]="true"
+                            [verticalMode]="true">
+          <input [formControl]="_cvv" [maxlength]="MAX_LENGTH.CVV(_cardType.value)"
+                 [placeholder]="Labels.CVV"
+                 [textMask]="{mask: MASK.DIGITS, guide: false}"
+                 autocomplete="cc-cvv"
+                 class="ng-trim-ignore form-control qbo-form-control cvv"
+                 formControlErrorMessage type="password">
+        </app-extended-input>
+      </div>
+
+      <div class="d-flex flex-row" *ngIf="viewService.showSave">
+        <label class="checkbox-container">
+          <input [formControl]="_savePaymentMethod" type="checkbox">
+          <span class="checkmark"></span>
+          <span class="checkbox-descr">{{Labels.SavePaymentMethod}}</span>
+        </label>
+      </div>
+
+      <div class="d-flex flex-row" *ngIf="viewService.showPrivate(_savePaymentMethod.value)">
+        <label class="checkbox-container">
+          <input [formControl]="_isPrivate" type="checkbox">
+          <span class="checkmark"></span>
+          <span class="checkbox-descr">{{Labels.IsPrivate}}</span>
+        </label>
+      </div>
+
+      <div *ngIf="viewService.showDefault(_savePaymentMethod.value)" class="d-flex flex-column mt-auto">
+        <div class="d-flex flex-row">
+          <label class="checkbox-container">
+            <input [formControl]="_paymentDefault" type="checkbox">
+            <span class="checkmark"></span>
+            <span class="checkbox-descr">{{Labels.PaymentDefault}}</span>
+          </label>
+        </div>
+
+        <div class="d-flex flex-row">
+          <label class="checkbox-container">
+            <input [formControl]="_batchDefault" type="checkbox">
+            <span class="checkmark"></span>
+            <span class="checkbox-descr">{{Labels.BatchDefault}}</span>
+          </label>
+        </div>
+        <div class="d-flex flex-row">
+          <label class="checkbox-container">
+            <input [formControl]="_customerDefault" type="checkbox">
+            <span class="checkmark"></span>
+            <span class="checkbox-descr">{{Labels.CustomerDefault}}</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="d-flex flex-column item">
+      <div *ngIf="showCopyFromRow" class="w-100 pb-2">
+        <a (click)="copyFromDefaultAddress()" class="copy-link">{{copyFromLabel}}</a>
+      </div>
+      <div class="w-100">
+        <app-extended-input [labelText]="Labels.Company"
+                            [verticalMode]="true">
+          <input [formControl]="_companyName"
+                 [ngClass]="{'label-style': _companyName.disabled,
+                                       'form-control qbo-form-control':  _companyName.enabled}"
+                 [placeholder]="_companyName.enabled ? Labels.Company: ''"
+                 formControlErrorMessage
+                 type="text">
+        </app-extended-input>
+      </div>
+      <div class="w-100 d-flex flex-row">
+        <div class="w-50 pr-2">
+          <app-extended-input [labelText]="Labels.FirstName"
+                              [verticalMode]="true">
+            <input [formControl]="_firstName"
+                   [ngClass]="{'label-style': _firstName.disabled,
+                                           'form-control qbo-form-control':  _firstName.enabled}"
+                   [placeholder]="_firstName.enabled ? Labels.FirstName: ''"
+                   formControlErrorMessage
+                   type="text">
+          </app-extended-input>
+        </div>
+        <div class="w-50">
+          <app-extended-input [labelText]="Labels.LastName"
+                              [verticalMode]="true">
+            <input [formControl]="_lastName"
+                   [ngClass]="{'label-style': _lastName.disabled,
+                                           'form-control qbo-form-control':  _lastName.enabled}"
+                   [placeholder]="_lastName.enabled ? Labels.LastName: ''"
+                   formControlErrorMessage
+                   type="text">
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="w-100">
+        <app-extended-input [labelText]="Labels.Address"
+                            [required]="true"
+                            [verticalMode]="true">
+          <input [formControl]="_address1"
+                 [ngClass]="{'label-style': _address1.disabled,
+                                       'form-control qbo-form-control':  _address1.enabled}"
+                 [placeholder]="_address1.enabled ? Labels.Address1: ''"
+                 formControlErrorMessage
+                 type="text">
+        </app-extended-input>
+      </div>
+      <div class="w-100">
+        <app-extended-input [verticalMode]="true">
+          <input [formControl]="_address2"
+                 [ngClass]="{'label-style': _address2.disabled,
+                                       'form-control qbo-form-control':  _address2.enabled}"
+                 [placeholder]="_address2.enabled ? Labels.Address2: ''"
+                 formControlErrorMessage type="text">
+        </app-extended-input>
+      </div>
+      <div class="w-100 d-flex flex-row">
+        <div class="w-50 pr-2">
+          <app-extended-input [labelText]="Labels.City"
+                              [required]="true"
+                              [verticalMode]="true">
+            <input [formControl]="_city"
+                   [ngClass]="{'label-style': _city.disabled,
+                                           'form-control qbo-form-control':  _city.enabled}"
+                   [placeholder]="_city.enabled ? Labels.City: ''"
+                   formControlErrorMessage
+                   type="text">
+          </app-extended-input>
+        </div>
+        <div class="w-50 pl-2">
+          <ng-container
+            *ngIf="!viewService.globalPaymentsEnabled || countryCode == CountryISOEnum.US || countryCode == CountryISOEnum.CA;">
+            <app-extended-input [labelText]="Labels.State"
+                                [required]="true"
+                                [verticalMode]="true">
+              <select [formControl]="_state" [ngClass]="{'label-style':  _state.disabled,
+                                'form-control qbo-form-control': _state.enabled }"
+                      formControlErrorMessage>
+                <option [ngValue]="null">{{_state.enabled ? Labels.Select : ''}}</option>
+                <ng-container [ngSwitch]="countryCode">
+                  <ng-container *ngSwitchCase=CountryISOEnum.US>
+                    <ng-container [ngTemplateOutlet]="usStates"></ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase=CountryISOEnum.CA>
+                    <ng-container [ngTemplateOutlet]="caStates"></ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                  </ng-container>
+                </ng-container>
+                <ng-template #usStates>
+                  <option *ngFor="let option of enumKeys(USStateEnum)" [ngValue]="option">
+                    {{USStateEnumValue.get(option)}}
+                  </option>
+                </ng-template>
+                <ng-template #caStates>
+                  <option *ngFor="let option of enumKeys(CAStateEnum)" [ngValue]="option">
+                    {{CAStateEnumValue.get(option)}}
+                  </option>
+                </ng-template>
+              </select>
+
+            </app-extended-input>
+          </ng-container>
+        </div>
+      </div>
+      <div class="w-100 d-flex flex-row">
+        <div class="w-50 pr-2">
+          <ng-container
+            *ngIf="countryCode == CountryISOEnum.US || countryCode == CountryISOEnum.CA; else simpleZipInput">
+            <app-extended-input [labelText]="Labels.Zip"
+                                [required]="true"
+                                [verticalMode]="true">
+              <input [formControl]="_zip" [ngClass]="{'label-style': _zip.disabled,
+                                           'form-control qbo-form-control':  _zip.enabled}"
+                     [placeholder]="_zip.enabled ? Labels.Zip: ''"
+                     [textMask]="zipMask"
+                     class="ng-trim-ignore"
+                     formControlErrorMessage type="text">
+            </app-extended-input>
+          </ng-container>
+          <ng-template #simpleZipInput>
+            <app-extended-input [labelText]="Labels.Zip"
+                                [verticalMode]="true">
+              <input [formControl]="_zip"
+                     [ngClass]="{'label-style': _zip.disabled,
+                                         'form-control qbo-form-control':  _zip.enabled}"
+                     [placeholder]="_zip.enabled ? Labels.Zip: ''"
+                     formControlErrorMessage
+                     type="text">
+            </app-extended-input>
+          </ng-template>
+        </div>
+
+        <div class="w-50 pl-2">
+          <app-extended-input [labelText]="Labels.Country"
+                              [required]=true
+                              [verticalMode]=true>
+            <app-extended-typeahead-input *ngIf="viewService.globalPaymentsEnabled" [formControl]="_country"
+                                          [listFormatter]="formatCountry"
+                                          [ngClass]="{'label-style': _country.disabled}"
+                                          [placeholder]="Labels.Country"
+                                          [resultFormatter]="formatCountry"
+                                          [searchProperty]="'name'"
+                                          [source]="findCountry"
+                                          formControlErrorMessage></app-extended-typeahead-input>
+
+            <select *ngIf="!viewService.globalPaymentsEnabled" [formControl]="_country"
+                    [ngClass]="{'label-style': _country.disabled,
+                                  'form-control qbo-form-control':  _country.enabled}"
+                    formControlErrorMessage>
+              <option *ngIf="!_country.value" [ngValue]="null">{{Labels.Select}}</option>
+              <option *ngFor="let option of viewService.countries" [ngValue]="option">
+                {{option.name}}
+              </option>
+            </select>
+          </app-extended-input>
+        </div>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="w-50 pr-2">
+          <app-extended-input [labelText]="Labels.Phone"
+                              [verticalMode]="true">
+            <input [formControl]="_phone"
+                   [ngClass]="{'label-style': _phone.disabled,
+                                           'form-control qbo-form-control':  _phone.enabled}"
+                   [placeholder]="Labels.Phone"
+                   formControlErrorMessage
+                   type="text">
+          </app-extended-input>
+        </div>
+        <div class="w-50 pl-2">
+          <app-extended-input [labelText]="Labels.Email"
+                              [required]="requiredEmail"
+                              [verticalMode]="true">
+            <input [formControl]="_email"
+                   [ngClass]="{'label-style': _email.disabled,
+                                           'form-control qbo-form-control':  _email.enabled}"
+                   [placeholder]="Labels.Email"
+                   class="form-control qbo-form-control"
+                   formControlErrorMessage
+                   type="text">
+          </app-extended-input>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

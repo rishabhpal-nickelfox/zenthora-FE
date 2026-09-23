@@ -1,0 +1,23 @@
+<nb-card>
+  <nb-card-body>
+    <form (ngSubmit)="saveAndClose()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+          nbSpinnerSize="small" nbSpinnerStatus="success">
+
+      <app-payment-methods *ngIf="!initializing"
+        [defaultAddress]="defaultAddress"
+        [formControl]="_paymentMethods"
+        (deletePaymentMethod)="onDeletePaymentMethod($event)">
+      </app-payment-methods>
+
+      <div class="d-flex flex-column my-3" >
+        <button [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-danger mx-auto"
+                *ngIf="showSubmit"
+                type="submit">
+          <nb-icon icon="lock-outline"></nb-icon>
+          {{Labels.Submit}}
+        </button>
+      </div>
+    </form>
+
+  </nb-card-body>
+</nb-card>

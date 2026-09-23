@@ -1,0 +1,28 @@
+<div class="auth">
+  <div class="auth-content">
+      <div class="logo-container">
+        <img alt="logo" class="zenthora-logo" src="/assets/zenthoralogo/logo.png">
+      </div>
+      <div [hidden]="!showLogin && !showForgotPassword && !showRoleSelect && !showChangePassword && !showUnderMaintenance">
+        <div class="d-flex flex-column login-container">
+          <app-login #loginComponent (forgotPasswordEvent)="onForgotPassword()" (loginEvent)="onLogin($event)"
+                     [hidden]="!showLogin"></app-login>
+          <app-forgot-password #forgotPasswordComponent (cancelEvent)="backToSignIn()"
+                               (sendNewPassword)="onSendNewPassword($event)"
+                               [hidden]="!showForgotPassword"></app-forgot-password>
+          <app-roleselect #roleSelectComponent (cancelEvent)="backToSignIn()"
+                          (roleSelectEvent)="onRoleSelected($event)"
+                          [hidden]="!showRoleSelect"></app-roleselect>
+          <app-change-password-login #changePasswordComponent
+                                               (cancelEvent)="backToSignIn()"
+                                               (changePassword)="onPasswordChange($event)"
+                                               [hidden]="!showChangePassword"></app-change-password-login>
+          <app-under-maintenance #underMaintenanceComponent [hidden]="!showUnderMaintenance"></app-under-maintenance>
+
+          <app-recaptcha-terms *ngIf="settingsProvider.isRecaptchaEnabled() && (showLogin || showForgotPassword  || showUnderMaintenance)"
+                               [light]="true" class="mt-5"></app-recaptcha-terms>
+        </div>
+      </div>
+  </div>
+</div>
+

@@ -1,0 +1,34 @@
+<form novalidate [formGroup]="getForm()" (ngSubmit)="saveAndClose()">
+<div class="login-body">
+    <div class="form-group">
+        <app-extended-input>
+            <input type="email" class="form-control qbo-form-control" autocomplete="username" [formControl]="_username" maxlength="100" formControlErrorMessage [placeholder]="Labels.Login">
+        </app-extended-input>
+    </div>
+
+
+    <div class="form-group">
+        <app-extended-input>
+            <input type="password" class="form-control qbo-form-control" [formControl]="_password" autocomplete="current-password" formControlErrorMessage [placeholder]="Labels.Password">
+        </app-extended-input>
+    </div>
+
+    <div class="d-flex flex-row align-content-center">
+        <a class="forgot-password" href="#" (click)="onForgotPassword()">{{Labels.ForgotPassword}}
+        </a>
+        <label class="remember-me ml-auto checkbox-container">
+            <input type="checkbox" [formControl]="_rememberMe" formControlErrorMessage>
+            <span class="checkmark"></span>
+            <span class="checkbox-descr">{{Labels.RememberMe}}</span>
+        </label>
+
+    </div>
+    </div>
+    <div class="d-flex justify-content-center button-container">
+        <button type="submit" class="btn btn-sm" [nbSpinner]="submitLocked" nbSpinnerSize="small" nbSpinnerStatus="success" nbSpinnerMessage="" [disabled]="!isSubmitEnabled()">
+            <nb-icon icon="log-in-outline"></nb-icon>
+            <span class="sign-in">{{Labels.SignIn}}</span>
+        </button>
+    </div>
+</form>
+

@@ -1,0 +1,121 @@
+{
+  "docNumber": "4321",
+  "docDate": "2024-01-01",
+  "job": "Jason Asano",
+  "saleDetail": {
+    "terms": "2% 10, Net 30 Days",
+    "dueDate": "2024-01-31",
+    "billTo": {
+      "companyName": "Jason Asano",
+      "firstName": null,
+      "lastName": null,
+      "address1": "321 Test Ave, #321",
+      "address2": null,
+      "city": "Vancouver",
+      "state": "WA",
+      "zip": "98662",
+      "country": "USA"
+    },
+    "shipDate": "2024-03-13",
+    "shipTo": {
+      "companyName": "Jason Asano",
+      "firstName": null,
+      "lastName": null,
+      "address1": "321 Test Ave, #321",
+      "address2": null,
+      "city": "Vancouver",
+      "state": "WA",
+      "zip": "98662",
+      "country": "USA"
+    },
+    "subTotal": 3938.00,
+    "taxPercentage": null,
+    "taxAmount": 0.00,
+    "undiscountedTaxAmount": null,
+    "discount": 0.00,
+    "discountExpDate": null,
+    "shippingCost": 0.00,
+    "appliedAmount": 0.00,
+    "amountDue": 3938.00,
+    "undiscountedAmountDue": null,
+    "total": 3938.00,
+    "undiscountedTotal": null,
+    "currency": "USD",
+    "lineItems": [
+      {
+        "itemName": "Clay Flower Pot - 24 in.",
+        "sku": "60",
+        "description": "Clay Flower Pot - 24 in.",
+        "quantity": "200",
+        "amount": "1998",
+        "rate": "1998",
+        "tax": null,
+        "taxable": true,
+        "serviceDate": null,
+        "categoryClass": null,
+        "other1": null,
+        "other2": null,
+        "name": "Clay Flower Pot - 24 in.",
+        "id": null
+      },
+      {
+        "itemName": "Plant Tray - 20 x 6",
+        "sku": "62",
+        "description": "Plastic Plant Tray - 20 in. x 6 in.",
+        "quantity": "200",
+        "amount": "60",
+        "rate": "60",
+        "tax": null,
+        "taxable": true,
+        "serviceDate": null,
+        "categoryClass": null,
+        "other1": null,
+        "other2": null,
+        "name": "Plant Tray - 20 x 6",
+        "id": null
+      }
+    ],
+    "customerMemo": "",
+    "customFields": null,
+    "shipMethod": null,
+    "fob": null,
+    "trackingNumber": null,
+    "salesRep": null,
+    "customerName": null,
+    "other": null
+  },
+  "clientInfo": {
+    "clientToken": "ASANO",
+    "companyName": "Jason Asano",
+    "firstName": null,
+    "middleName": "",
+    "lastName": null,
+    "email": "nicholas@verosa.com"
+  },
+  "level2": {
+    "poNumber": null,
+    "customerNumber": "ASANO"
+  },
+  "emailSale": {
+    "to": "nicholas@verosa.com",
+    "cc": null,
+    "bcc": null,
+    "subject": "Bellwether Garden Supply  Invoice 4321 for Jason Asano",
+    "attachments": null,
+    "header": "Jason Asano",
+    "attachPdf": null,
+    "from": "support@verosa.com",
+    "reply-to": null,
+    "htmlBody": "RGVhciBKYXNvbiBBc2Fubyw8YnIvPjxici8+UGxlYXNlIGNsaWNrIHRoZSBsaW5rIGJlbG93IHRvIHZpZXcgeW91ciBpbnZvaWNlIGFuZCByZW1pdCBhIHBheW1lbnQgb25saW5lLjxici8+PGJyLz5JZiB5b3UgaGF2ZSBhbnkgcXVlc3Rpb25zLCBwbGVhc2UgZW1haWwgIG9yIGNhbGwgNzcwLTcyNC00MDAwLjxici8+PGJyLz5UaGFuayB5b3UsPGJyLz48YnIvPkJlbGx3ZXRoZXIgR2FyZGVuIFN1cHBseQ=="
+  },
+  "emailReceipt": {
+    "to": "nicholas@verosa.com",
+    "cc": null,
+    "bcc": null,
+    "subject": "4321 Payment Receipt",
+    "from": "{CompanyEmail}",
+    "reply-to": null
+  },
+  "document": null,
+  "payments": null
+}

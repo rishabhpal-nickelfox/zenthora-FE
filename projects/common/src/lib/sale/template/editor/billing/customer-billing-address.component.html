@@ -1,0 +1,13 @@
+<div [innerHTML]="styles"></div>
+<div class="table w-100">
+    <div class="thead">
+        <div class="tr">
+            <div [style.grid-column]="1" [style.grid-row]="1" class="th"><strong>{{viewService.addressHeader}}</strong></div>
+        </div>
+    </div>
+    <div class="tbody">
+        <div class="tr">
+            <div [style.grid-column]="1" [style.grid-row]="2" class="td">{{billingAddress}}</div>
+        </div>
+    </div>
+</div>

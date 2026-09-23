@@ -1,0 +1,45 @@
+@use "../../../../../themes" as *;
+
+@include nb-install-component() {
+  * {
+    font-size: 14pt;
+  }
+
+  .column {
+    flex: 1 1 0;
+  }
+
+  .action-btn > * {
+    margin-top: 0.3rem;
+    font-weight: bold;
+    font-size: 27px;
+  }
+
+  .toolbar,
+  .toolbar span {
+    font-size: 11pt;
+  }
+
+  table {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  table, th, td {
+    height: 100%;
+  }
+
+  th {
+    font-weight: 500;
+    padding: 0.2rem !important;
+  }
+
+  td {
+    padding: 0.4rem !important;
+  }
+
+  .modal-body {
+    overflow: visible;
+  }
+
+}

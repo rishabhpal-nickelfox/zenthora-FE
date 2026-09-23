@@ -1,0 +1,42 @@
+@use '../../themes' as *;
+
+@include nb-install-component() {
+  .ach-container {
+    display: flex;
+  }
+
+  .item {
+    flex: 0 0 50%;
+    max-width: 50%;
+    min-width: 0;
+  }
+
+  @media screen and (max-width: 990px) {
+    .ach-container {
+      flex-wrap: wrap;
+    }
+    .item {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .item:last-child {
+      padding-left: 2rem;
+    }
+  }
+
+  .copy-link {
+    font-style: italic;
+    color: nb-theme(link-text-color);
+  }
+
+  .copy-link:hover {
+    color: nb-theme(link-text-color-hover);
+  }
+
+  .copy-link:focus {
+    color: nb-theme(link-text-color-focus);
+  }
+}

@@ -1,0 +1,12 @@
+<span (click)="$event.cancelBubble=true;" *ngIf="details && !ObjectHelper.isEmptyObject(details)" [ngbPopover]="detailsDescription"
+      autoClose="outside"
+      class="d-flex align-self-center pl-1"
+      placement="left">
+      <nb-icon icon="info-outline" status="info"></nb-icon>
+</span>
+
+<ng-template #detailsDescription>
+  <div>
+    <pre class="details-description">{{ details | json }}</pre>
+  </div>
+</ng-template>

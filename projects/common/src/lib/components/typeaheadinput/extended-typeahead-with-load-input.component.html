@@ -1,0 +1,44 @@
+<ng-template #optionsListTemplate let-matches="matches" let-itemTemplate="itemTemplate" let-query="query">
+    <div class="typeahead-scrollable-container">
+        <ng-template ngFor let-match let-i="index" [ngForOf]="matches">
+                <ng-template [ngTemplateOutlet]="customItemLabelTemplate"
+                             [ngTemplateOutletContext]="{item:match.item}"></ng-template>
+                <button type="button" #liElements class="dropdown-item" (click)="selectMatch(match, $event)" (mouseenter)="container.selectActive(match)" [class.typeahead-active]="container?.isActive(match)">
+                    <ng-template [ngTemplateOutlet]="customItemTemplate" [ngTemplateOutletContext]="{item:match.item, index:i, match:match, query:query}"></ng-template>
+                </button>
+        </ng-template>
+    </div>
+</ng-template>
+
+<ng-template #customItemLabelTemplate let-model="item">
+    <ng-container *ngIf="isDefined(labelFormatter) && isDefined(labelFormatter(model, model.level))">
+        <span class="placeholder" [innerHTML]="labelFormatter(model, model.level)"></span>
+    </ng-container>
+</ng-template>
+<ng-template #customItemTemplate let-model="item" let-index="index" let-query="query">
+    <div class="d-flex offset-{{offset(model)}}">
+        <span [hidden]="model._noMatch || model._loadMore" [innerHTML]="styleListFormatter(model, query)"></span>
+    </div>
+    <span [hidden]="!model._noMatch">No result found</span>
+    <span *ngIf="model._loadMore">
+        <nb-icon icon="chevron-down-outline"></nb-icon>
+    </span>
+</ng-template>
+<div class="d-flex flex-row" #a>
+    <ng-container>
+        <div class="w-100">
+            <div class="search" [nbSpinner]="loading" nbSpinnerStatus="success">
+                <nb-icon icon="search-outline"></nb-icon>
+                <input [ngModel]="searchFieldValue" (ngModelChange)="onTyping($event)" [disabled]="disabled" [extendedTypeaheadWithLoad]="dataSource$" [optionsListTemplate]="optionsListTemplate" [typeaheadItemTemplate]="customItemTemplate" [typeaheadAsync]="true" [dropup]="dropup" [typeaheadOptionField]="searchProperty" (typeaheadOnSelect)="onSelect($event)" (typeaheadOnBlur)="onSelect($event)" (keypress)="onKeyDown($event)" (keyup)="onKeyUp($event)" (focus)="onFocus($event)" (blur)="onBlur()" (loadMore)="onLoadMore()" [typeaheadMinLength]="0" [placeholder]="placeholder" container="body" #typeaheadDirective="qbo-typeahead-with-load" #typeahead class="form-control qbo-form-control typeahead-search">
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!required && searchFieldValue && !disabled">
+        <div class="qfiscal-icon">
+            <a (click)="onRemoveValue($event)">
+                <nb-icon icon="close-outline" ngbPopover="Remove" triggers="mouseenter:mouseleave"></nb-icon>
+            </a>
+        </div>
+    </ng-container>
+</div>
+

@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+
+.rich-text-viewer {
+  padding: 0;
+  overflow-wrap: break-word !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  word-wrap: break-word !important;
+  height: auto !important;
+  overflow-y: visible !important;
+}
+
+:host ::ng-deep .rich-text-viewer {
+  * {
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    word-wrap: break-word !important;
+  }
+
+  p,
+  span,
+  div,
+  strong,
+  b,
+  em,
+  i,
+  u {
+    line-height: 1.3em !important;
+  }
+
+  .ql-align-center {
+    text-align: center;
+  }
+
+  .ql-align-right {
+    text-align: right;
+  }
+
+  .ql-align-justify {
+    text-align: justify;
+  }
+
+  .ql-size-small {
+    font-size: 0.75em;
+  }
+
+  .ql-size-large {
+    font-size: 1.5em;
+  }
+
+  .ql-size-huge {
+    font-size: 2.5em;
+  }
+
+  @for $i from 6 through 32 {
+    .ql-size-#{$i}px,
+    .ql-size-#{$i}px * {
+      font-size: #{$i}pt !important;
+      line-height: 1.2em;
+    }
+  }
+}

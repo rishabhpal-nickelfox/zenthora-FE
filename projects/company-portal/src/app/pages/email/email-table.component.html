@@ -1,0 +1,121 @@
+<app-table-component #table
+                     [headers]="headers" [filters]="filters"
+                     [objectOperatingService]="service"
+                     [rowTemplate]="rowtemplate" [buttonsPanelTemplate]="buttonTemplate"></app-table-component>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr>
+    <td class="expand">
+      <div *ngIf="showExpandStatuses(rowData)" (click)="expandStatuses(rowData)" class="expand clickable">
+        <nb-icon *ngIf="rowData._expandStatuses" icon="minus-outline"></nb-icon>
+        <nb-icon *ngIf="!rowData._expandStatuses" icon="plus-outline"></nb-icon>
+      </div>
+    </td>
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <ng-container *ngIf="isSystemEmail">
+      <td class="vault-company-id">
+        <div>
+          <span>{{rowData.vaultCompanyId}}</span>
+        </div>
+      </td>
+      <td class="platform-id">
+        <div>
+          <span>{{rowData.platformId}}</span>
+        </div>
+      </td>
+      <td class="company-id">
+        <div>
+          <span>{{rowData.companyId}}</span>
+        </div>
+      </td>
+    </ng-container>
+    <td class="token-name">
+      <div>
+        <span>{{rowData.tokenName}}</span>
+      </div>
+    </td>
+    <td class="emailed-on-formatted">
+      <div>
+        <span>{{rowData.emailedOnFormatted}}</span>
+      </div>
+    </td>
+    <td class="email-type">
+      <div>
+        <span>{{EmailTypeEnumValue.get(rowData.type)}}</span>
+      </div>
+    </td>
+    <td class="subject">
+      <div>
+        <span>{{rowData.subject}}</span>
+      </div>
+    </td>
+    <td colspan="2" class="status">
+      <div class="d-flex flex-row">
+      <div class="d-flex flex-column flex-grow-1">
+      <div class="d-flex flex-row" *ngFor="let emailStatus of rowData.statuses">
+        <div class="d-flex flex-column">
+        <span class="mb-2 mr-1">{{EmailAddressTypeEnumValue.get(emailStatus.emailAddressType)}}:</span>
+        </div>
+      <div class="d-flex flex-column">
+        <span class="mb-2 mr-3">{{emailStatus.emailAddress}}</span>
+      </div>
+        <div class="d-flex flex-column ml-auto mr-4">
+          <span container="body" ngbPopover="{{EmailStatusDescription.get(emailStatus.status)}}"
+                placement="left"
+                triggers="mouseenter:mouseleave">
+          {{EmailStatusEnumValue.get(emailStatus.status)}}
+        </span>
+        </div>
+      </div>
+
+      </div>
+      <div class="mr-1">
+                <span (click)="$event.cancelBubble=true;" *ngIf="rowData.errorDescription" [ngbPopover]="errorDescription"
+                      autoClose="outside"
+                      class="d-flex align-self-center pl-1"
+                      placement="left">
+            <nb-icon icon="info-outline" status="danger"></nb-icon>
+      </span>
+      </div>
+      </div>
+      <ng-template #errorDescription>
+        {{rowData.errorDescription}}
+      </ng-template>
+      <ng-template #expanded>
+        <div *ngFor="let emailStatus of rowData.statuses" class="d-flex flex-row expanded-status-row">
+          <div class="col-2">
+            {{emailStatus.statusDatetimeUtcFormatted}}
+          </div>
+          <div class="col-2">
+            {{EmailAddressTypeEnumValue.get(emailStatus.emailAddressType)}}: {{emailStatus.emailAddress}}
+          </div>
+          <div class="col-1">
+            {{EmailStatusEnumValue.get(emailStatus.status)}}
+          </div>
+          <div class="col-2">
+            {{EmailStatusDescription.get(emailStatus.status)}}
+          </div>
+          <div class="col-5">
+            {{emailStatus.description}}
+          </div>
+        </div>
+      </ng-template>
+    </td>
+  </tr>
+  <tr *ngIf="rowData._expandStatuses">
+    <td colspan="999">
+      <ng-container *ngTemplateOutlet="expanded"></ng-container>
+    </td>
+  </tr>
+</ng-template>
+<ng-template #buttonTemplate>
+  <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success" (click)="table.refresh()">
+    <nb-icon icon="refresh-outline"></nb-icon>
+    Refresh
+  </button>
+</ng-template>
+

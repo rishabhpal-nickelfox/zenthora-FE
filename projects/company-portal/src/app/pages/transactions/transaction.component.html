@@ -1,0 +1,128 @@
+<app-transaction-table #table
+                       [buttonsPanelTemplate]="buttonPanelTemplate" [filters]="filters"
+                       [headers]="headers"
+                       [objectOperatingService]="service"
+                       [rowTemplate]="rowtemplate"></app-transaction-table>
+<ng-template #buttonPanelTemplate>
+  <div class="d-flex flex-column">
+    <div class="pb-3">
+      <button [ngbPopover]="Labels.Export" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.export()" class="btn btn-sm btn-rectangle btn-danger mr-2" type="button">
+        <nb-icon icon="arrow-upward-outline"></nb-icon>
+        {{Labels.Export}}
+      </button>
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" (click)="table.refresh()" class="btn btn-sm btn-rectangle btn-success" type="button">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr>
+    <td class="id">
+      <div>
+        <span>{{rowData.id}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{rowData.transactionTimestampFormatted}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{DocTypeEnumValue.get(rowData.docType)}}
+                </span>
+      </div>
+    </td>
+    <td class="doc-number">
+      <div>
+        <div (click)="canGoToSale() ? goToSale(sale.saleId): {}"
+             *ngFor="let sale of rowData.sales; let last = last" [class.clickable]="canGoToSale()">
+          <span [class.mr-1]="last">{{sale.docNumber}}</span>
+          <span *ngIf="!last">,</span>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div>
+                <span>
+                    {{PaymentSourceEnumValue.get(rowData.source)}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span [ngSwitch]="rowData.paymentMethod">
+          <ng-container *ngSwitchCase="TransactionPaymentMethodEnum.CREDIT_CARD">
+            {{CreditCardEnumValue.get(rowData.cardType)}}
+          </ng-container>
+           <ng-container *ngSwitchCase="TransactionPaymentMethodEnum.ACH">
+            {{AccountTypeEnumValue.get(rowData.accountType)}}
+           </ng-container>
+           <ng-container *ngSwitchCase="TransactionPaymentMethodEnum.OTHER">
+             {{rowData.otherPaymentMethodName}}
+           </ng-container>
+           <ng-container *ngSwitchDefault>
+             {{TransactionPaymentMethodEnumValue.get(rowData.paymentMethod)}}
+           </ng-container>
+        </span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{rowData.last4}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>
+           {{getCurrencyPrefix(rowData)}}{{rowData.amount |number:'1.2-2'}}
+        </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span *ngIf="ObjectHelper.isDefined(rowData.surchargeAmount)">
+           {{getCurrencyPrefix(rowData)}}{{rowData.surchargeAmount |number:'1.2-2'}}
+        </span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>
+           {{getCurrencyPrefix(rowData)}}{{rowData.totalAmount |number:'1.2-2'}}
+        </span>
+      </div>
+    </td>
+    <td [class.payment_declined]="!isSuccessful(rowData)" [class.payment_successful]="isSuccessful(rowData)">
+      <div>
+                <span>
+                    {{rowData.status}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{rowData.authCode}}
+                </span>
+      </div>
+    </td>
+    <td>
+      <div>
+                <span>
+                    {{rowData.vaultProductId}}
+                </span>
+      </div>
+    </td>
+  </tr>
+</ng-template>

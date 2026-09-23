@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <h6 class="modal-title">Receipt Preview</h6>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body d-flex justify-content-center">
+    <div class="print-section" id="print-section" [innerHTML]="receiptSafeHtml"></div>
+</div>
+<div class="modal-footer d-flex justify-content-center">
+    <button class="btn btn-xs btn-rectangle btn-success" (click)="printReceipt()">
+        <nb-icon icon="printer-outline"></nb-icon>
+        Print
+    </button>
+    <button class="btn btn-xs btn-rectangle btn-danger" (click)="close()">
+        <nb-icon icon="close-outline"></nb-icon>
+        Close
+    </button>
+</div>

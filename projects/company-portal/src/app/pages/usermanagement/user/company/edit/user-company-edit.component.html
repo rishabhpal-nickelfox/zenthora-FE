@@ -1,0 +1,103 @@
+<form (ngSubmit)="saveAndClose()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+      nbSpinnerSize="xsmall" nbSpinnerStatus="success">
+  <nb-card>
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row flex-grow-1">
+          <div class="mr-auto align-self-center sticky-left">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row header-label">
+          <div class="ml-auto sticky-right">{{Labels.UserEditHeader}}
+            <span *ngIf="user.disabled">[{{Labels.AccountDisabled}}]</span>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.FirstName}}</label>
+          <span class="col-md-6 col-form-label">{{user.firstName}}</span>
+        </div>
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.MiddleName}}</label>
+          <span class="col-md-6 col-form-label">{{user.middleName}}</span>
+        </div>
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.LastName}}</label>
+          <span class="col-md-6 col-form-label">{{user.lastName}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.Email}}</label>
+          <span class="col-md-6 col-form-label">{{user.username}}</span>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <app-usermanage-editroles-component #editRolesComponent (rolesChanged)="onRolesChanged($event)"
+                                              [selfEdit]="isSelfEdit"></app-usermanage-editroles-component>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.MainPhone}}</label>
+          <span class="col-md-6 col-form-label">{{MASK.transformValueToMaskedValue(user.contactInfo.mainPhone,
+            MASK.US_PHONE)}}</span>
+        </div>
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.WorkPhone}}</label>
+          <span class="col-md-6 col-form-label">{{MASK.transformValueToMaskedValue(user.contactInfo.workPhone,
+            MASK.US_PHONE)}}</span>
+        </div>
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.Mobile}}</label>
+          <span class="col-md-6 col-form-label">{{MASK.transformValueToMaskedValue(user.contactInfo.mobile,
+            MASK.US_PHONE)}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.Fax}}</label>
+          <span class="col-md-6 col-form-label">{{user.contactInfo.fax}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 row form-group align-items-start">
+          <label class="col-md-6 col-form-label">{{Labels.CCEmail}}</label>
+          <span class="col-md-6 col-form-label">{{user.contactInfo.ccEmail}}</span>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="">
+        <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+
+</form>
+
+<ng-template #submitButtons>
+  <div class="d-flex">
+    <div class="pr-2">
+      <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked" class="btn btn-sm btn-rectangle btn-primary"
+              nbSpinnerMessage="" nbSpinnerSize="xsmall" nbSpinnerStatus="success" type="submit">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        {{Labels.Submit}}
+      </button>
+    </div>
+    <div class="pl-2">
+
+      <button type="button" (click)="cancel()" class="btn btn-sm btn-rectangle btn-danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+        {{Labels.Cancel}}
+      </button>
+    </div>
+  </div>
+</ng-template>

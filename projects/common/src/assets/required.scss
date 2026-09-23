@@ -1,0 +1,12 @@
+@use '../lib/themes' as *;
+
+.required .col-form-label:after {
+  color: nb-theme(color-danger);
+  content: "*";
+  margin-left: 5px;
+}
+.ng2-smart-th.required > ng2-st-column-title > div > ng2-smart-table-title > span:after {
+  color: nb-theme(color-danger);
+  content: "*";
+  margin-left: 5px;
+}

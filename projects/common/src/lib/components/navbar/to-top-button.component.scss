@@ -1,0 +1,29 @@
+@use '../../themes' as *;
+
+
+@include nb-install-component() {
+  .to-top {
+    position: fixed;
+    bottom: 20%;
+    height: 3rem;
+    width: 3rem;
+    padding: 0;
+    text-align: center;
+    border: none;
+    transition: transform 0.3s ease, background-image 0.3s ease;
+    transform: translate(0, -50%);
+    z-index: 998;
+    box-shadow: nb-theme(shadow);
+    background-color: nb-theme(form-control-background);
+    border-top-left-radius: nb-theme(radius);
+    border-bottom-left-radius: nb-theme(radius);
+    right: 0;
+
+    i {
+      font-size: 2.75rem;
+      font-weight: bold;
+      color: nb-theme(color-danger);
+      display: block;
+    }
+  }
+}

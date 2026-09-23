@@ -1,0 +1,39 @@
+@use 'projects/common/src/lib/themes' as *;
+
+
+@include nb-install-component() {
+  nb-card {
+    max-width: 900px;
+  }
+
+  table > tbody > tr > td > div {
+    display: flex;
+    align-items: center;
+  }
+
+  table {
+    height: fit-content;
+  }
+
+
+  .payment-amount {
+    width: 240px;
+  }
+
+
+  table > thead > tr > th {
+    border-bottom: nb-theme(table-border-width) solid nb-theme(table-separator-color)
+  }
+
+  .doc-number {
+    max-width: 300px;
+    word-break: break-all;
+  }
+
+  div.authorization-message {
+    white-space: pre-wrap;
+    line-height: 1.2rem;
+    font-style: italic;
+  }
+
+}

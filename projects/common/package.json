@@ -1,0 +1,12 @@
+{
+  "name": "@eps/common",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0"
+  },
+  "dependencies": {
+    "dompurify": "^3.4.0",
+    "tslib": "^2.8.1"
+  }
+}

@@ -1,0 +1,35 @@
+@use "../../../../../themes" as *;
+
+@include nb-install-component() {
+
+  .memo-totals {
+    font-size: var(--previewFontSize, initial);
+    line-height: var(--previewLineHeight, 1.5);
+  }
+
+  .memo-totals * {
+    font-size: inherit;
+  }
+
+  .memo-totals .td,
+  .memo-totals .td > .d-flex {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .memo-totals .td strong,
+  .memo-totals .td span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .memo-totals .totals-cell {
+    position: relative;
+  }
+
+  .memo-totals .resize-handle {
+    right: auto;
+  }
+
+}

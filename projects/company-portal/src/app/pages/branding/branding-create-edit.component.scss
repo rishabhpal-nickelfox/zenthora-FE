@@ -1,0 +1,21 @@
+@use 'projects/common/src/lib/themes' as *;
+
+@include nb-install-component() {
+  .signature-formatted {
+    max-width: 1000px;
+  }
+
+  .signature-formatted,
+  .signature-formatted app-rich-text-editor {
+    width: 100%;
+  }
+
+  .signature-formatted app-rich-text-editor {
+    display: block;
+  }
+
+  ::ng-deep .signature-formatted app-rich-text-editor .rich-text-editor {
+    width: 100%;
+    max-width: none;
+  }
+}

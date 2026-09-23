@@ -1,0 +1,10 @@
+<div class="modal-header" id="header">
+  <h4 class="modal-title" *ngIf="header">{{header}}</h4>
+</div>
+<div class="modal-body" #htmlContent>
+  <div [innerHTML]="innerHtml">
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-rectangle btn-primary" (click)="activeModal.close(true)">{{okButtonText}}</button>
+</div>

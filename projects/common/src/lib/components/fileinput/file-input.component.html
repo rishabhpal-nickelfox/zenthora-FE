@@ -1,0 +1,48 @@
+<div class="d-flex flex-row flex-wrap">
+    <div [hidden]="disabled">
+        <button class="btn btn-rectangle btn-primary btn-xs" type="button" [disabled]="disabled" (click)="openFileBrowser($event, 'documentsLoader')">
+            <nb-icon icon="upload-outline"></nb-icon>
+            Upload
+            Files
+        </button>
+        <div class="d-flex flex-column pt-2" *ngFor="let tooLargeFile of tooLargeFiles">
+            <span class="val-message">
+                {{tooLargeFile.name}} is more than {{maxFileSize}} KB
+            </span>
+        </div>
+        <div class="d-flex flex-column pt-2" *ngFor="let invalidExtensionFile of invalidExtensionFiles">
+            <span class="val-message">
+                {{invalidExtensionFile.name}} has invalid extension
+            </span>
+        </div>
+        <input type="file" class="form-control qbo-form-control ng-trim-ignore" id="documentsLoader" [accept]="extension" [disabled]="disabled" #documentsLoader style="visibility:hidden; display: none" (change)="handleFileInput($event.target.files)" multiple placeholder="Upload file">
+    </div>
+</div>
+<div *ngFor="let document of documents" class="d-flex flex-row flex-wrap">
+    <div class="d-flex flex-row">
+        <div class="p-2">
+            <strong></strong>
+        </div>
+        <label class="checkbox-container">
+            <input type="checkbox" [(ngModel)]="document.includeOnSend" [disabled]="disabled">
+            <span class="checkmark"></span>
+            <span class="checkbox-descr">
+                Attach to Email
+                <span class="px-2">
+                    <strong>{{document.name}}</strong>
+                </span>
+                <a (click)="getFile(document)" class="px-2">
+                    <nb-icon icon="download-outline"></nb-icon>
+                </a>
+                <span class="px-2" [hidden]="disabled">
+                    <a (click)="removeFile(document)">
+                        <nb-icon icon="close-outline"></nb-icon>
+                    </a>
+                </span>
+            </span>
+
+        </label>
+
+    </div>
+</div>
+

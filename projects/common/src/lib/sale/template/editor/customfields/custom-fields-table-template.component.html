@@ -1,0 +1,82 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.CUSTOM_FIELDS)}}</h4>
+  <button (click)="close()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="d-flex flex-column modal-body">
+  <div class="d-flex flex-row toolbar pb-4 pt-2 my-4">
+    <div [innerHTML]="styles" class="template-styles"></div>
+    <div class="d-flex flex-row pb-2">
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_fontColor" [label]="'Font Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_titleColor" [label]="'Title Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_colorOdd" [label]="'Odd Line'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_borderColor" [includeNone]="true"
+                          [label]="'Border Color'"></app-color-picker>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-row toolbar mt-2 mb-4">
+    <div class="clickable" *ngIf="customFields.length < CustomFieldsTableTemplateLayoutService.CUSTOM_FIELDS_ROW_MAX_SIZE">
+    <span (click)="addCustomField()" class="p-3 mr-3" container="body"
+          ngbPopover="Click to Add" placement="bottom" triggers="mouseenter:mouseleave">Add Custom Field</span>
+    </div>
+  </div>
+  <div class="d-flex flex-row pt-4">
+    <div (cdkDropListDropped)="onColumnDrop($event)" *ngIf="customFields.length > 0; else emptyCustomFields"
+         cdkDropList cdkDropListOrientation="mixed" class="columns-row w-100">
+      <div *ngFor="let item of customFields; let i = index; trackBy: trackById"
+           cdkDrag cdkDragBoundary=".columns-row" cdkDragLockAxis="x" cdkDragPreviewContainer="parent"
+           class="column">
+        <div class="table">
+          <div class="thead">
+            <div class="th">
+              <app-extended-input>
+                <input (mousedown)="$event.stopPropagation()"
+                       [formControl]="customFieldsArray.at(i)"
+                       [attr.list]="viewService.availableCustomFieldNames.length ? 'cf-suggestions-' + customFieldsId : null"
+                       [maxlength]="MAX_LENGTH.HEADER"
+                       [placeholder]="Labels.Header"
+                       class="form-control qbo-form-control"
+                       formControlErrorMessage
+                       type="text">
+              </app-extended-input>
+            </div>
+          </div>
+          <div class="tbody">
+            <div class="td">Example Value {{item.name}}</div>
+          </div>
+        </div>
+        <div (mousedown)="$event.stopPropagation()" class="action-btn clickable">
+          <nb-icon (click)="viewService.deleteItem(customFields, item.id)" class="remove-btn" container="body"
+                   icon="close" ngbPopover="Remove" placement="bottom"
+                   triggers="mouseenter:mouseleave"></nb-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <datalist *ngIf="viewService.availableCustomFieldNames.length" [id]="'cf-suggestions-' + customFieldsId">
+    <option *ngFor="let name of viewService.availableCustomFieldNames" [value]="name"></option>
+  </datalist>
+</div>
+<div class="modal-footer">
+  <button (click)="saveAndClose()" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+  <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+    <nb-icon icon="minus-outline"></nb-icon>
+    Cancel
+  </button>
+</div>
+
+<ng-template #emptyCustomFields>
+  <span class="val-message pl-2">Custom Fields Are Not Configured</span>
+</ng-template>

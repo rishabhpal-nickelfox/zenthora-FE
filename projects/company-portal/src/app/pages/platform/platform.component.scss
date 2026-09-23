@@ -1,0 +1,12 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+  td.id:not(.collapsed) {
+    width: 75px;
+    min-width: 75px
+  }
+  .fa-trash-alt {
+    color: nb-theme(color-danger);
+    padding-top: 0.2rem;
+  }
+}

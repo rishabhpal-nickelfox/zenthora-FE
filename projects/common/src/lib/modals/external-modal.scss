@@ -1,0 +1,67 @@
+@use "../themes" as *;
+@use "../../assets/button";
+@use "../../assets/input";
+@use "../../assets/error-msg";
+@use "../../assets/checkbox";
+@use "../../assets/card";
+
+@include nb-install-component() {
+
+  .modal-header {
+    background-color: nb-theme(card-header-background-color);
+    border-bottom-color: nb-theme(table-separator-color);
+    padding: nb-theme(modal-header-padding);
+  }
+
+  .modal-body {
+    background-color: nb-theme(card-body-background-color);
+    padding: nb-theme(modal-body-padding);
+    white-space: pre-line;
+    line-height: 1.5;
+  }
+
+  .modal-footer {
+    background-color: nb-theme(card-footer-background-color);
+    border-top-color: nb-theme(table-separator-color);
+    padding: nb-theme(modal-footer-padding);
+  }
+
+  .close {
+    cursor: pointer;
+  }
+
+  .close:hover, .close:focus {
+    color: nb-theme(btn-fg);
+    text-decoration: none;
+    opacity: 0.4;
+    outline: none;
+  }
+
+  .toolbar {
+    row-gap: 0.5rem;
+  }
+
+  .toolbar .clickable span {
+    display: inline-block;
+    background-color: nb-theme(table-row-even);
+    border: nb-theme(table-border-width) solid nb-theme(table-separator-color);
+    border-radius: nb-theme(form-control-border-radius);
+    transition: background-color 0.1s;
+  }
+
+  .toolbar .clickable span:hover,
+  .toolbar .clickable span:focus {
+    background-color: nb-theme(table-row-hover);
+    outline: none;
+  }
+
+  .modal-body > hr {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .template-styles {
+    display: none;
+  }
+
+}

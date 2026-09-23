@@ -1,0 +1,26 @@
+@use "../../../themes" as *;
+
+@include nb-install-component() {
+  .toolbar {
+    background-color: nb-theme(table-row-odd);
+    padding-bottom: 1rem;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .toolbar > * {
+    margin: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    overflow: hidden;
+    background-color: nb-theme(table-row-even);
+    border-radius: nb-theme(form-control-border-radius);
+    border-color: nb-theme(separator);
+  }
+
+  .toolbar > *:hover {
+    background-color: nb-theme(table-row-hover);
+  }
+
+}

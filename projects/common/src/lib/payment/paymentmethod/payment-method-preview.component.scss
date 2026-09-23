@@ -1,0 +1,46 @@
+@use '../../themes' as *;
+
+@include nb-install-component() {
+  .payment-method-frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid nb-theme(color-primary);
+    border-radius: 5px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    height: 75px;
+    width: 240px;
+  }
+
+  .disabled.payment-method-frame {
+    cursor: not-allowed;
+    background-color: nb-theme(form-control-background-disabled);
+  }
+
+  .selected.payment-method-frame {
+    box-shadow: nb-theme(color-primary-shadow);
+    border-width: 2px;
+  }
+
+
+  .action-link {
+    font-style: italic;
+    color: nb-theme(link-text-color);
+    font-size: 0.9rem
+  }
+
+  .action-link:hover {
+    color: nb-theme(link-text-color-hover);
+  }
+
+  .action-link:focus {
+    color: nb-theme(link-text-color-focus);
+  }
+
+  .default {
+    color: nb-theme(link-text-color);
+    font-size: 0.9rem
+  }
+}

@@ -1,0 +1,14 @@
+@use '../lib/themes' as *;
+
+::-webkit-scrollbar {
+  height: 8px !important;
+  width: 5px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: nb-theme(scrollbar-thumb) !important;
+}
+
+::-webkit-scrollbar-track {
+  background: nb-theme(scrollbar-track) !important;
+}

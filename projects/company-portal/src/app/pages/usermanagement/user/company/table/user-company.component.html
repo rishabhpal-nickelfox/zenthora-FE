@@ -1,0 +1,69 @@
+<app-user-company-create-component (cancelEvent)="onUserCreateCancel()" (saveEvent)="onSubmit($event)"
+                                   *ngIf="showCreateForm"></app-user-company-create-component>
+<app-user-company-edit-component (cancelEvent)="onUserEditCancel()" (saveEvent)="onSubmit($event)"
+                                 *ngIf="showEditForm"></app-user-company-edit-component>
+<div [hidden]="showCreateForm || showEditForm">
+    <app-user-table #tableElement [buttonsPanelTemplate]="buttonPanelTemplate" [filters]="filters" [headers]="headers"
+                    [objectOperatingService]="userService" [rowTemplate]="rowtemplate"></app-user-table>
+</div>
+
+<ng-template #buttonPanelTemplate>
+ <div class="d-flex flex-column">
+    <div class="d-flex flex-row">
+      <button [ngbPopover]="Labels.CreateNew" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" (click)="onCreate()" [disabled]="maxUsersExceeded"
+              class="btn btn-sm btn-rectangle btn-primary">
+        <nb-icon icon="plus-outline"></nb-icon>
+        {{Labels.CreateNew}}
+      </button>
+
+      <button [ngbPopover]="Labels.Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success ml-2" (click)="table.refresh()">
+        <nb-icon icon="refresh-outline"></nb-icon>
+        {{Labels.Refresh}}
+      </button>
+    </div>
+    <div *ngIf="maxUsersExceeded" class="val-message">
+      {{Labels.MaxNumberOfUsers(table.maxUsersInCompany)}}
+    </div>
+  </div>
+</ng-template>
+<ng-template #rowtemplate let-rowData="rowData">
+    <tr (click)="onEdit(rowData.id)" *ngIf="isUserDataVisible(rowData)" class="clickable">
+      <td class="id">
+            <div>
+                <span>{{rowData.id}}</span>
+            </div>
+        </td>
+        <td>
+            <div>
+                <span>{{rowData.email}}
+                    <strong *ngIf="rowData.disabled">[{{Labels.AccountDisabled}}]</strong>
+                </span>
+            </div>
+        </td>
+        <td>
+            <div>
+                <div *ngFor="let entityId of getEntities(rowData)">
+                    <div *ngIf="showPendingMsg(rowData, entityId)">
+                        <strong>[{{Labels.Pending}}]</strong>
+                    </div>
+                    <div class="d-flex flex-row flex-wrap">
+                        <div *ngFor="let role of rowData.rolesMap.get(entityId); let last = last;">
+                            <span>{{role.name}}</span>
+                            <span *ngIf="!last" class="pr-1">,</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td (click)="$event.cancelBubble=true;">
+            <div class="d-flex flex-row">
+                <ng-container *ngIf="showReInvite(rowData)">
+                    <a (click)="reInviteUserToCurrentCompany(rowData)" class="px-1 qfiscal-icon">
+                        <i [ngbPopover]="Labels.ReInvite" class="far fa-envelope" container="body"
+                           placement="bottom" triggers="mouseenter:mouseleave"></i>
+                    </a>
+                </ng-container>
+            </div>
+        </td>
+    </tr>
+</ng-template>

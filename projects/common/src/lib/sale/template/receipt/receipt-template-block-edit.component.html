@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ReceiptTemplateComponentEnumLabel[component]}}</h4>
+  <button (click)="close()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="toolbar" *ngIf="hiddenFields().length > 0">
+    <button
+      *ngFor="let field of hiddenFields()"
+      (click)="addField(field)"
+      class="btn btn-sm"
+      type="button">
+      {{ReceiptTemplateFieldLabel[field]}}
+    </button>
+  </div>
+
+  <div [style.width]="ReceiptPrintWidthEnumValue.get(config?.width)">
+    <app-receipt-template-preview-block [component]="component"
+                                        [config]="config"
+                                        [editable]="true"
+                                        [showLogoPlaceholder]="true"
+                                        (removeField)="removeField($event)"></app-receipt-template-preview-block>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button (click)="save()" class="btn btn-xs btn-rectangle btn-primary" type="button">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+  <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger" type="button">
+    <nb-icon icon="minus-outline"></nb-icon>
+    Cancel
+  </button>
+</div>

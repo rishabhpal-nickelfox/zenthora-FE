@@ -1,0 +1,121 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{InvoiceEmailPaymentTemplateComponentsEnumValue.get(InvoiceEmailPaymentTemplateComponentsEnum.SALE_ADDITIONAL)}}</h4>
+  <button (click)="close()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex flex-column toolbar pb-4 pt-2 my-4">
+    <div [innerHTML]="styles" class="template-styles"></div>
+    <div class="d-flex flex-row pb-2">
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_fontColor" [label]="'Font Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_titleColor" [label]="'Title Color'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_colorOdd" [label]="'Odd Line'"></app-color-picker>
+      </div>
+      <div class="pr-3 d-flex">
+        <app-color-picker [formControl]="_borderColor" [includeNone]="true"
+                          [label]="'Border Color'"></app-color-picker>
+      </div>
+    </div>
+    <div class="d-flex flex-row mt-4">
+      <div *ngFor="let key of enumKeys(SaleAdditionalInfoColumnsEnum)" class="d-flex flex-row clickable">
+            <span (click)="addColumn(key)" *ngIf="canAddColumn(key)" class="p-3 mr-3" container="body"
+                  ngbPopover="Click to Add" placement="bottom" triggers="mouseenter:mouseleave">
+                {{SaleAdditionalInfoColumnsEnumValue.get(key)}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-row">
+    <div (cdkDropListDropped)="onColumnDrop($event)" cdkDropList cdkDropListOrientation="mixed"
+         class="columns-row w-100">
+      <div *ngFor="let item of layout; index as i" cdkDrag cdkDragBoundary=".columns-row"
+           cdkDragLockAxis="x" cdkDragPreviewContainer="parent" class="column">
+        <ng-container [ngSwitch]="item.id">
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.TERMS"
+            [ngTemplateOutletContext]="{'control': _termsHeader, 'property': 'terms'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.DUE_DATE"
+            [ngTemplateOutletContext]="{'control': _dueDateHeader, 'property': 'dueDate'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.SALES_REP"
+            [ngTemplateOutletContext]="{'control': _salesRepHeader, 'property': 'salesRep'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.SHIP_DATE"
+            [ngTemplateOutletContext]="{'control': _shipDateHeader, 'property': 'shipDate'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.SHIP_METHOD"
+            [ngTemplateOutletContext]="{'control': _shipMethodHeader, 'property': 'shipMethod'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.TRACKING_NUMBER"
+            [ngTemplateOutletContext]="{'control': _trackingNumberHeader, 'property': 'trackingNumber'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.FOB"
+            [ngTemplateOutletContext]="{'control': _fobHeader, 'property': 'fob'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.PO_NUMBER"
+            [ngTemplateOutletContext]="{'control': _poNumberHeader, 'property': 'poNumber'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container
+            *ngSwitchCase="SaleAdditionalInfoColumnsEnum.OTHER"
+            [ngTemplateOutletContext]="{'control': _otherHeader, 'property': 'other'}"
+            [ngTemplateOutlet]="additionalInfoColumnTemplate"></ng-container>
+          <ng-container *ngSwitchDefault></ng-container>
+        </ng-container>
+        <div (mousedown)="$event.stopPropagation()" class="action-btn clickable">
+          <nb-icon (click)="deleteColumn(item.id)"
+                   class="remove-btn" container="body" icon="close" ngbPopover="Remove"
+                   placement="bottom" triggers="mouseenter:mouseleave"></nb-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="saveAndClose()" [disabled]="!isSubmitEnabled()" class="btn btn-xs btn-rectangle btn-primary">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+  <button (click)="close()" class="btn btn-xs btn-rectangle btn-danger">
+    <nb-icon icon="minus-outline"></nb-icon>
+    Cancel
+  </button>
+</div>
+
+<ng-template #additionalInfoColumnTemplate let-control="control" let-property="property">
+  <table
+    class="w-100 h-100">
+    <thead>
+    <tr>
+      <th scope="col">
+        <app-extended-input>
+          <input (mousedown)="$event.stopPropagation()" [formControl]="control" [maxlength]="MAX_LENGTH.HEADER"
+                 [placeholder]="Labels.Header"
+                 class="form-control qbo-form-control my-3"
+                 formControlErrorMessage
+                 type="text">
+        </app-extended-input>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>
+        <span>{{viewService.data[property]}}</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</ng-template>

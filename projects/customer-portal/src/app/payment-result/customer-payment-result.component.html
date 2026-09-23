@@ -1,0 +1,18 @@
+<div class="d-flex flex-row justify-content-center payment-result">
+  <div class="d-flex flex-column">
+    <h6 class="d-flex align-items-center justify-content-center">
+      <nb-icon class="mr-1" icon="checkmark-circle-2-outline"></nb-icon>
+      Your Payment of {{currency}}{{paymentAmount | number:'1.2-2'}}<ng-container *ngIf="ObjectHelper.isDefined(surchargeAmount)">({{surchargeLabel}}: {{currency}}{{surchargeAmount | number:'1.2-2'}}. Total: {{currency}}{{totalIncludingSurcharge | number:'1.2-2'}})</ng-container> Successfully Completed
+    </h6>
+
+    <span *ngIf="authorizationId" class="d-flex justify-content-center">
+      <strong class="pr-1">{{Labels.AuthorizationId}}</strong>
+      {{authorizationId}}
+    </span>
+
+    <span *ngIf="approvalId" class="d-flex justify-content-center">
+      <strong class="pr-1">{{Labels.ApprovalId}}</strong>
+      {{approvalId}}
+    </span>
+  </div>
+</div>

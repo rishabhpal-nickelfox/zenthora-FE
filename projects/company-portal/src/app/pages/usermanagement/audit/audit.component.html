@@ -1,0 +1,40 @@
+<app-table-component #table [headers]="headers" [filters]="filters"
+                     [objectOperatingService]="auditService"
+                     [rowTemplate]="rowtemplate" [buttonsPanelTemplate]="buttonTemplate"></app-table-component>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr>
+    <td>
+      <div><span>{{rowData.timestamp}}</span></div>
+    </td>
+    <td>
+      <div><span>{{rowData.ip}}</span></div>
+    </td>
+    <td>
+      <div><span>{{rowData.login}}</span></div>
+    </td>
+    <td *ngIf="showEntityIdColumn">
+      <div><span>{{rowData.entityId}}</span></div>
+    </td>
+    <td *ngIf="showEntityLegalNameColumn">
+      <div><span>{{rowData.entityLegalName}}</span></div>
+    </td>
+    <td>
+      <div>
+        <app-new-audit-actions-column [action]="rowData.action"
+                                      [actionData]="rowData.actionData"></app-new-audit-actions-column>
+      </div>
+    </td>
+    <td>
+      <div>
+        <app-new-audit-details-column [details]="rowData.details"></app-new-audit-details-column>
+      </div>
+  </tr>
+</ng-template>
+<ng-template #buttonTemplate>
+  <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success" (click)="table.refresh()">
+    <nb-icon icon="refresh-outline"></nb-icon>
+    Refresh
+  </button>
+</ng-template>
+

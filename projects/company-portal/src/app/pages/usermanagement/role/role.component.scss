@@ -1,0 +1,11 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+  td.id {
+    width: 7%
+  }
+
+  .fa-trash-alt {
+    color: nb-theme(color-danger);
+  }
+}

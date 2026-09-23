@@ -1,0 +1,44 @@
+@use '../../themes' as *;
+
+@include nb-install-component() {
+
+  .login-body {
+    padding-bottom: 30px;
+  }
+
+  .remember-me .checkmark:hover {
+    border-color: #ffffff;
+  }
+
+  .remember-me.checkbox-container {
+    padding: 0;
+  }
+
+  .remember-me.checkbox-container input:checked + .checkmark::before {
+    border-color: #ffffff;
+  }
+
+  .remember-me .checkmark {
+    background-color: transparent;
+    border-color: #ffffff;
+    border-width: 2px;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  .remember-me .checkbox-descr {
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .remember-me.checkmark::before {
+    border-color: rgba(0, 0, 0, 0);
+  }
+
+  .forgot-password {
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+
+}

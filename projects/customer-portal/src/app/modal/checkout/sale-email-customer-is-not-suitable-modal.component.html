@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <div class="d-flex w-100">
+    <h4 class="modal-title mx-auto">
+      {{Labels.Title}}
+    </h4>
+  </div>
+</div>
+<div class="modal-body d-flex flex-column">
+  <span>{{Labels.Body}}</span>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-sm btn-rectangle btn-primary" *ngIf="showSwitchCompany" (click)="onSwitchCompany()">
+    <nb-icon icon="flip-2-outline"></nb-icon>
+    {{Labels.SwitchCompany}}</button>
+  <button type="button" class="btn btn-sm btn-rectangle btn-danger" (click)="onLogout()">
+    <nb-icon icon="log-out-outline"></nb-icon>
+    {{Labels.Logout}}</button>
+</div>

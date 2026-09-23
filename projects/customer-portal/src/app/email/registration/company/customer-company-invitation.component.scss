@@ -1,0 +1,138 @@
+@use 'projects/common/src/lib/themes' as *;
+
+@include nb-install-component() {
+  font-family: "Open Sans Light", sans-serif;
+  padding: 1rem;
+
+  ::ng-deep * {
+    font-size: 15px;
+  }
+
+  h3 {
+    font-size: 20px;
+    color: #ffffff;
+  }
+
+  h6.text-hint {
+    font-style: italic;
+    color: #ffffff;
+  }
+
+  .button-container {
+    color: #ffffff;
+
+    button {
+      background-color: #e87313;
+      color: #ffffff;
+      border-radius: 20px;
+      border: #e87313;
+      font-weight: bold;
+
+      nb-icon {
+        color: #ffffff;
+        font-weight: bold;
+      }
+    }
+
+    button:hover {
+      background-color: color-mix(in srgb, #e87313, white 5%)
+    }
+
+  }
+
+  .go-back {
+    a {
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+
+  ::ng-deep ::placeholder {
+    font-family: "Open Sans Light", sans-serif;
+    font-size: 14px;
+  }
+
+  ::ng-deep .val-message {
+    color: #ffffff;
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  input, select {
+    border: none;
+  }
+
+
+  .email-page {
+    background: nb-theme(background-basic-color-1);
+  }
+
+  .email-page-content {
+    min-height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: linear-gradient(rgba(255, 255, 255, .64), rgba(255, 255, 255, .64)), url('/assets/zenthoralogo/triangles.png');
+
+  }
+
+  .logo-container {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 600px;
+    padding: 100px 60px 60px;
+  }
+
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .zenthora-logo {
+    max-width: 100%;
+  }
+
+  .zenthora-online-header {
+    margin-left: auto;
+    font-family: "Open Sans Light", sans-serif;
+    font-weight: bold;
+    color: #009a49;
+    font-size: 5rem;
+  }
+
+  .content-container {
+    max-width: 600px;
+
+    padding: 50px 50px 50px 50px;
+    border-radius: 20px;
+
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+  }
+
+  .content-container.form {
+    background: rgba(0, 128, 55, 0.81);
+  }
+
+  .content-container.success {
+    background: rgba(0, 128, 55, 0.81);
+  }
+
+  .content-container.error {
+    background: rgba(248, 153, 57, 0.81);
+  }
+
+  .error-message, .success-message {
+    color: #ffffff;
+    font-size: 3rem
+  }
+
+  .text-hint {
+    color: #ffffff;
+  }
+}

@@ -1,0 +1,138 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+      nbSpinnerStatus="success" novalidate>
+  <nb-card [nbSpinner]="!isDefined(settings)" nbSpinnerStatus="success">
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row mr-auto sticky-left">
+          <div class="align-self-center">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row ml-auto sticky-right">
+          <div class="header-label">Payment Settings</div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+
+      <ng-container [formGroup]="getForm()">
+        <app-extended-input [labelContainerClass]="'row col-md-2'"
+                            [verticalMode]="true">
+          <label class="checkbox-container">
+            <input [formControl]="_allowCustomersManageTheirPaymentMethodsCreatedByMerchant" formControlErrorMessage
+                   type="checkbox">
+            <span class="checkmark"></span>
+            <span [innerHTML]="Labels.AllowCustomersManageTheirPaymentMethodsCreatedByMerchant"
+                  class="checkbox-descr"></span>
+          </label>
+        </app-extended-input>
+
+        <div class="d-flex flex-row">
+          <label class="col-form-label mr-2 pr-2">{{Labels.AllowPartialPaymentsOf}}</label>
+          <div class="d-flex flex-column">
+            <div class="d-flex flex-row">
+              <label class="checkbox-container">
+                <input [formControl]="_invoicePartialPaymentsAllowed" formControlErrorMessage type="checkbox">
+                <span class="checkmark"></span>
+                <span class="checkbox-descr">{{Labels.AllowInvoicePartialPayments}}</span>
+              </label>
+            </div>
+
+            <div class="d-flex flex-row">
+              <label class="checkbox-container">
+                <input [formControl]="_salesOrderPartialPaymentsAllowed" formControlErrorMessage type="checkbox">
+                <span class="checkmark"></span>
+                <span class="checkbox-descr">{{Labels.AllowSalesOrderPartialPayments}}</span>
+              </label>
+            </div>
+            <div class="d-flex flex-row">
+              <label class="checkbox-container">
+                <input [formControl]="_depositPartialPaymentsAllowed" formControlErrorMessage type="checkbox">
+                <span class="checkmark"></span>
+                <span class="checkbox-descr">{{Labels.AllowDepositPartialPayments}}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <ng-container
+            *ngIf="allowedPaymentMethodsOnVault && allowedPaymentMethodsOnVault.length > 0; else noAllowedPaymentMethods">
+            <app-extended-input [labelContainerClass]="'mr-5'" [labelText]="Labels.PaymentMethods"
+                                [required]=true>
+              <app-checkbox-group [formControl]="_allowedPaymentMethods" class="pl-1 pt-1"
+                                  formControlErrorMessage></app-checkbox-group>
+            </app-extended-input>
+          </ng-container>
+        </div>
+        <ng-container *ngIf="allowedPaymentMethods.indexOf(PaymentMethodTypeEnum.CREDIT_CARD) >= 0">
+          <div
+            class="row mt-3 col-sm-5 col-lg-3">
+            <app-extended-input [labelText]="Labels.CCPaymentAmountMaxValue"
+                                [verticalMode]=true
+                                class="w-100">
+              <app-extended-number-input [decimalMax]="2" [decimalMin]="2" [formControl]="_creditCardPaymentAmountLimit"
+                                         [integerLimit]="11"
+                                         [placeholder]="Labels.CCPaymentAmountMaxValue" formControlErrorMessage
+              ></app-extended-number-input>
+            </app-extended-input>
+          </div>
+          <div *ngIf="settings?.surchargesFeature?.isSurchargesAvailable" class="row mt-3 col-sm-5 col-lg-3">
+            <app-extended-input [labelContainerClass]="'row col-md-2'"
+                                [verticalMode]="true">
+              <label class="checkbox-container">
+                <input [formControl]="_surchargesEnabled" formControlErrorMessage type="checkbox">
+                <span class="checkmark"></span>
+                <span [innerHTML]="Labels.EnableSurcharges" class="checkbox-descr"></span>
+              </label>
+            </app-extended-input>
+            <ng-container *ngIf="_surchargesEnabled.value">
+              <app-extended-input [labelText]="Labels.SurchargePercent" class="w-100">
+                <app-extended-number-input [decimalMax]="2" [decimalMin]="2" [formControl]="_surchargesPercent"
+                                           [integerLimit]="1" [placeholder]="''" [suffix]="'%'"
+                                           formControlErrorMessage></app-extended-number-input>
+                <span class="text-hint">
+                {{Labels.SurchargeHint(SaleCreditCardSurchargesValue.MIN, SaleCreditCardSurchargesValue.MAX)}}
+              </span>
+
+              </app-extended-input>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <div *ngIf="allowedPaymentMethods.indexOf(PaymentMethodTypeEnum.CREDIT_CARD) >= 0" class="mt-4">
+          <h6>{{Labels.CCAuthorizationMessage}}</h6>
+          <app-sale-payment-authorization-message [formControl]="_ccAuthorizationMessageTemplate"
+                                                  formControlErrorMessage
+                                                  [placeholders]="ccAuthorizationMessagePlaceholders"></app-sale-payment-authorization-message>
+
+          <ng-container *ngIf="_surchargesEnabled.value">
+          <h6>{{Labels.CCSurchargesAuthorizationMessage}}</h6>
+            <app-sale-payment-authorization-message [formControl]="_ccSurchargesAuthorizationMessageTemplate"
+                                                    formControlErrorMessage
+                                                    [placeholders]="ccSurchargesAuthorizationMessagePlaceholders"></app-sale-payment-authorization-message>
+          </ng-container>
+        </div>
+        <div *ngIf="allowedPaymentMethods.indexOf(PaymentMethodTypeEnum.ACH) >= 0" class="mt-3">
+          <h6>{{Labels.ACHAuthorizationMessage}}</h6>
+          <app-sale-payment-authorization-message [formControl]="_achAuthorizationMessageTemplate"
+                                                  formControlErrorMessage
+                                                  [placeholders]="achAuthorizationMessagePlaceholders"></app-sale-payment-authorization-message>
+        </div>
+      </ng-container>
+
+      <ng-template #noAllowedPaymentMethods>
+      <span class="val-message">
+         {{Labels.NoPaymentMethods}}
+      </span>
+      </ng-template>
+
+    </nb-card-body>
+  </nb-card>
+</form>
+<ng-template #submitButtons>
+  <button [disabled]="!isSubmitEnabled()" class="btn btn-sm btn-rectangle btn-primary ml-1" type="submit">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+</ng-template>

@@ -1,0 +1,15 @@
+@use "../../../themes" as *;
+
+@include nb-install-component() {
+  .modal-body {
+    overflow: visible;
+  }
+
+  .toolbar {
+    background-color: nb-theme(table-row-odd);
+  }
+
+  ::ng-deep .ql-editor {
+    text-align: center;
+  }
+}

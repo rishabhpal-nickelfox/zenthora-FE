@@ -1,0 +1,20 @@
+@use 'projects/common/src/lib/themes' as *;
+
+@include nb-install-component() {
+  .change-mode-message {
+    color: nb-theme(card-text-color);
+  }
+
+  .change-mode-link {
+    font-style: italic;
+    color: nb-theme(link-text-color);
+  }
+
+  .change-mode-link:hover {
+    color: nb-theme(link-text-color-hover);
+  }
+
+  .change-mode-link:focus {
+    color: nb-theme(link-text-color-focus);
+  }
+}

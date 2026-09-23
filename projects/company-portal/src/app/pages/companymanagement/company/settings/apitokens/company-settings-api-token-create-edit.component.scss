@@ -1,0 +1,27 @@
+@use 'projects/common/src/lib/themes' as *;
+
+@include nb-install-component() {
+  .refresh-token {
+    position: relative;
+    word-break: break-all;
+    min-height: 42px;
+    padding: 12px 36px 12px 14px;
+    border: 1px solid rgba(0, 128, 0, 0.25);
+    border-radius: 4px;
+    color: green;
+    background: rgba(0, 128, 0, 0.06);
+    cursor: pointer;
+    overflow-wrap: anywhere;
+  }
+
+  .refresh-token:hover {
+    background: rgba(0, 128, 0, 0.1);
+  }
+
+  .copy-icon {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    color: green;
+  }
+}

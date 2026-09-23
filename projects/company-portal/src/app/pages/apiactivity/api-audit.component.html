@@ -1,0 +1,61 @@
+<app-table-component #table
+                     [headers]="headers" [filters]="filters"
+                     [objectOperatingService]="service"
+                     [rowTemplate]="rowtemplate"
+                     [buttonsPanelTemplate]="buttonTemplate"></app-table-component>
+
+<ng-template #rowtemplate let-rowData="rowData">
+  <tr>
+    <td>
+      <div>
+        <span>{{rowData.date}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.platformName}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.ip}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.tokenName}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.entityId}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <span>{{rowData.legalName}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <app-api-audit-actions-column [action]="rowData.action"></app-api-audit-actions-column>
+      </div>
+    </td>
+    <td>
+      <div>
+        {{ApiAuditResultValue.get(rowData.success)}}<span
+        *ngIf="rowData.resultMessage">: {{rowData.resultMessage}}</span>
+      </div>
+    </td>
+    <td>
+      <div>
+        <app-api-audit-details-column [details]="rowData.details"></app-api-audit-details-column>
+      </div>
+    </td>
+</ng-template>
+<ng-template #buttonTemplate>
+  <button ngbPopover="Refresh" container="body" placement="bottom" popoverClass="compact-button-hint" triggers="mouseenter:mouseleave" type="button" class="btn btn-sm btn-rectangle btn-success" (click)="table.refresh()">
+    <nb-icon icon="refresh-outline"></nb-icon>
+    Refresh
+  </button>
+</ng-template>

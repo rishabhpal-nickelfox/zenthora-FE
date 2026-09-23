@@ -1,0 +1,81 @@
+<div>
+  <div class="d-flex flex-row pb-1">
+    <div *ngIf="buttonsPanelTemplate" class="buttons-panel pr-2 pb-3 sticky-left d-flex flex-row flex-grow-1 align-items-end">
+      <ng-template [ngTemplateOutlet]="buttonsPanelTemplate"></ng-template>
+    </div>
+    <div class="ml-auto pb-2 sticky-right">
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-end pb-1">
+          <div class="d-flex flex-row align-items-center">
+            <span>Show</span>
+            <select (ngModelChange)="onChangePerPage($event)" [ngModel]="perPage"
+                    class="form-control qbo-form-control page-size mx-2">
+              <option *ngFor="let size of pageSizes" [ngValue]="size">{{size}}</option>
+            </select>
+            <span class="per-page-suffix">results per page</span>
+          </div>
+        </div>
+        <div class="d-flex flex-row">
+          <div class="mx-1" [hidden]="!hasFilters">
+            <a (click)="clearFilters()" href="#">Clear Filters</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table #table class="col-md-12 table-page"  [nbSpinner]="loading" nbSpinnerStatus="success">
+    <thead>
+    <tr class="full-height">
+      <th *ngFor="let header of headers; let i = index" class="sticky table-header" scope="col">
+        <div (click)="onSortChange(header)"
+             [class.clickable]="isDefined(header.sortProperty)" [class.collapsed]="isCollapsed(i)"
+             class="d-flex align-content-center align-self-start">
+          <ng-container *ngIf="header.template; else noTemplateHeader">
+            <ng-container *ngTemplateOutlet="header.template"></ng-container>
+          </ng-container>
+          <ng-template #noTemplateHeader><label>{{header.value}}</label></ng-template>
+          <i [class.nb-arrow-down]="isHeaderASC(header.sortProperty)" [class.nb-arrow-up]="isHeaderDESC(header.sortProperty)"
+             class="sort-btn"></i>
+          <ng-container *ngIf="header.collapsible">
+          <a (click)="$event.cancelBubble=true; onCollapseButton(i)"
+             class="ml-auto collapse-btn align-self-baseline">
+            <i [class.nb-arrow-left]="!isCollapsed(i)" [class.nb-arrow-right]="isCollapsed(i)"
+               [ngbPopover]="header.value" class="collapse-btn" container="body"
+               triggers="mouseenter:mouseleave"></i>
+          </a>
+          </ng-container>
+          <div></div>
+        </div>
+      </th>
+    </tr>
+    <tr class="full-height" *ngIf="filters">
+      <th *ngFor="let filter of filters; let i = index" class="sticky table-filter" scope="col">
+        <div class="filter align-self-stretch mt-auto">
+          <app-extended-table-filter (filterChanged)="onFilterChange($event)" *ngIf="filters[i]"
+                                     [componentParams]="filters[i].componentParams"
+                                     [componentType]="filters[i].componentType"
+                                     [filterProperty]="filters[i].filterProperty"></app-extended-table-filter>
+        </div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container
+      *ngFor="let element of elements | paginate: { id: id, itemsPerPage: perPage, currentPage: currentPage, totalItems: totalElements }; let last = last; let i = index">
+      <ng-template [ngTemplateOutletContext]="{rowData: element, i: i}" [ngTemplateOutlet]="rowTemplate"></ng-template>
+      <ng-container *ngIf="needToUpdateCollapsedState && last">{{updateCollapsedState()}}</ng-container>
+    </ng-container>
+    </tbody>
+  </table>
+
+  <ng-container *ngIf="!loading">
+    <div [hidden]="totalElements > 0" class="no-data-found">
+      <span>No data found</span>
+    </div>
+    <div class="pt-4 has-text-centered">
+      <app-extended-table-pagination-component (pageChange)="getPage($event)"
+                                               [id]="id"></app-extended-table-pagination-component>
+    </div>
+  </ng-container>
+
+</div>

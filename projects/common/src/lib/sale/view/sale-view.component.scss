@@ -1,0 +1,30 @@
+
+.parent {
+  position: relative;
+  display: flex;
+  width: fit-content;
+}
+
+.pdf-parent {
+  position: relative;
+  width: 80vw;
+}
+
+.paid-container, .partially-paid-container, .cancelled-container {
+  position: absolute;
+  display: flex;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  z-index: 1050;
+  pointer-events: none;
+
+  img {
+    opacity: 0.2;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+

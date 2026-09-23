@@ -1,0 +1,138 @@
+<div class="modal-header">
+  <div class="d-flex w-100">
+    <h4 class="modal-title mx-auto">
+      <ng-container *ngIf="canRegister">
+        <ng-container *ngIf="mode == PayerSignInModalMode.REGISTER">{{Labels.Register}}</ng-container>
+      </ng-container>
+      <ng-container *ngIf="mode == PayerSignInModalMode.SIGN_IN">{{Labels.SignIn}}</ng-container>
+      <ng-container *ngIf="mode == PayerSignInModalMode.FORGOT_PASSWORD">{{Labels.ForgotPassword}}</ng-container>
+      <ng-container *ngIf="mode == PayerSignInModalMode.CHANGE_PASSWORD">{{Labels.ChangePassword}}</ng-container>
+      <ng-container *ngIf="mode == PayerSignInModalMode.CONFIRM_REGISTRATION">{{Labels.ConfirmRegistrationHeader}}</ng-container>
+    </h4>
+  </div>
+  <button (click)="activeModal.dismiss()" aria-label="Close" class="close" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body d-flex flex-column">
+  <div class="mx-auto col-md-8 col-sm-12">
+    <form (ngSubmit)="submit()" [formGroup]="getForm()" novalidate>
+      <div class="d-flex flex-column">
+        <div class="form-group">
+          <ng-container *ngIf="mode == PayerSignInModalMode.SIGN_IN">
+            <ng-container [ngTemplateOutlet]="email"></ng-container>
+            <div class="d-flex flex-column">
+              <div class="d-flex flex-row align-items-baseline">
+                <label class="col-form-label">{{Labels.Password}}</label>
+                <a (click)="changeMode(PayerSignInModalMode.FORGOT_PASSWORD)"
+                   class="ml-auto col-form-label change-mode-link">{{Labels.ForgotPassword}}</a>
+              </div>
+              <app-extended-input>
+                <input [formControl]="_password" [maxlength]="MAX_LENGTH.PASSWORD" [placeholder]="Labels.Password"
+                       autocomplete="password"
+                       class="form-control qbo-form-control"
+                       formControlErrorMessage type="password">
+              </app-extended-input>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="canRegister">
+            <ng-container *ngIf="mode == PayerSignInModalMode.REGISTER">
+              <ng-container [ngTemplateOutlet]="email"></ng-container>
+              <app-extended-input [labelText]="Labels.Password" [verticalMode]="true">
+                <div
+                  class="text-hint pb-2"><i>{{Labels.PasswordHint(MIN_LENGTH.PASSWORD, MAX_LENGTH.PASSWORD)}}</i></div>
+                <app-password-field [formControl]="_password"
+                                    [placeholder]="Labels.Password"
+                                    formControlErrorMessage></app-password-field>
+              </app-extended-input>
+              <app-extended-input [labelText]="Labels.ConfirmPassword" [verticalMode]="true">
+                <input [formControl]="_confirmPassword" [maxlength]="MAX_LENGTH.PASSWORD"
+                       [placeholder]="Labels.ConfirmPassword"
+                       autocomplete="new-password"
+                       class="form-control qbo-form-control"
+                       formControlErrorMessage type="password">
+              </app-extended-input>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="mode == PayerSignInModalMode.CONFIRM_REGISTRATION">{{Labels.ConfirmRegistration(registrationConfirmationLifeTimeInMinutes)}}
+          </ng-container>
+          <ng-container *ngIf="mode == PayerSignInModalMode.FORGOT_PASSWORD">
+            <ng-container [ngTemplateOutlet]="email"></ng-container>
+          </ng-container>
+          <ng-container *ngIf="mode == PayerSignInModalMode.CHANGE_PASSWORD">
+            <app-extended-input [labelText]="Labels.OldPassword" [verticalMode]="true">
+              <input [formControl]="_oldPassword" [maxlength]="MAX_LENGTH.PASSWORD" [placeholder]="Labels.OldPassword"
+                     autocomplete="password"
+                     class="form-control qbo-form-control"
+                     formControlErrorMessage type="password">
+            </app-extended-input>
+            <app-extended-input [labelText]="Labels.NewPassword" [verticalMode]="true">
+              <div
+                class="text-hint pb-2"><i>{{Labels.PasswordHint(MIN_LENGTH.PASSWORD, MAX_LENGTH.PASSWORD)}}</i></div>
+              <app-password-field [formControl]="_password"
+                                  [placeholder]="Labels.NewPassword"
+                                  formControlErrorMessage></app-password-field>
+            </app-extended-input>
+            <app-extended-input [labelText]="Labels.ConfirmPassword" [verticalMode]="true">
+              <input [formControl]="_confirmPassword" [maxlength]="MAX_LENGTH.PASSWORD"
+                     [placeholder]="Labels.ConfirmPassword"
+                     autocomplete="new-password"
+                     class="form-control qbo-form-control"
+                     formControlErrorMessage type="password">
+            </app-extended-input>
+          </ng-container>
+        </div>
+        <div class="form-group">
+          <button [disabled]="!isSubmitEnabled()" [nbSpinner]="submitLocked" class="btn btn-rectangle btn-block btn-primary"
+                  nbSpinnerStatus="success" type="submit">
+            <nb-icon icon="log-in-outline"></nb-icon>
+            <ng-container *ngIf="canRegister">
+              <span *ngIf="mode == PayerSignInModalMode.REGISTER">{{Labels.Register}}</span>
+            </ng-container>
+            <span *ngIf="mode == PayerSignInModalMode.SIGN_IN">{{Labels.SignIn}}</span>
+            <span *ngIf="mode == PayerSignInModalMode.FORGOT_PASSWORD">{{Labels.ResetPassword}}</span>
+            <span *ngIf="mode == PayerSignInModalMode.CHANGE_PASSWORD">{{Labels.ChangePassword}}</span>
+            <span *ngIf="mode == PayerSignInModalMode.CONFIRM_REGISTRATION">{{Labels.Continue}}</span>
+          </button>
+        </div>
+        <ng-container *ngIf="canRegister">
+        <span *ngIf="mode == PayerSignInModalMode.REGISTER" class="change-mode-message">{{Labels.SignInMessage}} <a
+          (click)="changeMode(PayerSignInModalMode.SIGN_IN)"
+          class="change-mode-link col-form-label">{{Labels.SignIn}}</a></span>
+          <span *ngIf="mode == PayerSignInModalMode.SIGN_IN" class="change-mode-message">{{Labels.RegisterMessage}} <a
+            (click)="changeMode(PayerSignInModalMode.REGISTER)"
+            class="change-mode-link col-form-label">{{Labels.Register}}</a></span>
+        </ng-container>
+        <span *ngIf="mode == PayerSignInModalMode.FORGOT_PASSWORD" class="change-mode-message"><a
+          (click)="changeMode(PayerSignInModalMode.SIGN_IN)"
+          class="change-mode-link col-form-label">{{Labels.BackToSignIn}}</a></span>
+        <span *ngIf="mode == PayerSignInModalMode.CHANGE_PASSWORD" class="change-mode-message"><a
+          (click)="changeMode(PayerSignInModalMode.CHANGE_PASSWORD)"
+          class="change-mode-link col-form-label">{{Labels.BackToSignIn}}</a></span>
+        <span *ngIf="mode == PayerSignInModalMode.CONFIRM_REGISTRATION" class="change-mode-message"><a
+          (click)="changeMode(PayerSignInModalMode.SIGN_IN)"
+          class="change-mode-link col-form-label">{{Labels.BackToSignIn}}</a></span>
+      </div>
+
+      <ng-template #email>
+        <ng-container *ngIf="emails.length > 1">
+          <app-extended-input [labelText]="Labels.Email" [required]="true" [verticalMode]="true">
+            <select [formControl]="_email" class="form-control qbo-form-control"
+                    formControlErrorMessage>
+              <option [ngValue]="null">Select...</option>
+              <option *ngFor="let email of emails" [value]="email">
+                {{email}}
+              </option>
+            </select>
+
+          </app-extended-input>
+        </ng-container>
+        <ng-container *ngIf="emails.length == 1">
+          <div class="py-2">{{_email.value}}</div>
+        </ng-container>
+      </ng-template>
+    </form>
+  </div>
+  <app-recaptcha-terms *ngIf="settingsProvider.isRecaptchaEnabled()" class="mt-5"></app-recaptcha-terms>
+
+</div>

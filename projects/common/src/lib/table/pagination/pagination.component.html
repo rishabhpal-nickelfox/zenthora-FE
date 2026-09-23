@@ -1,0 +1,40 @@
+<pagination-template #p="paginationApi" [id]="id"
+                     (pageChange)="pageChange.emit($event)">
+  <div class="row d-flex align-items-center pagination" [hidden]="p.isFirstPage() && p.isLastPage()">
+    <div class="ml-auto sticky-right">
+      <div class="d-flex flex-row">
+        <div class="pagination-first clickable" [class.pagination-disabled]="p.isFirstPage()" (click)="setFirst()">
+          <span>
+            <nb-icon icon="arrowhead-left-outline"></nb-icon>
+          </span>
+        </div>
+
+        <div class="pagination-previous clickable" [class.pagination-disabled]="p.isFirstPage()"
+             (click)="setPrevious()">
+          <span>
+            <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+          </span>
+        </div>
+
+        <div class="pagination-number clickable" *ngFor="let page of p.pages"
+             [class.current]="p.getCurrent() === page.value" (click)="setPage(page.value)">
+      <span>
+        {{ page.label }}
+      </span>
+        </div>
+
+        <div class="pagination-next clickable" [class.pagination-disabled]="p.isLastPage()" (click)="setNext()">
+          <span>
+            <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+          </span>
+        </div>
+
+        <div class="pagination-last clickable" [class.pagination-disabled]="p.isLastPage()" (click)="setLast()">
+          <span>
+            <nb-icon icon="arrowhead-right-outline"></nb-icon>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</pagination-template>

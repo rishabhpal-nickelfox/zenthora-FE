@@ -1,0 +1,34 @@
+<div class="d-flex flex-column">
+  <div class="d-flex flex-row w-100 date-picker">
+
+    <input class="form-control qbo-form-control ng-trim-ignore px-2" [placeholder]="placeholder"
+           style="min-width: 100px" name="dp" [ngModel]="stringModel"
+           (ngModelChange)="onInputChanged($event)" [disabled]="isDisabled"
+           [ngClass]="{'form-control-danger':invalidDate}" [textMask]="{mask: mask, guide:false}">
+    <div class="input-group-append qfiscal-icon pl-1">
+      <a *ngIf="!isDisabled"
+         [ngbPopover]="calendarTemplate"
+         #calendarPopover="ngbPopover"
+         [autoClose]="'outside'"
+         container="body"
+         (click)="onCalendarButtonClicked($event)"
+         (keydown)="closePopoverOnTab($event, calendarPopover)">
+        <nb-icon icon="calendar-outline"></nb-icon>
+      </a>
+
+      <nb-icon *ngIf="isDisabled" icon="calendar-outline"></nb-icon>
+    </div>
+
+  </div>
+  <div class="flex-row">
+    <div class="val-message" *ngIf="invalidDate">
+      {{ invalidDateErrorMessage }}
+    </div>
+  </div>
+</div>
+<ng-template #calendarTemplate>
+  <div class="w-100">
+    <ngb-datepicker (dateSelect)="onDateSelect($event, calendarPopover)" [(ngModel)]="calendarModel"
+                    #calendar></ngb-datepicker>
+  </div>
+</ng-template>

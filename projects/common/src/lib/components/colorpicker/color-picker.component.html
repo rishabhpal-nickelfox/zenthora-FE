@@ -1,0 +1,23 @@
+<div class="color-picker">
+    <div class="d-flex flex-row align-items-center summary-info">
+        <div class="d-flex flex-column info px-1">
+            <span class="style">{{ label }}</span>
+            <span class="style-value">{{ color }}</span>
+        </div>
+        <div #p="ngbPopover" [autoClose]="'outside'" [ngbPopover]="colorPicker"
+             [style.background]="!isNone(color) ? color: ''" class="mx-2 circle" [class.none]="isNone(color)" placement="bottom"></div>
+    </div>
+</div>
+
+<ng-template #colorPicker>
+    <div class="colors">
+        <div (click)="changeColor(paint); p.close()" *ngFor="let paint of colors" [style.background]="!isNone(paint) ? paint: ''"
+             [class.none]="isNone(paint)"
+             class="circle"></div>
+    </div>
+
+    <div>
+        <input #paintInput (keydown.enter)="p.close()" (keyup)="changeColorManual(paintInput.value)" [value]="color" class="form-control qbo-form-control px-2"
+               maxlength="7" placeholder="HEX" type="text"/>
+    </div>
+</ng-template>

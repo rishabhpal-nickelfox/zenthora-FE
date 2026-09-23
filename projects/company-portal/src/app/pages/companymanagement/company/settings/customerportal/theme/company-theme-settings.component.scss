@@ -1,0 +1,271 @@
+@use "projects/common/src/lib/themes" as *;
+
+@include nb-install-component() {
+  --company-theme-color1: var(--theme-color1);
+  --company-theme-color2: var(--theme-color2);
+  --company-theme-color3: var(--theme-color3);
+  --company-theme-color4:  var(--theme-color4);
+  --company-theme-color5: var(--theme-color5);
+  --company-theme-background-color: var(--theme-background-color);
+  --company-theme-font-color: var(--theme-font-color);
+  --company-theme-font-color-2: var(--theme-font-color-2);
+  --company-theme-border-color: var(--theme-border-color);
+
+  .company-theme-template {
+    background-color: var(--company-theme-background-color);
+
+    .nav-link {
+      padding: 1rem 1rem 1rem 1.5rem;
+      color: var(--company-theme-font-color-2);
+      width: 100%;
+      text-decoration: none;
+    }
+
+    .nav-item {
+      width: 100%;
+      background-color: var(--company-theme-color1);
+    }
+
+    .child .item a {
+      padding-left: 3.5rem;
+    }
+
+    .parent {
+      margin-bottom: 2rem;
+      padding: 0.5rem 0;
+
+      & > :not(.has-children) {
+        cursor: pointer;
+      }
+
+      .has-children {
+        padding-bottom: 2rem;
+        cursor: default;
+
+        .child .nav-link {
+          cursor: pointer;
+        }
+      }
+    }
+
+    nb-icon {
+      margin-right: 1rem;
+    }
+
+    .zenthora-logo {
+      padding-left: 1.5rem;
+      background: linear-gradient(to right, var(--company-theme-color1), var(--company-theme-color2));
+      color: var(--company-theme-font-color-2);
+
+      img {
+        height: 40px;
+      }
+    }
+
+    ::ng-deep table {
+      word-wrap: break-word;
+      white-space: normal;
+      border: nb-theme(table-border-width) solid var(--company-theme-border-color);
+
+      &.table-page {
+        box-shadow: nb-theme(card-body-shadow-2);
+      }
+
+      th, td {
+        font-size: 1rem;
+        height: fit-content;
+        padding: 0.4rem 0 !important;
+        border-bottom: nb-theme(table-border-width) solid var(--company-theme-border-color);
+
+        &:last-of-type > div {
+          border: none;
+        }
+      }
+
+      td {
+        & > div {
+          width: 100%;
+          height: 100%;
+          display: inline-block;
+          border-right: nb-theme(table-border-width) solid var(--company-theme-border-color);
+          padding: 0.5rem;
+        }
+
+        &.collapsed {
+          min-width: 0 !important;
+        }
+
+        &.status-success {
+          background-color: color-mix(in srgb, var(--company-theme-color2), white 30%)
+        }
+
+        &.status-failed {
+          background-color: color-mix(in srgb, var(--company-theme-color3), white 30%)
+        }
+      }
+
+      tr:nth-child(odd) {
+        background-color: var(--company-theme-background-color);
+        color: var(--company-theme-font-color);
+
+        &:hover {
+          background-color: color-mix(in srgb, var(--company-theme-background-color), black 10%);
+          color: var(--company-theme-font-color);
+        }
+      }
+
+      tr:nth-child(even) {
+        background-color: var(--company-theme-background-color);
+        color: var(--company-theme-font-color);
+
+        &:hover {
+          background-color: color-mix(in srgb, var(--company-theme-background-color), black 10%);
+          color: var(--company-theme-font-color);
+        }
+      }
+
+      thead {
+        th.sticky {
+          background: var(--company-theme-background-color);
+          color: var(--company-theme-font-color);
+          border-right: nb-theme(table-border-width) solid var(--company-theme-border-color);
+          border-bottom: nb-theme(table-border-width) solid var(--company-theme-border-color);
+
+          &.table-filter {
+            &::before {
+              border-top: nb-theme(table-border-width) solid var(--company-theme-border-color);
+            }
+
+            &::after {
+              border-bottom: nb-theme(table-border-width) solid var(--company-theme-border-color);
+            }
+          }
+
+          & > div > .sort-btn,
+          & > div > label {
+            color: var(--company-theme-color1);
+          }
+        }
+      }
+    }
+
+    ::ng-deep input,
+    ::ng-deep select {
+      background: var(--company-theme-background-color);
+      color: var(--company-theme-font-color);
+      border-color: var(--company-theme-border-color);
+
+      &.qbo-form-control:focus {
+        border-color: var(--company-theme-color1);
+      }
+
+      &::placeholder {
+        font-family: "Open Sans Light", sans-serif;
+        color: color-mix(in srgb, var(--company-theme-font-color), white 60%);
+      }
+
+      &.qbo-form-control:hover {
+        box-shadow: 0px 0px 5px 1px rgba(var(--company-theme-border-color), 0.7);
+      }
+    }
+
+    .col-form-label {
+      color: var(--company-theme-color1);
+    }
+
+    nb-card,
+    nb-card-body {
+      background-color: var(--company-theme-background-color);
+      color: var(--company-theme-font-color);
+    }
+
+    .btn {
+      &.btn-primary {
+        background-color: var(--company-theme-color3);
+        color: var(--company-theme-font-color-2);
+        border: var(--company-theme-color3);
+        box-shadow: var(--company-theme-color3);
+      }
+
+      &.btn-success {
+        background-color: var(--company-theme-color2);
+        color: var(--company-theme-font-color-2);
+        border: var(--company-theme-color2);
+        box-shadow: var(--company-theme-color2);
+      }
+
+      &.btn-info {
+        background-color: var(--company-theme-color5);
+        color: var(--company-theme-font-color-2);
+        border: var(--company-theme-color5);
+        box-shadow: var(--company-theme-color5);
+      }
+
+      &.btn-danger {
+        background-color: var(--company-theme-color4);
+        color: var(--company-theme-font-color-2);
+        border: var(--company-theme-color4);
+        box-shadow: var(--company-theme-color4);
+      }
+
+      &.btn-warning {
+        background-color: var(--company-theme-color1);
+        color: var(--company-theme-font-color-2);
+        border: var(--company-theme-color1);
+        box-shadow: var(--company-theme-color1);
+      }
+    }
+
+    .checkmark {
+      background-color: var(--company-theme-background-color);
+      border: nb-theme(checkbox-border-size) solid var(--company-theme-border-color);
+
+      &:hover,
+      &:focus {
+        border-color: var(--company-theme-color2);
+      }
+
+      &::before {
+        border-color: var(--company-theme-background-color);
+      }
+
+      & + .checkbox-container input:checked ~ & {
+        border-color: var(--company-theme-color2);
+
+        &::before {
+          border-color: var(--company-theme-color2);
+        }
+      }
+    }
+
+    .checkbox-descr {
+      color: var(--company-theme-font-color);
+    }
+
+    .val-message {
+      color: var(--company-theme-color3);
+    }
+
+    ::ng-deep .clickable,
+    ::ng-deep a,
+    ::ng-deep .pagination-number.current {
+      color: var(--company-theme-color1);
+    }
+
+    .collapsed div > *:not(.collapse-btn) {
+      display: none;
+    }
+
+    .collapse-btn {
+      text-decoration: none;
+    }
+
+    ::ng-deep select.qbo-form-control.page-size {
+      width: auto;
+      color: var(--company-theme-color1);
+      border-color: var(--company-theme-color1);
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+}

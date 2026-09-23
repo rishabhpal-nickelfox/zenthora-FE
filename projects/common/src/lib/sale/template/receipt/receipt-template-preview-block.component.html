@@ -1,0 +1,241 @@
+<div [ngSwitch]="component">
+  <div *ngSwitchCase="ReceiptTemplateComponentEnum.COMPANY_INFO" class="receipt-company-info" align="center">
+    {{preview.receiptTitle}}<br>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.COMPANY_LOGO)" class="editable-row editable-row--center">
+      <ng-container *ngIf="preview.company.logo.value">
+        <img [src]="preview.companyLogoUrl" [style.width]="preview.companyLogoWidth" alt="logo">
+      </ng-container>
+      <div *ngIf="showLogoPlaceholder && !preview.company.logo.value" class="logo-placeholder">LOGO</div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.COMPANY_LOGO)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div>
+      <div *ngIf="hasField(ReceiptTemplateFieldEnum.COMPANY_NAME)" class="editable-row editable-row--center">
+        <div><b><span style="font-family:Arial;font-size:16px">{{preview.company.name}}</span></b></div>
+        <nb-icon *ngIf="editable"
+                 (click)="onRemoveField(ReceiptTemplateFieldEnum.COMPANY_NAME)"
+                 class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+                 triggers="mouseenter:mouseleave"></nb-icon>
+      </div>
+
+      <div *ngIf="hasField(ReceiptTemplateFieldEnum.COMPANY_ADDRESS)" class="editable-row editable-row--center">
+        <div>
+          <span>{{preview.company.street}}</span>,
+          <span>{{preview.company.city}}</span>,
+          <span>{{preview.company.state}}</span>
+          <div>
+            <span>{{preview.company.zip}}</span>
+          </div>
+        </div>
+        <nb-icon *ngIf="editable"
+                 (click)="onRemoveField(ReceiptTemplateFieldEnum.COMPANY_ADDRESS)"
+                 class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+                 triggers="mouseenter:mouseleave"></nb-icon>
+      </div>
+
+      <div *ngIf="hasField(ReceiptTemplateFieldEnum.COMPANY_WEB_URL)" class="editable-row editable-row--center">
+        <div>
+          <span>{{preview.company.website}}</span>
+        </div>
+        <nb-icon *ngIf="editable"
+                 (click)="onRemoveField(ReceiptTemplateFieldEnum.COMPANY_WEB_URL)"
+                 class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+                 triggers="mouseenter:mouseleave"></nb-icon>
+      </div>
+
+      <div *ngIf="hasField(ReceiptTemplateFieldEnum.COMPANY_PHONE)" class="editable-row editable-row--center">
+        <div>{{preview.company.phone}}</div>
+        <nb-icon *ngIf="editable"
+                 (click)="onRemoveField(ReceiptTemplateFieldEnum.COMPANY_PHONE)"
+                 class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+                 triggers="mouseenter:mouseleave"></nb-icon>
+      </div>
+
+      <div *ngIf="hasField(ReceiptTemplateFieldEnum.COMPANY_EMAIL)" class="editable-row editable-row--center">
+        <div>{{preview.company.email}}</div>
+        <nb-icon *ngIf="editable"
+                 (click)="onRemoveField(ReceiptTemplateFieldEnum.COMPANY_EMAIL)"
+                 class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+                 triggers="mouseenter:mouseleave"></nb-icon>
+      </div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="ReceiptTemplateComponentEnum.SALE_INFO">
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.DATETIME)" class="editable-row">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td><span style="font-weight:bold">Date: </span>{{preview.date}}</td>
+          <td align="right"><span style="font-weight:bold">Time: </span>{{preview.time}}</td>
+        </tr>
+      </table>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.DATETIME)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.CUSTOMER_NAME)" class="editable-row">
+      <div><span style="font-weight:bold">Customer Name: </span>{{preview.customerName}}</div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.CUSTOMER_NAME)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.CUSTOMER_EMAIL)" class="editable-row">
+      <div><span style="font-weight:bold">Customer Email: </span>{{preview.customerEmail}}</div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.CUSTOMER_EMAIL)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.PO_NUMBER)" class="editable-row">
+      <div><span style="font-weight:bold">PO Number: </span>{{preview.poNumber}}</div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.PO_NUMBER)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.MEMO)" class="editable-row">
+      <p><span style="font-weight:bold">Memo: </span>{{preview.memo}}</p>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.MEMO)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.SALE_TABLE)" class="editable-row">
+      <div>
+        <b>{{saleTableLabel}}</b><br>
+        &nbsp;<br>
+        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;border-spacing:0;table-layout:fixed;width:100%">
+          <thead>
+          <tr>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;padding-bottom:4px;vertical-align:bottom">
+              Type
+            </td>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;padding-bottom:4px;vertical-align:bottom">
+              Number
+            </td>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;padding-bottom:4px;vertical-align:bottom;text-align:right">
+              {{amountLabel}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" style="padding:0;height:1px;line-height:1px;background:#000"></td>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;vertical-align:top">
+              <span>{{preview.saleType}}</span>
+            </td>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;vertical-align:top;word-break:break-word">
+              <span>{{preview.saleNumber}}</span>
+            </td>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;vertical-align:top;text-align:right">
+              <span>{{preview.amountPaid}}</span>
+            </td>
+          </tr>
+          </tbody>
+
+          <tfoot>
+          <tr>
+            <td colspan="3" style="padding:0;height:1px;line-height:1px;background:#000"></td>
+          </tr>
+
+          <tr *ngIf="hasField(ReceiptTemplateFieldEnum.SALE_TOTAL)">
+            <td colspan="2" style="font-family:Arial;font-size:12px;line-height:16px;text-align:right">
+              <b>TOTAL:</b>
+            </td>
+            <td style="font-family:Arial;font-size:12px;line-height:16px;text-align:right">
+              <b>{{preview.amountPaid}}</b>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.SALE_TABLE)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.SALE_TOTAL) && !hasField(ReceiptTemplateFieldEnum.SALE_TABLE)"
+         class="editable-row">
+      <div><b>TOTAL:</b> {{preview.amountPaid}}</div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.SALE_TOTAL)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.TAX)" class="editable-row">
+      <p>Tax: {{preview.tax}}</p>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.TAX)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.DISCOUNT)" class="editable-row">
+      <p>Discount: {{preview.discount}}</p>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.DISCOUNT)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.TIP)" class="editable-row">
+      <p>Tip: {{preview.tip}}</p>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.TIP)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.SHIPPING_AMOUNT)" class="editable-row">
+      <p>Shipping: {{preview.shippingAmount}}</p>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.SHIPPING_AMOUNT)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="ReceiptTemplateComponentEnum.PAYMENT_INFO">
+    <div>{{preview.paymentMode}}</div>
+    <div>
+      Payment Method: <span>{{preview.paymentMethod}}</span> ending in <span>{{preview.paymentLastFour}}</span>
+    </div>
+    <div *ngIf="hasField(ReceiptTemplateFieldEnum.REFERENCE_NUMBER)" class="editable-row">
+      <div>Reference #: <span>{{preview.referenceNumber}}</span></div>
+      <nb-icon *ngIf="editable"
+               (click)="onRemoveField(ReceiptTemplateFieldEnum.REFERENCE_NUMBER)"
+               class="remove-btn ml-auto" container="body" icon="close" ngbPopover="Remove" placement="bottom"
+               triggers="mouseenter:mouseleave"></nb-icon>
+    </div>
+    <div>Authorization #: <span>{{preview.authorization}}</span></div>
+    <p>CVV2: <span>{{preview.cvv2}}</span></p>
+  </div>
+
+  <div *ngSwitchCase="ReceiptTemplateComponentEnum.SIGNATURE">
+    <p>Payer: <span>{{preview.payer}}</span></p>
+    <br>
+    <span style="font-weight:bold">x</span>
+    <hr style="height:1px;border-bottom:1px">
+    <br>
+  </div>
+
+  <div *ngSwitchCase="ReceiptTemplateComponentEnum.MESSAGE" align="center">
+    <app-rich-text-viewer [value]="safeMessage"></app-rich-text-viewer>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h4 class="modal-title">User Exists</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="d-flex flex-column">
+        <div>
+            <span>The user identified by email
+                <strong>{{userEmail}}</strong>
+                  already exists.
+            </span>
+        </div>
+        <div>
+            <span>Hit
+                <strong>[APPLY]</strong>
+                  to apply role assignments to the existing user,
+            </span>
+        </div>
+        <div>
+            <span>or hit
+                <strong>[CANCEL]</strong>
+                  and choose another email.
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-xs btn-rectangle btn-warning" (click)="apply()">
+        <nb-icon icon="checkmark-outline"></nb-icon>
+        Apply
+    </button>
+    <button type="button" class="btn btn-xs btn-rectangle btn-danger" (click)="close()">
+        <nb-icon icon="minus-outline"></nb-icon>
+        Cancel
+    </button>
+</div>

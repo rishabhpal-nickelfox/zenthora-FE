@@ -1,0 +1,39 @@
+@use '../../themes' as *;
+
+:host ::ng-deep .carousel-inner {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+:host ::ng-deep .carousel-control-prev {
+  justify-content: start;
+  width: 30px;
+}
+
+:host ::ng-deep .carousel-control-next {
+  justify-content: end;
+  width: 30px;
+}
+
+:host ::ng-deep .carousel-control-prev-icon {
+  display: inline-block;
+  border-right: 4px solid nb-theme(color-primary);
+  border-bottom: 4px solid nb-theme(color-primary);
+  width: 10px;
+  height: 10px;
+  transform: rotate(-225deg);
+}
+
+:host ::ng-deep .carousel-control-next-icon {
+  display: inline-block;
+  border-right: 4px solid nb-theme(color-primary);
+  border-bottom: 4px solid nb-theme(color-primary);
+  width: 10px;
+  height: 10px;
+  transform: rotate(-45deg);
+}
+
+:host ::ng-deep .carousel-item {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}

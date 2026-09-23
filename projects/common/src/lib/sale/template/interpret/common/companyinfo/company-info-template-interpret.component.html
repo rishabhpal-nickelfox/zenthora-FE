@@ -1,0 +1,11 @@
+<div *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.STREET)">{{companyInfo.street}}</div>
+<div
+  *ngIf="isAnyCompanyInfoRowPresented([CompanyInfoRowsEnum.CITY, CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])"><span
+  *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.CITY)">{{companyInfo.city}}<span
+  *ngIf="isAnyCompanyInfoRowPresented([CompanyInfoRowsEnum.STATE, CompanyInfoRowsEnum.ZIP])">, </span></span><span
+  *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.STATE)">{{companyInfo.state}} </span><span
+  *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.ZIP)">{{companyInfo.zip}}</span></div>
+<div *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.COUNTRY)">{{companyInfo.country}}</div>
+<div *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.EMAIL)">{{companyInfo.email}}</div>
+<div *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.PHONE)">{{companyInfo.formattedPhone}}</div>
+<div *ngIf="isCompanyInfoRowPresented(CompanyInfoRowsEnum.WEB_URL)">{{companyInfo.website}}</div>

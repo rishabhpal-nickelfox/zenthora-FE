@@ -1,0 +1,86 @@
+@use 'projects/common/src/lib/themes' as *;
+@use '../../../../../../node_modules/bootstrap/scss/mixins/breakpoints' as *;
+
+
+@include nb-install-component() {
+  span {
+    color: nb-theme(navbar-text-color);
+  }
+
+  .zenthora-logo img {
+    height: 30px;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .left {
+    display: flex;
+    width: 100%;
+    order: 0;
+    flex-direction: row;
+  }
+
+  .right {
+    order: 1;
+    flex-direction: row-reverse;
+  }
+
+  .logo-containter {
+    display: flex;
+    align-items: center;
+  }
+
+  .control-item {
+    display: block;
+  }
+
+  .small-container {
+    width: 20%;
+  }
+
+  .large-container {
+    width: 80%;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+
+    .navigation {
+      padding-right: nb-theme(padding);
+      font-size: 2.5rem;
+      text-decoration: none;
+      border-right: 1px solid nb-theme(separator);
+
+      i {
+        display: block;
+      }
+
+    }
+
+    .logo {
+      padding: 0 nb-theme(padding);
+      font-size: 1.75rem;
+      font-weight: nb-theme(font-weight-bolder);
+      white-space: nowrap;
+
+      span {
+        font-weight: nb-theme(font-weight-normal);
+      }
+    }
+  }
+
+  .bbt {
+    align-items: flex-start;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  nb-action {
+    height: 100%;
+  }
+}

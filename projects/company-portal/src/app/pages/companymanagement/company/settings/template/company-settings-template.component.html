@@ -1,0 +1,30 @@
+<form (ngSubmit)="submit()" [formGroup]="getForm()" [nbSpinner]="submitLocked" nbSpinnerMessage=""
+      nbSpinnerStatus="success" novalidate>
+  <nb-card [nbSpinner]="!isDefined(settings)" nbSpinnerStatus="success">
+    <nb-card-header>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row mr-auto sticky-left">
+          <div class="align-self-center">
+            <ng-container *ngTemplateOutlet="submitButtons"></ng-container>
+          </div>
+        </div>
+        <div class="d-flex flex-row ml-auto template-header">
+          <div class="header-label">Templates</div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <h6>Sale Template</h6>
+      <app-invoice-email-payment-template #emailPaymentTemplate></app-invoice-email-payment-template>
+      <hr/>
+      <h6>Receipt Template</h6>
+      <app-receipt-template-editor #receiptTemplateEditor [companyInfo]="companyInfo"></app-receipt-template-editor>
+    </nb-card-body>
+  </nb-card>
+</form>
+<ng-template #submitButtons>
+  <button [disabled]="!isSubmitEnabled()" class="btn btn-sm btn-rectangle btn-primary ml-1" type="submit">
+    <nb-icon icon="checkmark-outline"></nb-icon>
+    Save
+  </button>
+</ng-template>

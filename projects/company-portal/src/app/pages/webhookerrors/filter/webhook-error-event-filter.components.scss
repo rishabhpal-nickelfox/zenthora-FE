@@ -1,0 +1,7 @@
+@use "projects/common/src/lib/themes" as *;
+
+
+::ng-deep nb-select > button {
+  background-color: nb-theme(form-control-background);
+  border: 1px solid nb-theme(form-control-border-color);
+}

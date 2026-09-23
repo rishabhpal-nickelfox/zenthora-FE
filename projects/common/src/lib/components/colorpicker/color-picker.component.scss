@@ -1,0 +1,52 @@
+@use '../../themes' as *;
+
+.color-picker {
+
+  .summary-info {
+    padding: 0.5rem;
+    border: 1px solid nb-theme(form-control-border-color);
+    cursor: pointer;
+    transition: border-color 0.1s, box-shadow 0.1s;
+  }
+
+  .summary-info:hover {
+    box-shadow: nb-theme(form-control-border-shadow-hover);
+  }
+
+  .summary-info:focus-within {
+    border-color: nb-theme(form-control-border-color-focus);
+    box-shadow: none;
+  }
+
+  .circle {
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+    border-radius: 100%;
+    cursor: pointer;
+    border: 1px solid #dadada;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+  }
+
+  .circle.none {
+    background-image: repeating-linear-gradient(45deg, white 0px, #eaeaea 6px, white 2px);
+  }
+
+  .colors {
+    display: flex;
+    flex-wrap: wrap;
+
+    .circle {
+      flex: 0 0 40px;
+      height: 40px;
+      width: 40px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+
+      &:nth-child(5n) {
+        margin-right: 0;
+      }
+    }
+  }
+
+}
